@@ -7,10 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-kivy = "^2.3.1"
 flake8 = "^7.1.1"
 pytest = "^8.3.4"
 sqlalchemy = "^2.0.37"
+kivy-garden = "^0.1.5"
+kivy = "^2.3.1"
+kivy-garden-matplotlib = "^0.1.1.dev0"
+setuptools = "^75.8.0"
+matplotlib = "^3.10.0"
 
 
 [build-system]

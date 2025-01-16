@@ -15,3 +15,6 @@ class Area(Base):
 
     # relationship
     ascents: Mapped[Optional[List["models.ascent.Ascent"]]] = relationship(back_populates="area")
+
+    def __repr__(self):
+        return f"<Area : name={self.name}>"
