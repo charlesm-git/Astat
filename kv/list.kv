@@ -1,0 +1,51 @@
+#:kivy 2.3.1
+
+<AscentItem>
+    orientation: 'horizontal'
+    adaptive_height: True
+    spacing: 20
+    padding: 0, 5, 0, 0
+
+    canvas.after:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1  # Light gray color for the line
+        Line:
+            points: self.x, self.y, self.right, self.y  # Draws a line at the bottom
+            width: 1  # Thickness of the line
+
+    MDLabel:
+        text: root.date
+        text_size: self.size
+        valign: 'middle'
+        adaptive_width: True
+        text_color: 0.2, 0.2, 0.2, 1
+        italic: True
+    
+    MDLabel:
+        text: root.name
+        adaptive_height: True
+        bold: True
+    
+    MDLabel:
+        text: root.grade
+        text_size: self.size
+        valign: 'middle'
+        adaptive_width: True
+        text_color: self.theme_cls.primaryColor
+
+    MDLabel:
+        text: root.area
+        text_size: self.size
+        valign: 'middle'
+        adaptive_width: True
+
+<AscentManager>
+    md_bg_color: self.theme_cls.backgroundColor
+    MDScrollView:
+        do_scroll_x: False
+        MDBoxLayout:
+            id: ascent_list
+            orientation: 'vertical'
+            adaptive_height: True
+            padding: dp(20)
+

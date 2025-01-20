@@ -15,6 +15,7 @@ kivy = "^2.3.1"
 kivy-garden-matplotlib = "^0.1.1.dev0"
 setuptools = "^75.8.0"
 matplotlib = "^3.10.0"
+kivymd2 = "^2.0.1"
 
 
 [build-system]
