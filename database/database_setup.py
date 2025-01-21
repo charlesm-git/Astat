@@ -6,7 +6,7 @@ from models.base import Base
 from models.area import Area
 from models.grade import Grade
 from models.ascent import Ascent
-from database import Session, engine
+from .database import Session, engine
 
 GRADE_ASSOCIATION_DICT = {
     "6a": 1,
@@ -52,9 +52,9 @@ def get_grades_as_object():
     in the database
     """
     grades = []
-    for grade_value, correspondance in GRADE_ASSOCIATION_DICT.items():
+    for grade_value, correspondence in GRADE_ASSOCIATION_DICT.items():
         grades.append(
-            Grade(grade_value=grade_value, correspondance=correspondance)
+            Grade(grade_value=grade_value, correspondence=correspondence)
         )
     return grades
 
@@ -118,7 +118,3 @@ def initialize_db():
         ascents = get_ascents_as_object(ascents, session)
         session.add_all(ascents)
         session.commit()
-
-
-if __name__ == "__main__":
-    initialize_db()

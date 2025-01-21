@@ -13,7 +13,7 @@ class Grade(Base):
         Integer, primary_key=True, autoincrement=True
     )
     grade_value: Mapped[str] = mapped_column(String(3))
-    correspondance: Mapped[int] = mapped_column(SmallInteger)
+    correspondence: Mapped[int] = mapped_column(SmallInteger)
 
     # relationship
     ascents: Mapped[Optional[List["models.ascent.Ascent"]]] = relationship(
@@ -21,4 +21,4 @@ class Grade(Base):
     )
 
     def __repr__(self):
-        return f"<Grade : {self.grade_value}, {self.correspondance}>"
+        return f"<Grade : {self.grade_value}, {self.correspondence}>"

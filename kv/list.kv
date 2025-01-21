@@ -41,11 +41,40 @@
 
 <AscentManager>
     md_bg_color: self.theme_cls.backgroundColor
-    MDScrollView:
-        do_scroll_x: False
-        MDBoxLayout:
-            id: ascent_list
-            orientation: 'vertical'
-            adaptive_height: True
-            padding: dp(20)
 
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(20)
+        padding: dp(20)
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            adaptive_height: True
+            spacing: dp(10)
+
+            MDLabel:
+                text: "Sort by"
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            MDButton:
+                id: sort_by_date
+                style: 'elevated'
+                on_release: root.load_by_date()
+                MDButtonText:
+                    text: 'Date'
+
+            MDButton:
+                id: sort_by_grade
+                style: 'elevated'
+                on_release: root.load_by_grade()
+                MDButtonText:
+                    text: 'Grade'
+
+        MDScrollView:
+            do_scroll_x: False
+            MDBoxLayout:
+                id: ascent_list
+                orientation: 'vertical'
+                adaptive_height: True
