@@ -2,9 +2,9 @@
 
 <AscentItem>
     orientation: 'horizontal'
+    # md_bg_color: self.theme_cls.primaryContainerColor
     adaptive_height: True
-    spacing: 20
-    padding: 0, 5, 0, 0
+    spacing: dp(10)
 
     canvas.after:
         Color:
@@ -15,29 +15,37 @@
 
     MDLabel:
         text: root.date
-        text_size: self.size
-        valign: 'middle'
+        # md_bg_color: self.theme_cls.primaryColor
         adaptive_width: True
         text_color: 0.2, 0.2, 0.2, 1
         italic: True
+        font_style: 'Body'
+        role: 'small'
     
     MDLabel:
         text: root.name
-        adaptive_height: True
+        # md_bg_color: self.theme_cls.primaryColor
+        multiline: True
         bold: True
+        font_style: 'Title' if root.is_group else 'Body'
+        role: 'large' if root.is_group else 'medium'
     
     MDLabel:
         text: root.grade
-        text_size: self.size
-        valign: 'middle'
+        # md_bg_color: self.theme_cls.primaryColor
         adaptive_width: True
         text_color: self.theme_cls.primaryColor
+        font_style: 'Body'
+        role: 'medium'
 
     MDLabel:
         text: root.area
-        text_size: self.size
-        valign: 'middle'
+        # md_bg_color: self.theme_cls.primaryColor
         adaptive_width: True
+        font_style: 'Body'
+        role: 'medium'
+
+
 
 <AscentManager>
     md_bg_color: self.theme_cls.backgroundColor
@@ -72,9 +80,17 @@
                 MDButtonText:
                     text: 'Grade'
 
-        MDScrollView:
-            do_scroll_x: False
-            MDBoxLayout:
-                id: ascent_list
+        MDRecycleView:
+            viewclass: 'AscentItem'
+            id: ascent_list
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(60)
+            bar_width: dp(10)
+            
+            RecycleBoxLayout:
                 orientation: 'vertical'
-                adaptive_height: True
+                default_size: None, dp(40)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+
