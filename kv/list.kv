@@ -2,7 +2,6 @@
 
 <AscentItem>
     orientation: 'horizontal'
-    # md_bg_color: self.theme_cls.primaryContainerColor
     adaptive_height: True
     spacing: dp(10)
 
@@ -15,36 +14,46 @@
 
     MDLabel:
         text: root.date
-        # md_bg_color: self.theme_cls.primaryColor
         adaptive_width: True
         text_color: 0.2, 0.2, 0.2, 1
         italic: True
         font_style: 'Body'
         role: 'small'
     
-    MDLabel:
+    ClickableMDLabel:
         text: root.name
-        # md_bg_color: self.theme_cls.primaryColor
-        multiline: True
         bold: True
         font_style: 'Title' if root.is_group else 'Body'
-        role: 'large' if root.is_group else 'medium'
+        role: 'medium' if root.is_group else 'medium'
+        shorten: True
+        shorten_from: 'right'
+        on_release: root.show_info_bubble()
+
     
     MDLabel:
         text: root.grade
-        # md_bg_color: self.theme_cls.primaryColor
         adaptive_width: True
         text_color: self.theme_cls.primaryColor
         font_style: 'Body'
         role: 'medium'
 
-    MDLabel:
-        text: root.area
-        # md_bg_color: self.theme_cls.primaryColor
-        adaptive_width: True
-        font_style: 'Body'
-        role: 'medium'
+    # MDLabel:
+    #     text: root.area
+    #     # md_bg_color: self.theme_cls.primaryColor
+    #     adaptive_width: True
+    #     font_style: 'Body'
+    #     role: 'small'
 
+    MDIconButton:
+        icon: 'delete-outline'
+        theme_font_size: "Custom"
+        font_size: "20sp"
+        radius: [self.height / 4, ]
+        size_hint: None, None
+        size: "30dp", "30dp"
+        on_release: root.delete_item()
+        opacity: 0 if root.is_group else 1
+        disabled: root.is_group
 
 
 <AscentManager>
@@ -89,8 +98,20 @@
             
             RecycleBoxLayout:
                 orientation: 'vertical'
-                default_size: None, dp(40)
+                default_size: None, dp(30)
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
 
+<DialogItem>
+    orientation: 'horizontal'
+    adaptive_height: True
+    spacing: dp(20)
+
+    MDIcon:
+        icon: root.icon
+        adaptive_width: True
+
+    MDLabel:
+        text: root.label
+        adaptive_height: True

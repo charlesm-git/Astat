@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime, date
 
+from database.database import Session
 from models.base import Base
 import models.area
 import models.grade
@@ -36,3 +37,10 @@ class Ascent(Base):
     area: Mapped["models.area.Area"] = relationship(
         "Area", back_populates="ascents"
     )
+    
+    @classmethod
+    def delete(cls, id):
+        with Session() as session:
+            ascent_to_delete = session.get(cls, id)
+            session.delete(ascent_to_delete)
+            session.commit()
