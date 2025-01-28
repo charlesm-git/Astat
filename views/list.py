@@ -1,8 +1,6 @@
 from sqlalchemy import select, desc
 
-from kivymd.app import MDApp
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty
-from kivy.clock import Clock
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.widget import Widget
@@ -22,63 +20,7 @@ from models.ascent import Ascent
 from models.grade import Grade
 
 
-class ClickableMDLabel(ButtonBehavior, MDLabel):
-    pass
-
-
-class DialogItem(MDBoxLayout):
-    icon = StringProperty()
-    label = StringProperty()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-
-class AscentItem(MDBoxLayout):
-    id = NumericProperty()
-    name = StringProperty()
-    grade = StringProperty()
-    area = StringProperty()
-    date = StringProperty()
-    is_group = BooleanProperty()
-
-    def __init__(self, refresh_callback=None, **kwargs):
-        super().__init__(**kwargs)
-        self.refresh_callback = refresh_callback  # Store the callback
-
-    def delete_item(self):
-        Ascent.delete(self.id)
-        self.refresh_callback(
-            self.id
-        )  # Call the callback to refresh the RecycleView
-
-    def show_info_bubble(self):
-        """Show a dialog with the full name and additional details."""
-        dialog = MDDialog(
-            MDDialogHeadlineText(text="Ascent Details"),
-            MDDialogContentContainer(
-                MDDivider(),
-                DialogItem(icon="calendar", label=self.date),
-                DialogItem(icon="terrain", label=self.name),
-                DialogItem(icon="chart-bar", label=self.grade),
-                DialogItem(icon="map-marker", label=self.area),
-                MDDivider(),
-                orientation="vertical",
-                spacing="10dp",
-            ),
-            MDDialogButtonContainer(
-                Widget(),
-                MDButton(
-                    MDButtonText(text="Close"),
-                    style="text",
-                    on_release=lambda *args: dialog.dismiss(),
-                ),
-            ),
-        )
-        dialog.open()
-
-
-class AscentManager(MDScreen):
+class ListScreen(MDScreen):
     ascents_data = []
 
     def __init__(self, **kwargs):
@@ -157,8 +99,57 @@ class AscentManager(MDScreen):
         self.ids.sort_by_date.style = "elevated"
 
 
-class ListApp(MDApp):
-    def build(self):
-        self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Darkred"
-        return AscentManager()
+class AscentItem(MDBoxLayout):
+    id = NumericProperty()
+    name = StringProperty()
+    grade = StringProperty()
+    area = StringProperty()
+    date = StringProperty()
+    is_group = BooleanProperty()
+
+    def __init__(self, refresh_callback=None, **kwargs):
+        super().__init__(**kwargs)
+        self.refresh_callback = refresh_callback  # Store the callback
+
+    def delete_item(self):
+        Ascent.delete(self.id)
+        self.refresh_callback(
+            self.id
+        )  # Call the callback to refresh the RecycleView
+
+    def show_info_bubble(self):
+        """Show a dialog with the full name and additional details."""
+        dialog = MDDialog(
+            MDDialogHeadlineText(text="Ascent Details"),
+            MDDialogContentContainer(
+                MDDivider(),
+                DialogItem(icon="calendar", label=self.date),
+                DialogItem(icon="terrain", label=self.name),
+                DialogItem(icon="chart-bar", label=self.grade),
+                DialogItem(icon="map-marker", label=self.area),
+                MDDivider(),
+                orientation="vertical",
+                spacing="10dp",
+            ),
+            MDDialogButtonContainer(
+                Widget(),
+                MDButton(
+                    MDButtonText(text="Close"),
+                    style="text",
+                    on_release=lambda *args: dialog.dismiss(),
+                ),
+            ),
+        )
+        dialog.open()
+
+
+class ClickableMDLabel(ButtonBehavior, MDLabel):
+    pass
+
+
+class DialogItem(MDBoxLayout):
+    icon = StringProperty()
+    label = StringProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

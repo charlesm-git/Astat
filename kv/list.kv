@@ -1,5 +1,53 @@
 #:kivy 2.3.1
 
+<ListScreen>
+    md_bg_color: self.theme_cls.backgroundColor
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(20)
+        padding: dp(20)
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            adaptive_height: True
+            spacing: dp(10)
+
+            MDLabel:
+                text: "Sort by"
+                text_size: self.size
+                halign: 'right'
+                valign: 'middle'
+
+            MDButton:
+                id: sort_by_date
+                style: 'elevated'
+                on_release: root.load_by_date()
+                MDButtonText:
+                    text: 'Date'
+
+            MDButton:
+                id: sort_by_grade
+                style: 'elevated'
+                on_release: root.load_by_grade()
+                MDButtonText:
+                    text: 'Grade'
+
+        MDRecycleView:
+            viewclass: 'AscentItem'
+            id: ascent_list
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(60)
+            bar_width: dp(3)
+            
+            RecycleBoxLayout:
+                orientation: 'vertical'
+                default_size: None, dp(30)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+
+
 <AscentItem>
     orientation: 'horizontal'
     adaptive_height: True
@@ -54,54 +102,6 @@
         on_release: root.delete_item()
         opacity: 0 if root.is_group else 1
         disabled: root.is_group
-
-
-<AscentManager>
-    md_bg_color: self.theme_cls.backgroundColor
-
-    MDBoxLayout:
-        orientation: 'vertical'
-        spacing: dp(20)
-        padding: dp(20)
-
-        MDBoxLayout:
-            orientation: 'horizontal'
-            adaptive_height: True
-            spacing: dp(10)
-
-            MDLabel:
-                text: "Sort by"
-                text_size: self.size
-                halign: 'right'
-                valign: 'middle'
-
-            MDButton:
-                id: sort_by_date
-                style: 'elevated'
-                on_release: root.load_by_date()
-                MDButtonText:
-                    text: 'Date'
-
-            MDButton:
-                id: sort_by_grade
-                style: 'elevated'
-                on_release: root.load_by_grade()
-                MDButtonText:
-                    text: 'Grade'
-
-        MDRecycleView:
-            viewclass: 'AscentItem'
-            id: ascent_list
-            scroll_type: ['bars', 'content']
-            scroll_wheel_distance: dp(60)
-            bar_width: dp(10)
-            
-            RecycleBoxLayout:
-                orientation: 'vertical'
-                default_size: None, dp(30)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
 
 <DialogItem>
     orientation: 'horizontal'

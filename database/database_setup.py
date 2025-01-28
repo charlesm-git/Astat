@@ -48,7 +48,7 @@ def load_ascents_from_csv():
 
 def get_grades_as_object():
     """
-    Create and return a list of Grade Objects to initialize the 'grade' table 
+    Create and return a list of Grade Objects to initialize the 'grade' table
     in the database
     """
     grades = []
@@ -61,7 +61,7 @@ def get_grades_as_object():
 
 def get_areas_as_objects(ascents):
     """
-    Create and return a list of Area Objects to initialize the 'area' table 
+    Create and return a list of Area Objects to initialize the 'area' table
     in the database. The list is based on the .csv given as input.
     """
     areas = []
@@ -113,7 +113,7 @@ def initialize_db():
         session.add_all(areas)
         session.add_all(grades)
         session.commit()
-        # Initialize the 'ascent' table based. Has to be done after the 
+        # Initialize the 'ascent' table based. Has to be done after the
         # initialisation of 'area' and 'grade' for foreign key references
         ascents = get_ascents_as_object(ascents, session)
         session.add_all(ascents)

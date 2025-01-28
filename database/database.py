@@ -17,4 +17,3 @@ DATABASE_URL = "sqlite:///ascents.db"
 engine = create_engine(DATABASE_URL, echo=False)
 
 Session = sessionmaker(bind=engine)
-
