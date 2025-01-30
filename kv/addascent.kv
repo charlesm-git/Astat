@@ -1,44 +1,5 @@
 #:kivy 2.3.1
 
-<DropDownMenuHeader>
-    orientation: "vertical"
-    id: container
-
-    MDBoxLayout:
-        spacing: dp(15)
-        # padding: 0, dp(10)
-        adaptive_height: True
-        adaptive_width: True
-
-        MDIcon:
-            id: leading_icon
-            icon: root.leading_icon
-            size_hint: None, None
-            size: "48dp", "48dp"
-            theme_text_color: "Custom"
-            adaptive_width: True
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-
-        MDLabel:
-            id: label
-            text: root.text
-            adaptive_size: True
-            theme_text_color: "Custom"
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-        
-        MDIcon:
-            id: leading_icon
-            icon: "arrow-down-drop-circle-outline"
-            size_hint: None, None
-            size: "48dp", "48dp"
-            theme_text_color: "Custom"
-            adaptive_width: True
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-
-
 <AddAscentScreen>
     md_bg_color: self.theme_cls.backgroundColor
 
@@ -108,3 +69,41 @@
                 text: "Add"
 
     Widget:
+
+<DropDownMenuHeader>
+    orientation: "vertical"
+    id: container
+
+    MDBoxLayout:
+        spacing: dp(15)
+        # padding: 0, dp(10)
+        adaptive_height: True
+        adaptive_width: True
+
+        MDIcon:
+            id: leading_icon
+            icon: root.leading_icon
+            size_hint: None, None
+            size: "48dp", "48dp"
+            theme_text_color: "Custom"
+            adaptive_width: True
+            text_color:
+                app.theme_cls.onSurfaceVariantColor
+
+        MDLabel:
+            id: label
+            text: root.text
+            adaptive_size: True
+            theme_text_color: "Custom"
+            text_color:
+                app.theme_cls.onSurfaceVariantColor
+        
+        MDIcon:
+            id: leading_icon
+            icon: "arrow-down-drop-circle-outline"
+            size_hint: None, None
+            size: "48dp", "48dp"
+            theme_text_color: "Custom"
+            adaptive_width: True
+            text_color:
+                app.theme_cls.onSurfaceVariantColor

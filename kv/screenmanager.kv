@@ -1,0 +1,36 @@
+#:kivy 2.3.1
+#:import Factory kivy.factory.Factory
+
+<BaseMDNavigationItem>
+
+    MDNavigationItemIcon:
+        icon: root.icon
+
+    MDNavigationItemLabel:
+        text: root.text
+
+
+<MainScreenManager>:
+    orientation: 'vertical'
+    MDScreenManager:
+        id: screen_manager
+        ListScreen:
+            name: 'list'
+        AddAscentScreen:
+            name: 'add-ascent'
+
+    MDNavigationBar:
+        on_switch_tabs: root.on_switch_tabs(args[1])
+
+        BaseMDNavigationItem:
+            name: 'list'
+            icon: "format-list-bulleted"
+            text: "Ascents"
+            active: True
+
+
+        BaseMDNavigationItem:
+            name: 'add-ascent'
+            icon: "plus"
+            text: "Add"
+
