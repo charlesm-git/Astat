@@ -1,8 +1,6 @@
-from datetime import date
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.label import MDLabel
 from kivymd.uix.pickers import MDModalDatePicker
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.properties import StringProperty
@@ -164,6 +162,7 @@ class AddingForm(MDBoxLayout):
 
 class DropDownMenuHeader(ButtonBehavior, MDBoxLayout):
     """Class declaration for header of Grade, Area and Date selection"""
+
     leading_icon = StringProperty()
     text = StringProperty()
 

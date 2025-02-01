@@ -1,8 +1,19 @@
 from views.astat import AStatApp
 
-# from utils.calculation import get_ascent_per_area, get_ascent_per_grade, get_total_ascent, get_ascent_per_year
+from utils.calculation import (
+    get_ascent_per_area,
+    get_ascent_per_grade,
+    get_total_ascent,
+    get_ascent_per_year,
+)
+from utils.plotmaker import (
+    graph_ascent_per_area,
+    graph_ascent_per_grade,
+    graph_ascent_per_year,
+    graph_showing,
+)
 
-# from database.database_setup import initialize_db
+from database.database_setup import initialize_db
 
 
 if __name__ == "__main__":
@@ -12,3 +23,7 @@ if __name__ == "__main__":
     # print(get_ascent_per_area())
     # print(get_ascent_per_grade())
     # print(get_ascent_per_year())
+    # graph_ascent_per_area()
+    # graph_ascent_per_grade()
+    # graph_ascent_per_year()
+    # graph_showing()

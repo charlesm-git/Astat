@@ -6,7 +6,7 @@ from models.base import Base
 from models.area import Area
 from models.grade import Grade
 from models.ascent import Ascent
-from .database import Session, engine
+from database.database import Session, engine
 
 GRADE_ASSOCIATION_DICT = {
     "6a": 1,
@@ -81,12 +81,11 @@ def get_ascents_as_object(ascents, session):
     """
     ascents_object_list = []
     for ascent in ascents:
-        grade = ascent["grade"]
         grade_id = session.scalar(
-            select(Grade).where(Grade.grade_value == grade)
-        ).id
+            select(Grade.id).where(Grade.grade_value == ascent["grade"])
+        )
         area = ascent["area"]
-        area_id = session.scalar(select(Area).where(Area.name == area)).id
+        area_id = session.scalar(select(Area.id).where(Area.name == area))
         full_date = ascent["date"]
         day, month, year = full_date.split("/")
         ascents_object_list.append(

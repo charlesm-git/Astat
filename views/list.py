@@ -29,7 +29,7 @@ class ListScreen(MDScreen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Adding of a delay. Loading of the list after setup of the layout
+        # Adding of a delay: Loading of the list after setup of the layout
         Clock.schedule_once(lambda dt: self.load_by_date())
         self._initialized = True
 
@@ -52,7 +52,8 @@ class ListScreen(MDScreen):
             for ascent in ascents:
                 # Get the group of the new index of ascent.
                 current_group = group_label_getter(ascent)
-                # If it is a new group, add the group to the ascent_data for display
+                # If it is a new group, add the group to the ascent_data for
+                # display
                 if previous_group != current_group:
                     self.ascents_data.append(
                         {
@@ -158,7 +159,7 @@ class AscentItem(MDBoxLayout):
         self.refresh_callback(self.id)
 
     def show_info_bubble(self):
-        """Show a dialog window with full details of an ascent when the name of 
+        """Show a dialog window with full details of an ascent when the name of
         the ascent is clicked"""
         if self.is_group:
             return
@@ -188,6 +189,7 @@ class AscentItem(MDBoxLayout):
 
 class ClickableMDLabel(ButtonBehavior, MDLabel):
     """Creates a Label with Button properties (clickable)"""
+
     pass
 
 

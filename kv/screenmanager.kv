@@ -18,6 +18,8 @@
             name: 'list'
         AddAscentScreen:
             name: 'add-ascent'
+        StatisticScreen:
+            name: 'statistics'
 
     MDNavigationBar:
         on_switch_tabs: root.on_switch_tabs(args[1])
@@ -26,11 +28,14 @@
             name: 'list'
             icon: "format-list-bulleted"
             text: "Ascents"
-            active: True
-
 
         BaseMDNavigationItem:
             name: 'add-ascent'
             icon: "plus"
             text: "Add"
 
+        BaseMDNavigationItem:
+            name: 'statistics'
+            icon: "chart-donut-variant"
+            text: "Statistics"
+            active: True
