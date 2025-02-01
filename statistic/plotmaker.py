@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils.calculation import (
+from statistic.queries import (
     get_ascent_per_area,
     get_ascent_per_grade,
     get_ascent_per_year,
@@ -67,7 +67,7 @@ def graph_ascent_per_area():
     # Shift the pie chart left to center all the content (chart + legend)
     fig.subplots_adjust(right=0.5)
 
-    file_path = "utils/graphs/graph_ascent_per_area.png"
+    file_path = "statistic/graphs/graph_ascent_per_area.png"
     fig.savefig(file_path, dpi=300, bbox_inches="tight", transparent=True)
 
     plt.close(fig)
@@ -88,7 +88,7 @@ def graph_ascent_per_grade():
     )
     ax.bar_label(bar_container, number_of_ascents, padding=5)
 
-    file_path = "utils/graphs/graph_ascent_per_grade.png"
+    file_path = "statistic/graphs/graph_ascent_per_grade.png"
     fig.savefig(file_path, dpi=300, bbox_inches="tight", transparent=True)
 
     plt.close(fig)
@@ -112,7 +112,7 @@ def graph_ascent_per_year():
     ax.bar_label(bar_container, number_of_ascents, padding=5)
     ax.set_xticks(ticks=years_range, labels=years_range, rotation=45)
 
-    file_path = "utils/graphs/graph_ascent_per_year.png"
+    file_path = "statistic/graphs/graph_ascent_per_year.png"
     fig.savefig(file_path, dpi=300, bbox_inches="tight", transparent=True)
 
     plt.close(fig)

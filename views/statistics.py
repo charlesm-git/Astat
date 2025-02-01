@@ -3,8 +3,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import StringProperty
 from kivy.clock import Clock
 
-from utils.calculation import get_total_ascent
-from utils.plotmaker import (
+from statistic.queries import get_total_ascent
+from statistic.plotmaker import (
     graph_ascent_per_area,
     graph_ascent_per_grade,
     graph_ascent_per_year,

@@ -13,7 +13,6 @@ class BaseMDNavigationItem(MDNavigationItem):
 class MainScreenManager(MDBoxLayout, MDFadeSlideTransition):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ids.screen_manager.current = "statistics"
 
     def on_switch_tabs(self, item: BaseMDNavigationItem):
         self.ids.screen_manager.current = item.name

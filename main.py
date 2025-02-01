@@ -1,12 +1,12 @@
 from views.astat import AStatApp
 
-from utils.calculation import (
+from statistic.queries import (
     get_ascent_per_area,
     get_ascent_per_grade,
     get_total_ascent,
     get_ascent_per_year,
 )
-from utils.plotmaker import (
+from statistic.plotmaker import (
     graph_ascent_per_area,
     graph_ascent_per_grade,
     graph_ascent_per_year,

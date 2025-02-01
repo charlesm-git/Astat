@@ -11,8 +11,8 @@ class AStatApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Teal"
-        Builder.load_file("kv/list.kv")
-        Builder.load_file("kv/addascent.kv")
-        Builder.load_file("kv/statistics.kv")
+        Builder.load_file("kv/list-screen.kv")
+        Builder.load_file("kv/addascent-screen.kv")
+        Builder.load_file("kv/statistic-screen.kv")
         Builder.load_file("kv/screenmanager.kv")
         return MainScreenManager()
