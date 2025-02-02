@@ -14,24 +14,36 @@
             spacing: dp(10)
 
             MDLabel:
-                text: "Sort by"
-                text_size: self.size
-                halign: 'right'
-                valign: 'middle'
+                text: "Area :"
+                adaptive_width: True
+                bold: True
+                theme_text_color: 'Custom'
+                text_color: app.theme_cls.primaryColor
 
-            MDButton:
-                id: sort_by_date
-                style: 'elevated'
-                on_release: root.load_by_date()
-                MDButtonText:
-                    text: 'Date'
+            ClickableMDLabel:
+                id: area_selector
+                text: "All"
+                adaptive_width: True
+                bold: True
+                text_color: app.theme_cls.primaryColor
+                on_release: root.area_selection(self)
 
-            MDButton:
-                id: sort_by_grade
-                style: 'elevated'
-                on_release: root.load_by_grade()
-                MDButtonText:
-                    text: 'Grade'
+            MDDivider:
+                orientation: 'vertical'
+                
+            CustomMDSegmentedButton:
+                MDSegmentedButtonItem:
+                    id: sort_by_date
+                    on_release: root.load_by_date()
+                    radius: dp(20)
+                    active: True
+                    MDSegmentButtonLabel:
+                        text: 'by Date'
+                MDSegmentedButtonItem:
+                    id: sort_by_grade
+                    on_release: root.load_by_grade()
+                    MDSegmentButtonLabel:
+                        text: 'by Grade'
 
         MDRecycleView:
             viewclass: 'AscentItem'
@@ -98,7 +110,7 @@
         radius: [self.height / 4, ]
         size_hint: None, None
         size: "30dp", "30dp"
-        on_release: root.delete_item()
+        on_release: root.show_delete_dialog()
         opacity: 0 if root.is_group else 1
         disabled: root.is_group
 

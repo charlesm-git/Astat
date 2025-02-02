@@ -2,6 +2,13 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDModalDatePicker
+from kivymd.uix.snackbar import (
+    MDSnackbar,
+    MDSnackbarText,
+    MDSnackbarCloseButton,
+    MDSnackbarButtonContainer,
+    MDSnackbarSupportingText,
+)
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.properties import StringProperty
 from kivy.metrics import dp
@@ -131,11 +138,17 @@ class AddingForm(MDBoxLayout):
     def submit(self):
         """Configure the actions performed when the form is submited"""
         self.get_name_from_form()
-        print(self.form)
+        incomplete = False
         for value in self.form.values():
             if value == "":
-                print("Form Incomplete")
-                return
+                incomplete = True
+                break
+        if incomplete:
+            self.show_snackbar(
+                text="Form Incomplete",
+            )
+            return
+
         # If the ascent doesn't already exist in the database, add it
         with Session() as session:
             if not session.scalar(
@@ -151,13 +164,43 @@ class AddingForm(MDBoxLayout):
                     area_id=self.form["area_id"],
                     ascent_date=self.form["date"],
                 )
-                print("Ascent added")
+                self.show_snackbar(text="Ascent added successfully")
+                # Reset all fields
+                self.clear_fields()
             else:
-                print("Ascent already exist in the database")
+                self.show_snackbar(
+                    text="This ascent already exist in the database"
+                )
+        
+    def show_snackbar(self, text):
+        snackbar = MDSnackbar(
+            MDSnackbarText(
+                text=text,
+                adaptive_size=True,
+            ),
+            MDSnackbarButtonContainer(
+                MDSnackbarCloseButton(
+                    icon="close", on_release=lambda x: snackbar.dismiss()
+                ),
+                pos_hint={"center_y": 0.5},
+            ),
+            y=dp(100),
+            orientation="horizontal",
+            pos_hint={"center_x": 0.5},
+            size_hint_x=0.9,
+            duration=5,
+        )
+        snackbar.open()
 
     def get_name_from_form(self):
         typed_name = self.ids.form_name.text
         self.form["name"] = typed_name
+        
+    def clear_fields(self):
+        self.ids.form_name.text = ""
+        self.ids.form_area.text = "Area"
+        self.ids.form_grade.text = "Grade"
+        self.ids.form_date_picker.text = "Date"
 
 
 class DropDownMenuHeader(ButtonBehavior, MDBoxLayout):

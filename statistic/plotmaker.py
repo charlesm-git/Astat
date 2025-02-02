@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from models import grade
 from statistic.queries import (
     get_ascent_per_area,
     get_ascent_per_grade,
@@ -78,9 +79,16 @@ def graph_ascent_per_grade():
 
     grade_value, number_of_ascents = zip(*ascent_per_grade)
 
+    # Define Colormap
+    cmap = plt.get_cmap("twilight_shifted")
+    colors = [
+        cmap(ascents / (2 * max(number_of_ascents)) + 0.5)
+        for ascents in number_of_ascents
+    ]
+
     max_x_limit = max(number_of_ascents) + 20
     fig, ax = plt.subplots()
-    bar_container = ax.barh(grade_value, number_of_ascents)
+    bar_container = ax.barh(grade_value, number_of_ascents, color=colors)
 
     ax.set(
         xlabel="Number of Ascents",
@@ -101,9 +109,16 @@ def graph_ascent_per_year():
 
     years_range = range(min(years), max(years) + 1)
 
+    # Define Colormap
+    cmap = plt.get_cmap("twilight_shifted")
+    colors = [
+        cmap(ascents / (2 * max(number_of_ascents)) + 0.5)
+        for ascents in number_of_ascents
+    ]
+
     max_x_limit = max(number_of_ascents) + 20
     fig, ax = plt.subplots()
-    bar_container = ax.bar(years, number_of_ascents)
+    bar_container = ax.bar(years, number_of_ascents, color=colors)
 
     ax.set(
         ylabel="Number of Ascents",

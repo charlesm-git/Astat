@@ -1,20 +1,22 @@
 #:kivy 2.3.1
 
+<CustomTitleLabel@MDLabel>
+    adaptive_height: True
+    size_hint_x: 1
+    text_size: self.size
+    halign: 'center'
+    font_style: 'Title'
+    role: 'large'
+    text_color: app.theme_cls.primaryColor
+    bold: True
+
 <GraphBlock>
     orientation: 'vertical'
     adaptive_height: True
     spacing: dp(10)
 
-    MDLabel:
+    CustomTitleLabel:
         text: root.title
-        adaptive_height: True
-        size_hint_x: 1
-        text_size: self.size
-        halign: 'center'
-        font_style: 'Title'
-        role: 'large'
-        text_color: app.theme_cls.secondaryColor
-        bold: True
     Image:
         id: image
         source: root.image_path
@@ -31,16 +33,13 @@
             spacing: dp(30)
             adaptive_height: True
 
-            MDBoxLayout:
-                orientation: 'horizontal'
-                adaptive_size: True
-                spacing: dp(20)
-                MDLabel:
-                    text: 'Total number of ascents: '
-                    adaptive_size: True
-                MDLabel:
-                    id: total_ascent_input
-                    adaptive_size: True
+
+            CustomTitleLabel:
+                text: 'Total number of ascents'
+            CustomTitleLabel:
+                id: total_ascent_input
+                font_style: 'Display'
+                role: 'medium'
 
             GraphBlock:
                 id: graph_ascent_per_area

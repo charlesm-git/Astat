@@ -8,15 +8,21 @@ from kivymd.uix.widget import Widget
 from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import (
     MDDialog,
+    MDDialogIcon,
+    MDDialogHeadlineText,
     MDDialogContentContainer,
     MDDialogButtonContainer,
-    MDDialogHeadlineText,
 )
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.divider import MDDivider
+from kivymd.uix.menu import MDDropdownMenu
+from kivy.metrics import dp
 from kivy.uix.behaviors import ButtonBehavior
 
+from kivymd.uix.segmentedbutton import MDSegmentedButton
+
 from database.database import Session
+from models.area import Area
 from models.ascent import Ascent
 from models.grade import Grade
 
@@ -96,47 +102,87 @@ class ListScreen(MDScreen):
             Clock.schedule_once(lambda dt: self.refresh_data())
 
     def refresh_data(self):
-        if self.ids.sort_by_date.style == "filled":
+        if self.ids.sort_by_date.active:
             self.load_by_date()
         else:
             self.load_by_grade()
 
     def load_by_date(self):
         """Load data in the RecycleView ordered by dates"""
-        # if self.ids.sort_by_date.style == "filled":
-        #     return
-        # Query for the database
-        query = select(Ascent).order_by(desc(Ascent.ascent_date))
+        query = self.get_area_filtered_db_query()
+        # Adding ordering to the query
+        query = query.order_by(desc(Ascent.ascent_date))
         # Call of load_ascent with the right lambda function
         self.load_ascents(
             ordered_query=query,
             group_label_getter=lambda ascent: ascent.ascent_date.year,
         )
-        # Change button style
-        self.ids.sort_by_date.style = "filled"
-        self.ids.sort_by_grade.style = "elevated"
 
     def load_by_grade(self):
         """Load data in the RecycleView ordered by grades"""
-        # if self.ids.sort_by_grade.style == "filled":
-        #     return
-        # Query for the database
-        query = (
-            select(Ascent)
-            .join(Ascent.grade)
-            .order_by(
-                desc(Grade.correspondence),
-                desc(Ascent.ascent_date),
-            )
+        query = self.get_area_filtered_db_query()
+        # Adding of the ordering to the query
+        query = query.join(Ascent.grade).order_by(
+            desc(Grade.correspondence),
+            desc(Ascent.ascent_date),
         )
         # Call of load_ascent with the right lambda function
         self.load_ascents(
             ordered_query=query,
             group_label_getter=lambda ascent: ascent.grade.grade_value,
         )
-        # Change button style
-        self.ids.sort_by_grade.style = "filled"
-        self.ids.sort_by_date.style = "elevated"
+
+    def get_area_filtered_db_query(self):
+        """Get the base area filtered query for the database"""
+        area = self.ids.area_selector.text
+        if area == "All":
+            query = select(Ascent)
+        else:
+            query = select(Ascent).where(Area.name == area).join(Ascent.area)
+        return query
+
+    def area_selection(self, item):
+        """Function for grade dropdown menu configuration and opening"""
+        with Session() as session:
+            areas = session.scalars(select(Area).order_by(Area.name)).all()
+
+        menu_items = [
+            {
+                "text": "All",
+                "on_release": lambda: self.area_selection_callback(
+                    "All",
+                ),
+            }
+        ]
+        for area in areas:
+            menu_items.append(
+                {
+                    "text": f"{area.name}",
+                    "on_release": lambda a=area: self.area_selection_callback(
+                        a.name,
+                    ),
+                }
+            )
+
+        # Setup of the dropdown menu
+        self.area_selector = MDDropdownMenu(
+            caller=item,
+            items=menu_items,
+            max_height=dp(200),
+            width=dp(180),
+            position="bottom",
+            hor_growth="right",
+        )
+        self.area_selector.open()
+
+    def area_selection_callback(self, area_name):
+        """
+        Function called when an area is selected.
+        Updated the area displayed on the label and the content of the form
+        """
+        self.ids.area_selector.text = area_name
+        self.area_selector.dismiss()
+        Clock.schedule_once(lambda dt: self.refresh_data())
 
 
 class AscentItem(MDBoxLayout):
@@ -185,6 +231,49 @@ class AscentItem(MDBoxLayout):
             ),
         )
         dialog.open()
+
+    def show_delete_dialog(self):
+        dialog = MDDialog(
+            MDDialogIcon(icon="delete"),
+            MDDialogHeadlineText(text="Delete this ascent ?"),
+            MDDialogContentContainer(
+                MDDivider(),
+                DialogItem(icon="calendar", label=self.date),
+                DialogItem(icon="terrain", label=self.name),
+                DialogItem(icon="chart-bar", label=self.grade),
+                DialogItem(icon="map-marker", label=self.area),
+                MDDivider(),
+                orientation="vertical",
+                spacing="10dp",
+            ),
+            MDDialogButtonContainer(
+                Widget(),
+                MDButton(
+                    MDButtonText(text="No"),
+                    style="text",
+                    on_release=lambda *args: dialog.dismiss(),
+                ),
+                MDButton(
+                    MDButtonText(text="Yes"),
+                    style="text",
+                    on_release=lambda x: [
+                        self.delete_item(),
+                        dialog.dismiss(),
+                    ],
+                ),
+            ),
+        )
+        dialog.open()
+
+
+class CustomMDSegmentedButton(MDSegmentedButton):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        Clock.schedule_once(self._adjust_radius_after_build)
+
+    def _adjust_radius_after_build(self, *args):
+        """Ensure the radius is set after all widgets are added."""
+        Clock.schedule_once(lambda dt: self.adjust_segment_radius(), 0)
 
 
 class ClickableMDLabel(ButtonBehavior, MDLabel):

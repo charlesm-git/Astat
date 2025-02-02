@@ -7,7 +7,7 @@
 
 <AddingForm>
     orientation: 'vertical'
-    padding: dp(50)
+    padding: dp(20)
     # spacing: dp(30)
     
     MDTextField:
@@ -16,6 +16,7 @@
         MDTextFieldLeadingIcon:
             icon: "terrain"
         MDTextFieldHintText:
+            id: text_field
             text: "Name"
         MDTextFieldMaxLengthText:
             max_text_length: 64
@@ -60,11 +61,14 @@
         orientation: "horizontal"
         adaptive_height: True
         padding: 0, dp(30), 0, dp(10)
+        spacing: dp(30)
         Widget:
         MDButton:
+            on_release: root.clear_fields()
+            MDButtonText:
+                text: 'Clear'
+        MDButton:
             on_release: root.submit()
-            adaptive_width: True
-            halign: "right"
             MDButtonText:
                 text: "Add"
 

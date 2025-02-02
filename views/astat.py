@@ -10,7 +10,7 @@ from views.screenmanager import MainScreenManager
 class AStatApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Teal"
+        self.theme_cls.primary_palette = "Darkorange"
         Builder.load_file("kv/list-screen.kv")
         Builder.load_file("kv/addascent-screen.kv")
         Builder.load_file("kv/statistic-screen.kv")
