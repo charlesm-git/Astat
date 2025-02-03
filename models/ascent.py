@@ -20,7 +20,7 @@ class Ascent(Base):
         ForeignKey("grade.id", ondelete="RESTRICT", onupdate="CASCADE")
     )
     area_id: Mapped[int] = mapped_column(
-        ForeignKey("area.id", ondelete="RESTRICT", onupdate="CASCADE")
+        ForeignKey("area.id", ondelete="CASCADE", onupdate="CASCADE")
     )
     ascent_date: Mapped[date] = mapped_column(Date)
     date_created: Mapped[datetime] = mapped_column(
