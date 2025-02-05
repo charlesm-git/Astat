@@ -602,24 +602,6 @@ files = [
 requests = "*"
 
 [[package]]
-name = "kivy-garden-matplotlib"
-version = "0.1.1.dev0"
-description = "A Kivy Garden flower for matplotlib"
-optional = false
-python-versions = "*"
-files = [
-    {file = "kivy_garden.matplotlib-0.1.1.dev0.tar.gz", hash = "sha256:742806dd08557c03de9409fc5bef0a578d5104971627b15fd67ad035d5d61ba7"},
-]
-
-[package.dependencies]
-kivy = ">=2.1.0"
-matplotlib = ">=3.7.2"
-
-[package.extras]
-ci = ["coveralls", "pycodestyle"]
-dev = ["pytest (>=3.6)", "pytest-asyncio", "pytest-cov", "sphinx_rtd_theme"]
-
-[[package]]
 name = "kivymd2"
 version = "2.0.1"
 description = "Set of widgets for Kivy inspired by Google's Material Design"
@@ -1305,4 +1287,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "c1cfec881cec0e665e23f3affae9ae5d6788af337cc3eb30ed5c8c472296ff7c"
+content-hash = "1ebc5b64257bdbee4e4fd849722e6f1df2df4bd6f9c4c70323f38582bc90e89b"

@@ -10,7 +10,7 @@ class BaseMDNavigationItem(MDNavigationItem):
     name = StringProperty()
 
 
-class MainScreenManager(MDBoxLayout, MDFadeSlideTransition):
+class MainScreenManager(MDBoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -5,17 +5,18 @@
 
     MDBoxLayout:
         orientation: 'vertical'
-        spacing: dp(20)
+        spacing: dp(10)
         padding: dp(10)
 
         MDBoxLayout:
             orientation: 'horizontal'
             adaptive_height: True
-            spacing: dp(10)
+            spacing: dp(20)
+            padding: dp(40), dp(10), 0, 0
 
             MDLabel:
                 text: "Area :"
-                adaptive_width: True
+                adaptive_size: True
                 bold: True
                 theme_text_color: 'Custom'
                 text_color: app.theme_cls.primaryColor
@@ -23,27 +24,28 @@
             ClickableMDLabel:
                 id: area_selector
                 text: "All"
-                adaptive_width: True
+                adaptive_size: True
                 bold: True
                 text_color: app.theme_cls.primaryColor
                 on_release: root.area_selection(self)
 
-            MDDivider:
-                orientation: 'vertical'
-                
-            CustomMDSegmentedButton:
-                MDSegmentedButtonItem:
-                    id: sort_by_date
-                    on_release: root.load_by_date()
-                    radius: dp(20)
-                    active: True
-                    MDSegmentButtonLabel:
-                        text: 'by Date'
-                MDSegmentedButtonItem:
-                    id: sort_by_grade
-                    on_release: root.load_by_grade()
-                    MDSegmentButtonLabel:
-                        text: 'by Grade'
+        MDDivider:
+            size_hint_x: .9
+            pos_hint: {'center_x': .5}
+        CustomMDSegmentedButton:
+            type: 'medium'
+            MDSegmentedButtonItem:
+                id: sort_by_date
+                on_release: root.load_by_date()
+                active: True
+                MDSegmentButtonLabel:
+                    text: 'by Date'
+            MDSegmentedButtonItem:
+                id: sort_by_grade
+                on_release: root.load_by_grade()
+
+                MDSegmentButtonLabel:
+                    text: 'by Grade'
 
         MDRecycleView:
             viewclass: 'AscentItem'
