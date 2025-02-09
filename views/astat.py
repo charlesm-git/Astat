@@ -7,7 +7,7 @@ from views.adding import AddingScreen
 from views.statistics import StatisticScreen
 from views.screenmanager import MainScreenManager
 
-# Window.size = (360, 640)
+Window.size = (360, 640)
 
 class AStatApp(MDApp):
     def build(self):

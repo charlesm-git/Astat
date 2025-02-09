@@ -11,7 +11,6 @@ pytest = "^8.3.4"
 sqlalchemy = "^2.0.37"
 kivy = "^2.3.1"
 setuptools = "^75.8.0"
-matplotlib = "^3.10.0"
 kivymd2 = "^2.0.1"
 flake8 = "^7.1.1"
 

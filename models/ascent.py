@@ -5,8 +5,8 @@ from datetime import datetime, date
 
 from database.database import Session
 from models.base import Base
-import models.area
-import models.grade
+import models.area as area
+import models.grade as grade
 
 
 class Ascent(Base):
@@ -31,10 +31,10 @@ class Ascent(Base):
     )
 
     # Relationship
-    grade: Mapped["models.grade.Grade"] = relationship(
+    grade: Mapped["grade.Grade"] = relationship(
         "Grade", back_populates="ascents"
     )
-    area: Mapped["models.area.Area"] = relationship(
+    area: Mapped["area.Area"] = relationship(
         "Area", back_populates="ascents"
     )
 

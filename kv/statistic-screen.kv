@@ -1,6 +1,6 @@
 #:kivy 2.3.1
 
-<CustomTitleLabel@MDLabel>
+<CustomTitleLabel>
     adaptive_height: True
     size_hint_x: 1
     text_size: self.size
@@ -10,47 +10,56 @@
     text_color: app.theme_cls.primaryColor
     bold: True
 
-<GraphBlock>
+<TableCell@MDLabel>
+    adaptive_height: True
+    text_size: self.size
+    shorten: True
+    shorten_from: 'right'
+    halign: 'center'
+    valign: 'middle'
+    padding: dp(4)
+
+<TableRow>
+    orientation: 'horizontal'
+    adaptive_height: True
+    md_bg_color: app.theme_cls.primaryContainerColor if self.is_header else app.theme_cls.backgroundColor
+    
+    TableCell:
+        text: root.value
+        bold: True if root.is_header else False
+    MDDivider:
+        orientation: 'vertical'
+    TableCell:
+        text: root.nbre_of_ascents
+        bold: True if root.is_header else False
+    MDDivider:
+        orientation: 'vertical'
+    TableCell:
+        text: root.pourcentage
+        bold: True if root.is_header else False
+
+<Table>
     orientation: 'vertical'
     adaptive_height: True
-    spacing: dp(10)
-
+    padding: 0, 0, 0, dp(20)
     CustomTitleLabel:
         text: root.title
-    Image:
-        id: image
-        source: root.image_path
-        size_hint: 1, None
-        height: self.width * (self.texture_size[1] / self.texture_size[0]) if self.texture else dp(200)
+        padding: 0, 0, 0, dp(15)
 
 <StatisticScreen>
     md_bg_color: app.theme_cls.backgroundColor
     MDScrollView:
         MDBoxLayout:
+            id: scroll_view_content
             orientation: 'vertical'
-            padding: dp(10)
-            spacing: dp(30)
+            padding: dp(20)
+            spacing: dp(10)
             adaptive_height: True
             
             CustomTitleLabel:
                 text: 'Total number of ascents'
             CustomTitleLabel:
-                id: total_ascent_input
+                id: total_ascents
                 font_style: 'Display'
-                role: 'medium'
-
-            GraphBlock:
-                id: graph_ascent_per_area
-                title: "Ascent per Area"
-                image_path: "statistic/graphs/graph_ascent_per_area.png"
-
-            GraphBlock:
-                id: graph_ascent_per_grade
-                title: "Ascent per Grade"
-                image_path: "statistic/graphs/graph_ascent_per_grade.png"
-
-            GraphBlock:
-                id: graph_ascent_per_year
-                title: "Ascent per Year"
-                image_path: "statistic/graphs/graph_ascent_per_year.png"
+                role: 'small'
                 

@@ -1,4 +1,4 @@
-from sqlalchemy import func, extract
+from sqlalchemy import func, extract, desc
 
 from database.database import Session
 from models.area import Area
@@ -16,7 +16,7 @@ def get_total_ascent():
     return result[0]
 
 
-def get_ascent_per_area():
+def get_ascents_per_area():
     """
     Get the number of ascent per area
     :return: a list of tuple with format : (number_of_ascent, area)
@@ -32,7 +32,7 @@ def get_ascent_per_area():
     return result
 
 
-def get_ascent_per_grade():
+def get_ascents_per_grade():
     """
     Get the number of ascent per grade
     :return: a list of tuple with format : (number_of_ascent, grade)
@@ -42,13 +42,13 @@ def get_ascent_per_grade():
             session.query(Grade.grade_value, func.count(Ascent.id))
             .join(Ascent, Grade.id == Ascent.grade_id)
             .group_by(Grade.grade_value)
-            .order_by(Grade.correspondence)
+            .order_by(desc(Grade.correspondence))
             .all()
         )
     return result
 
 
-def get_ascent_per_year():
+def get_ascents_per_year():
     """
     Get the number of ascent per year
     :return: a list of tuple with format : (number_of_ascent, year)
@@ -60,7 +60,7 @@ def get_ascent_per_year():
                 func.count(Ascent.id),
             )
             .group_by("year")
-            .order_by("year")
+            .order_by(desc("year"))
             .all()
         )
     return result
