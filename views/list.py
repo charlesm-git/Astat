@@ -109,7 +109,7 @@ class ListScreen(MDScreen):
 
     def load_by_date(self):
         """Load data in the RecycleView ordered by dates"""
-        query = self.get_area_filtered_db_query()
+        query = self.get_filtered_query()
         # Adding ordering to the query
         query = query.order_by(desc(Ascent.ascent_date))
         # Call of load_ascent with the right lambda function
@@ -120,7 +120,7 @@ class ListScreen(MDScreen):
 
     def load_by_grade(self):
         """Load data in the RecycleView ordered by grades"""
-        query = self.get_area_filtered_db_query()
+        query = self.get_filtered_query()
         # Adding of the ordering to the query
         query = query.join(Ascent.grade).order_by(
             desc(Grade.correspondence),
@@ -132,13 +132,19 @@ class ListScreen(MDScreen):
             group_label_getter=lambda ascent: ascent.grade.grade_value,
         )
 
-    def get_area_filtered_db_query(self):
+    def get_filtered_query(self):
         """Get the base area filtered query for the database"""
+        # Area filter
         area = self.ids.area_selector.text
         if area == "All":
             query = select(Ascent)
         else:
             query = select(Ascent).where(Area.name == area).join(Ascent.area)
+
+        # Search filter
+        search_input = self.ids.search_field.text
+        query = query.where(Ascent.name.like(f"%{search_input}%"))
+
         return query
 
     def area_selection(self, item):
@@ -178,7 +184,7 @@ class ListScreen(MDScreen):
     def area_selection_callback(self, area_name):
         """
         Function called when an area is selected.
-        Updated the area displayed on the label and the content of the form
+        Updated the area displayed on the label
         """
         self.ids.area_selector.text = area_name
         self.area_selector.dismiss()

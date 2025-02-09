@@ -11,7 +11,12 @@ from kivy.properties import (
 )
 from kivy.clock import Clock
 
-from statistic.queries import get_ascents_per_area, get_ascents_per_grade, get_ascents_per_year, get_total_ascent
+from statistic.queries import (
+    get_ascents_per_area,
+    get_ascents_per_grade,
+    get_ascents_per_year,
+    get_total_ascent,
+)
 
 
 class CustomTitleLabel(MDLabel):
@@ -87,7 +92,7 @@ class StatisticScreen(MDScreen):
             table_content=ascents_per_area,
             title="Ascent per area",
         )
-        self.ids['area_table'] = area_table
+        self.ids["area_table"] = area_table
         self.ids.scroll_view_content.add_widget(area_table)
 
     def grade_table_instanciation(self):
@@ -99,7 +104,7 @@ class StatisticScreen(MDScreen):
             table_content=ascents_per_grade,
             title="Ascent per grade",
         )
-        self.ids['grade_table'] = grade_table
+        self.ids["grade_table"] = grade_table
         self.ids.scroll_view_content.add_widget(grade_table)
 
     def year_table_instanciation(self):
@@ -111,7 +116,7 @@ class StatisticScreen(MDScreen):
             table_content=ascents_per_year,
             title="Ascent per year",
         )
-        self.ids['year_table'] = year_table
+        self.ids["year_table"] = year_table
         self.ids.scroll_view_content.add_widget(year_table)
 
     def add_pourcentage(self, query_result):

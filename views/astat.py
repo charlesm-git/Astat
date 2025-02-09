@@ -9,6 +9,7 @@ from views.screenmanager import MainScreenManager
 
 Window.size = (360, 640)
 
+
 class AStatApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Light"

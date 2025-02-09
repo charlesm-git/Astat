@@ -17,3 +17,4 @@ if __name__ == "__main__":
     # print(get_ascents_per_area())
     # print(get_ascents_per_grade())
     # print(get_ascents_per_year())
+    # print(search_query())

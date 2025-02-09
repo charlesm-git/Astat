@@ -11,12 +11,12 @@
         MDBoxLayout:
             orientation: 'horizontal'
             adaptive_height: True
-            spacing: dp(20)
-            padding: dp(40), dp(10), 0, 0
+            spacing: dp(5)
+            padding: dp(20), dp(10), 0, 0
 
             MDLabel:
                 text: "Area :"
-                adaptive_size: True
+                adaptive_width: True
                 bold: True
                 theme_text_color: 'Custom'
                 text_color: app.theme_cls.primaryColor
@@ -24,10 +24,20 @@
             ClickableMDLabel:
                 id: area_selector
                 text: "All"
-                adaptive_size: True
+                adaptive_width: True
                 bold: True
                 text_color: app.theme_cls.primaryColor
                 on_release: root.area_selection(self)
+                padding: 0, 0, dp(20), 0
+
+            MDTextField:
+                id: search_field
+                mode: 'filled'
+                on_text: root.refresh_data()
+                MDTextFieldLeadingIcon:
+                    icon: "magnify"
+                MDTextFieldHintText:
+                    text: "Climb Name"
 
         MDDivider:
             size_hint_x: .9

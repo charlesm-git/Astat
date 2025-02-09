@@ -43,9 +43,9 @@ class Area(Base):
                 ascents_to_delete = session.scalars(
                     select(Ascent).where(Ascent.area_id == area_to_delete.id)
                 ).all()
-                
+
                 for ascent in ascents_to_delete:
                     session.delete(ascent)
-                    
+
                 session.delete(area_to_delete)
                 session.commit()
