@@ -2,7 +2,6 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.divider import MDDivider
 from kivymd.uix.label import MDLabel
-from kivymd.uix.textfield import MDTextField
 from kivy.properties import (
     StringProperty,
     ListProperty,
@@ -11,6 +10,7 @@ from kivy.properties import (
 )
 from kivy.clock import Clock
 
+from models.grade import Grade
 from statistic.queries import (
     get_ascents_per_area,
     get_ascents_per_grade,
@@ -62,12 +62,23 @@ class Table(MDBoxLayout):
 
 class StatisticScreen(MDScreen):
     total_ascents = NumericProperty()
+    min_grade_filter = NumericProperty(1)
+    max_grade_filter = NumericProperty(19)
+    area_filter = StringProperty("All")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         Clock.schedule_once(lambda dt: self.table_update())
 
     def on_pre_enter(self):
+        min_grade_value = Grade.get_grade_value_from_correspondence(
+            self.min_grade_filter
+        )
+        max_grade_value = Grade.get_grade_value_from_correspondence(
+            self.max_grade_filter
+        )
+        self.ids.filter_display.text = f"Grades : ({min_grade_value} - {max_grade_value})   /   Area : {self.area_filter}"
+
         area_table = self.ids.area_table
         grade_table = self.ids.grade_table
         year_table = self.ids.year_table
@@ -77,14 +88,23 @@ class StatisticScreen(MDScreen):
         Clock.schedule_once(lambda dt: self.table_update())
 
     def table_update(self):
-        self.total_ascents = get_total_ascent()
+        self.total_ascents = get_total_ascent(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
         self.ids.total_ascents.text = str(self.total_ascents)
-        self.area_table_instanciation()
+        if self.area_filter == 'All':
+            self.area_table_instanciation()
         self.grade_table_instanciation()
         self.year_table_instanciation()
 
     def area_table_instanciation(self):
-        area_query = get_ascents_per_area()
+        area_query = get_ascents_per_area(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
         header = ["Area", "Ascents", "Percentage"]
         ascents_per_area = self.add_pourcentage(area_query)
         area_table = Table(
@@ -96,7 +116,11 @@ class StatisticScreen(MDScreen):
         self.ids.scroll_view_content.add_widget(area_table)
 
     def grade_table_instanciation(self):
-        grade_query = get_ascents_per_grade()
+        grade_query = get_ascents_per_grade(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
         header = ["Grade", "Ascents", "Percentage"]
         ascents_per_grade = self.add_pourcentage(grade_query)
         grade_table = Table(
@@ -108,7 +132,11 @@ class StatisticScreen(MDScreen):
         self.ids.scroll_view_content.add_widget(grade_table)
 
     def year_table_instanciation(self):
-        year_query = get_ascents_per_year()
+        year_query = get_ascents_per_year(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
         header = ["Year", "Ascents", "Percentage"]
         ascents_per_year = self.add_pourcentage(year_query)
         year_table = Table(

@@ -1,0 +1,44 @@
+#:kivy 2.3.1
+
+<StatisticFilterScreen>
+    md_bg_color: app.theme_cls.backgroundColor
+    BoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            type: "small"
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    on_release: root.manager.current = "statistic"
+            MDTopAppBarTitle:
+                text: 'Filters'
+                text_color: app.theme_cls.primaryColor
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "refresh"
+                    on_release: root.clear_field()
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(30)
+            AreaSelector:
+                id: area_selector
+                adaptive_height: True
+            GradeSelector:
+                id: min_grade_selector
+                title: 'Min grade :'
+                starting_grade_value: '6a'
+                starting_slider_value: 0
+            GradeSelector:
+                id: max_grade_selector
+                title: 'Max grade :'
+                starting_grade_value: '9a'
+                starting_slider_value: 18
+            MDBoxLayout:
+                orientation: 'horizontal'
+                Widget:
+                MDButton:
+                    on_release: root.validate_filter()
+                    MDButtonText:
+                        text: 'OK'
+            Widget:

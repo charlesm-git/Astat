@@ -1,0 +1,47 @@
+#:kivy 2.3.1
+
+<AreaSelector>
+    orientation: 'horizontal'
+    spacing: dp(10)
+    adaptive_height: True
+    MDLabel:
+        text: "Area :"
+        adaptive_width: True
+        theme_text_color: 'Custom'
+        text_color: app.theme_cls.primaryColor
+
+    ClickableMDLabel:
+        id: selected_area
+        text: "All"
+        adaptive_width: True
+        bold: True
+        text_color: app.theme_cls.primaryColor
+        on_release: root.area_selection(self)
+        
+<GradeSelector>
+    orientation: 'vertical'
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: dp(20)
+        MDLabel:
+            text: root.title
+            adaptive_size: True
+            font_style: 'Title'
+            role: 'medium'
+            text_color: app.theme_cls.primaryColor
+        MDLabel:
+            id: grade_value
+            text: root.starting_grade_value
+            adaptive_height: True
+            font_style: 'Title'
+            role: 'medium'
+            text_color: app.theme_cls.primaryColor
+            bold: True
+    GradeSlider:
+        id: slider
+        min: 0
+        max: 18
+        step: 1
+        value: root.starting_slider_value
+        adaptive_height: True
+        MDSliderHandle:

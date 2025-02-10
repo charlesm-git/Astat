@@ -1,6 +1,5 @@
 from kivymd.uix.navigationbar import MDNavigationItem
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.transition import MDFadeSlideTransition
 from kivy.properties import StringProperty
 
 

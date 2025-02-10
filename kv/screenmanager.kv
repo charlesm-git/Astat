@@ -12,6 +12,7 @@
 
 <MainScreenManager>:
     orientation: 'vertical'
+
     MDScreenManager:
         id: screen_manager
         ListScreen:
@@ -20,6 +21,8 @@
             name: 'add-ascent'
         StatisticScreen:
             name: 'statistic'
+        StatisticFilterScreen:
+            name: 'statistic-filter'
 
     MDNavigationBar:
         on_switch_tabs: root.on_switch_tabs(args[1])

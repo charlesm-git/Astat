@@ -48,18 +48,29 @@
 
 <StatisticScreen>
     md_bg_color: app.theme_cls.backgroundColor
-    MDScrollView:
-        MDBoxLayout:
-            id: scroll_view_content
-            orientation: 'vertical'
-            padding: dp(20)
-            spacing: dp(10)
-            adaptive_height: True
-            
-            CustomTitleLabel:
-                text: 'Total number of ascents'
-            CustomTitleLabel:
-                id: total_ascents
-                font_style: 'Display'
-                role: 'small'
-                
+    FloatLayout:
+        MDScrollView:
+            MDBoxLayout:
+                id: scroll_view_content
+                orientation: 'vertical'
+                padding: dp(20), dp(40), dp(20), dp(100)
+                spacing: dp(10)
+                adaptive_height: True
+                CustomTitleLabel:
+                    id: filter_display
+                    bold: False
+                    halign: 'left'
+                    font_style: 'Title'
+                    role: 'medium'
+
+                MDDivider:
+                CustomTitleLabel:
+                    text: 'Total number of ascents'
+                CustomTitleLabel:
+                    id: total_ascents
+                    font_style: 'Display'
+                    role: 'small'
+        MDFabButton:
+            icon: "filter-outline"
+            pos_hint: {"right": 0.95, "y": 0.03}
+            on_release: root.manager.current = 'statistic-filter'

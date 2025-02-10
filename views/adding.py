@@ -19,7 +19,7 @@ from kivymd.uix.dialog import (
 )
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.clock import Clock
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp
 from sqlalchemy import select
 
@@ -34,10 +34,10 @@ class AddingScreen(MDScreen):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        Clock.schedule_once(lambda x: self.adding_area_callback())
+        Clock.schedule_once(lambda x: self.binds())
 
-    def adding_area_callback(self):
-        self.ids.adding_ascent_form.callback_after_adding = (
+    def binds(self):
+        self.ids.adding_area_form.on_area_adding = (
             self.ids.delete_area_list.refresh_area_list_after_adding_callback
         )
 
@@ -231,7 +231,7 @@ class AddingAreaForm(MDBoxLayout):
 
     # Defines the function called when an Area is added to the database
     # Initialized in the Adding Screen
-    callback_after_adding = None
+    on_area_adding = ObjectProperty(None, allownone=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -254,7 +254,9 @@ class AddingAreaForm(MDBoxLayout):
         Area.create(name=area_name)
         self.show_snackbar(text="Area created successfully")
         self.clear_field()
-        self.callback_after_adding(area_name)
+        
+        if callable(self.on_area_adding):
+            self.on_area_adding(area_name)
 
     def show_snackbar(self, text):
         snackbar = MDSnackbar(

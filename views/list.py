@@ -36,8 +36,12 @@ class ListScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Adding of a delay: Loading of the list after setup of the layout
+        Clock.schedule_once(lambda dt: self.binds())
         Clock.schedule_once(lambda dt: self.load_by_date())
         self._initialized = True
+
+    def binds(self, *args):
+        self.ids.area_selector.on_area_selected = self.refresh_data
 
     def load_ascents(self, ordered_query, group_label_getter):
         """
@@ -135,7 +139,7 @@ class ListScreen(MDScreen):
     def get_filtered_query(self):
         """Get the base area filtered query for the database"""
         # Area filter
-        area = self.ids.area_selector.text
+        area = self.ids.area_selector.ids.selected_area.text
         if area == "All":
             query = select(Ascent)
         else:
@@ -146,49 +150,6 @@ class ListScreen(MDScreen):
         query = query.where(Ascent.name.like(f"%{search_input}%"))
 
         return query
-
-    def area_selection(self, item):
-        """Function for grade dropdown menu configuration and opening"""
-        with Session() as session:
-            areas = session.scalars(select(Area).order_by(Area.name)).all()
-
-        menu_items = [
-            {
-                "text": "All",
-                "on_release": lambda: self.area_selection_callback(
-                    "All",
-                ),
-            }
-        ]
-        for area in areas:
-            menu_items.append(
-                {
-                    "text": f"{area.name}",
-                    "on_release": lambda a=area: self.area_selection_callback(
-                        a.name,
-                    ),
-                }
-            )
-
-        # Setup of the dropdown menu
-        self.area_selector = MDDropdownMenu(
-            caller=item,
-            items=menu_items,
-            max_height=dp(200),
-            width=dp(180),
-            position="bottom",
-            hor_growth="right",
-        )
-        self.area_selector.open()
-
-    def area_selection_callback(self, area_name):
-        """
-        Function called when an area is selected.
-        Updated the area displayed on the label
-        """
-        self.ids.area_selector.text = area_name
-        self.area_selector.dismiss()
-        Clock.schedule_once(lambda dt: self.refresh_data())
 
 
 class AscentItem(MDBoxLayout):
@@ -284,7 +245,6 @@ class CustomMDSegmentedButton(MDSegmentedButton):
 
 class ClickableMDLabel(ButtonBehavior, MDLabel):
     """Creates a Label with Button properties (clickable)"""
-
     pass
 
 
