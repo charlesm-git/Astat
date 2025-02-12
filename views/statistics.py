@@ -8,6 +8,7 @@ from kivymd.uix.tab import (
     MDTabsItemIcon,
     MDTabsItemText,
 )
+from kivy.app import App
 from kivy.properties import (
     StringProperty,
     ListProperty,
@@ -138,6 +139,7 @@ class StatisticScreen(MDScreen):
         max_grade_value = Grade.get_grade_value_from_correspondence(
             self.max_grade_filter
         )
+        self.area_filter = App.get_running_app().root.selected_area
         self.ids.filter_display.text = (
             f"Grades : ({min_grade_value} - {max_grade_value})"
             f"   /   Area : {self.area_filter}"

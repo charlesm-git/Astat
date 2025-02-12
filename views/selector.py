@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.slider import MDSlider
@@ -11,6 +12,7 @@ from database.database import Session
 
 class AreaSelector(MDBoxLayout):
     on_area_selected = ObjectProperty(None, allownone=True)
+    selected_area = StringProperty('All')
 
     def area_selection(self, item):
         """Function for grade dropdown menu configuration and opening"""
@@ -51,7 +53,9 @@ class AreaSelector(MDBoxLayout):
         Function called when an area is selected.
         Updated the area displayed on the label
         """
-        self.ids.selected_area.text = area_name
+        screen_manager = App.get_running_app().root
+        self.selected_area = area_name
+        screen_manager.selected_area = self.selected_area
         self.area_selector.dismiss()
 
         if callable(self.on_area_selected):

@@ -1,5 +1,6 @@
 from sqlalchemy import select, desc
 
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 from kivymd.uix.screen import MDScreen
@@ -40,6 +41,17 @@ class ListScreen(MDScreen):
 
     def binds(self, *args):
         self.ids.area_selector.on_area_selected = self.refresh_data
+
+    def on_pre_enter(self):
+        if self._initialized:
+            
+            def get_selected_area():
+                self.ids.area_selector.selected_area = (
+                    App.get_running_app().root.selected_area
+                )
+            Clock.schedule_once(lambda dt: get_selected_area())
+            
+            Clock.schedule_once(lambda dt: self.refresh_data())
 
     def load_ascents(self, ordered_query, group_label_getter):
         """
@@ -98,10 +110,6 @@ class ListScreen(MDScreen):
         # Update the data of the RecycleView with the ascent_data
         self.ids.ascent_list.data = self.ascents_data
         self.ids.ascent_list.refresh_from_data()
-
-    def on_enter(self):
-        if self._initialized:
-            Clock.schedule_once(lambda dt: self.refresh_data())
 
     def refresh_data(self):
         if self.ids.sort_by_date.active:
@@ -243,6 +251,7 @@ class CustomMDSegmentedButton(MDSegmentedButton):
 
 class ClickableMDLabel(ButtonBehavior, MDLabel):
     """Creates a Label with Button properties (clickable)"""
+
     pass
 
 
