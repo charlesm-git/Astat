@@ -2,11 +2,18 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.divider import MDDivider
 from kivymd.uix.label import MDLabel
+from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.tab import (
+    MDTabsItem,
+    MDTabsItemIcon,
+    MDTabsItemText,
+)
 from kivy.properties import (
     StringProperty,
     ListProperty,
     BooleanProperty,
     NumericProperty,
+    ObjectProperty,
 )
 from kivy.clock import Clock
 
@@ -16,6 +23,7 @@ from statistic.queries import (
     get_ascents_per_grade,
     get_ascents_per_year,
     get_total_ascent,
+    get_average_grade,
 )
 
 
@@ -34,13 +42,19 @@ class TableRow(MDBoxLayout):
 
 
 class Table(MDBoxLayout):
-    title = StringProperty()
-    table_content = ListProperty([])
-    header = ListProperty([])
+    title = StringProperty("")
+    content = ListProperty([["", "", ""]])
+    header = ListProperty(["", "", ""])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        horizontal_divider = MDDivider()
+
+    def update_table(self, *args):
+
+        for child in self.children[:]:
+            if not isinstance(child, CustomTitleLabel):
+                self.remove_widget(child)
+
         header_row = TableRow(
             value=self.header[0],
             nbre_of_ascents=self.header[1],
@@ -48,27 +62,45 @@ class Table(MDBoxLayout):
             is_header=True,
         )
         self.add_widget(header_row)
-        self.add_widget(horizontal_divider)
-        for value, nbre_of_ascents, pourcentage in self.table_content:
+        self.add_widget(MDDivider())
+        for value, nbre_of_ascents, pourcentage in self.content:
             table_row = TableRow(
                 value=value,
                 nbre_of_ascents=nbre_of_ascents,
                 pourcentage=f"{pourcentage} %",
             )
-            horizontal_divider = MDDivider()
             self.add_widget(table_row)
-            self.add_widget(horizontal_divider)
+            self.add_widget(MDDivider())
 
 
-class StatisticScreen(MDScreen):
-    total_ascents = NumericProperty()
-    min_grade_filter = NumericProperty(1)
-    max_grade_filter = NumericProperty(19)
-    area_filter = StringProperty("All")
+class CustomTableTab(MDScrollView):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+class GeneralInfoTab(MDBoxLayout):
+    total_number_of_ascent = StringProperty()
+    average_grade = StringProperty()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        Clock.schedule_once(lambda dt: self.table_update())
+
+
+class StatisticScreen(MDScreen):
+    total_ascents = NumericProperty(0)
+    min_grade_filter = NumericProperty(1)
+    max_grade_filter = NumericProperty(19)
+    area_filter = StringProperty()
+
+    tab_general = ObjectProperty()
+    tab_grade = ObjectProperty()
+    tab_year = ObjectProperty()
+    tab_area = ObjectProperty()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.area_filter = self.manager.area_filter
+        Clock.schedule_once(lambda dt: self.tab_init())
 
     def on_pre_enter(self):
         min_grade_value = Grade.get_grade_value_from_correspondence(
@@ -79,41 +111,97 @@ class StatisticScreen(MDScreen):
         )
         self.ids.filter_display.text = f"Grades : ({min_grade_value} - {max_grade_value})   /   Area : {self.area_filter}"
 
-        area_table = self.ids.area_table
-        grade_table = self.ids.grade_table
-        year_table = self.ids.year_table
-        self.ids.scroll_view_content.remove_widget(area_table)
-        self.ids.scroll_view_content.remove_widget(grade_table)
-        self.ids.scroll_view_content.remove_widget(year_table)
-        Clock.schedule_once(lambda dt: self.table_update())
+        Clock.schedule_once(lambda dt: self.carousel_update())
 
-    def table_update(self):
+    def tab_init(self, *args):
+        tabs = {
+            "General": "clipboard-text-outline",
+            "Grade": "speedometer",
+            "Year": "calendar-range",
+            "Area": "earth",
+        }
+
+        for tab_name, tab_icon in tabs.items():
+            self.ids.tabs.add_widget(
+                MDTabsItem(
+                    MDTabsItemIcon(icon=tab_icon),
+                    MDTabsItemText(text=tab_name),
+                )
+            )
+
+        carousel = self.ids.carousel
+
+        general_tab = GeneralInfoTab(
+            total_number_of_ascent=str(self.total_ascents)
+        )
+        carousel.add_widget(general_tab)
+        self.ids["general_tab"] = general_tab
+
+        grade_tab = CustomTableTab()
+        carousel.add_widget(grade_tab)
+        self.ids["grade_tab"] = grade_tab
+
+        year_tab = CustomTableTab()
+        carousel.add_widget(year_tab)
+        self.ids["year_tab"] = year_tab
+
+        area_tab = CustomTableTab()
+        carousel.add_widget(area_tab)
+        self.ids["area_tab"] = area_tab
+
+    def carousel_update(self):
+
         self.total_ascents = get_total_ascent(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        self.ids.total_ascents.text = str(self.total_ascents)
-        if self.area_filter == 'All':
-            self.area_table_instanciation()
-        self.grade_table_instanciation()
-        self.year_table_instanciation()
-
-    def area_table_instanciation(self):
-        area_query = get_ascents_per_area(
+        average_grade = get_average_grade(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        header = ["Area", "Ascents", "Percentage"]
-        ascents_per_area = self.add_pourcentage(area_query)
-        area_table = Table(
-            header=header,
-            table_content=ascents_per_area,
-            title="Ascent per area",
+        self.ids.general_tab.total_number_of_ascent = str(self.total_ascents)
+        self.ids.general_tab.average_grade = average_grade
+
+        area_table_header, area_table_content, area_table_title = (
+            self.area_table_instanciation()
         )
-        self.ids["area_table"] = area_table
-        self.ids.scroll_view_content.add_widget(area_table)
+        grade_table_header, grade_table_content, grade_table_title = (
+            self.grade_table_instanciation()
+        )
+        year_table_header, year_table_content, year_table_title = (
+            self.year_table_instanciation()
+        )
+
+        headers = [
+            grade_table_header,
+            year_table_header,
+            area_table_header,
+        ]
+        contents = [
+            grade_table_content,
+            year_table_content,
+            area_table_content,
+        ]
+        titles = [
+            grade_table_title,
+            year_table_title,
+            area_table_title,
+        ]
+        tables = [
+            self.ids.grade_tab.ids.table,
+            self.ids.year_tab.ids.table,
+            self.ids.area_tab.ids.table,
+        ]
+
+        for header, content, title, table in zip(
+            headers, contents, titles, tables
+        ):
+            table.header = header
+            table.content = content
+            table.title = title
+            table.update_table()
 
     def grade_table_instanciation(self):
         grade_query = get_ascents_per_grade(
@@ -123,13 +211,9 @@ class StatisticScreen(MDScreen):
         )
         header = ["Grade", "Ascents", "Percentage"]
         ascents_per_grade = self.add_pourcentage(grade_query)
-        grade_table = Table(
-            header=header,
-            table_content=ascents_per_grade,
-            title="Ascent per grade",
-        )
-        self.ids["grade_table"] = grade_table
-        self.ids.scroll_view_content.add_widget(grade_table)
+        title = "Ascent per grade"
+
+        return header, ascents_per_grade, title
 
     def year_table_instanciation(self):
         year_query = get_ascents_per_year(
@@ -139,13 +223,20 @@ class StatisticScreen(MDScreen):
         )
         header = ["Year", "Ascents", "Percentage"]
         ascents_per_year = self.add_pourcentage(year_query)
-        year_table = Table(
-            header=header,
-            table_content=ascents_per_year,
-            title="Ascent per year",
+        title = "Ascent per year"
+        return header, ascents_per_year, title
+
+    def area_table_instanciation(self):
+        area_query = get_ascents_per_area(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
         )
-        self.ids["year_table"] = year_table
-        self.ids.scroll_view_content.add_widget(year_table)
+        header = ["Area", "Ascents", "Percentage"]
+        ascents_per_area = self.add_pourcentage(area_query)
+        title = "Ascent per area"
+
+        return header, ascents_per_area, title
 
     def add_pourcentage(self, query_result):
         updated_filtered_list = []

@@ -46,31 +46,61 @@
         text: root.title
         padding: 0, 0, 0, dp(15)
 
+<CustomTableTab>
+    MDScrollView:
+        MDBoxLayout:
+            id: tab_scroll_view
+            orientation: 'vertical'
+            padding: 0, dp(10), 0, dp(100)
+            adaptive_height: True
+            Table:
+                id: table
+                adaptive_height: True
+
+<GeneralInfoTab>
+    orientation: 'vertical'
+    padding: 0, dp(40)
+    CustomTitleLabel:
+        text: 'Total number of ascents'
+    CustomTitleLabel:
+        id: total_ascents
+        text: root.total_number_of_ascent
+        font_style: 'Display'
+        role: 'small'
+    CustomTitleLabel:
+        text: 'Average grade'
+    CustomTitleLabel:
+        id: total_ascents
+        text: root.average_grade
+        font_style: 'Display'
+        role: 'small'
+    Widget:
+
 <StatisticScreen>
     md_bg_color: app.theme_cls.backgroundColor
     FloatLayout:
-        MDScrollView:
-            MDBoxLayout:
-                id: scroll_view_content
-                orientation: 'vertical'
-                padding: dp(20), dp(40), dp(20), dp(100)
-                spacing: dp(10)
-                adaptive_height: True
-                CustomTitleLabel:
-                    id: filter_display
-                    bold: False
-                    halign: 'left'
-                    font_style: 'Title'
-                    role: 'medium'
-
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            CustomTitleLabel:
+                id: filter_display
+                bold: False
+                halign: 'left'
+                font_style: 'Title'
+                role: 'medium'
+            MDTabsPrimary:
+                id: tabs
+                size_hint_y: None
                 MDDivider:
-                CustomTitleLabel:
-                    text: 'Total number of ascents'
-                CustomTitleLabel:
-                    id: total_ascents
-                    font_style: 'Display'
-                    role: 'small'
+                MDTabsCarousel:
+                    id: carousel
+                    size_hint_y: None
+                    height: dp(400)
+            Widget:
         MDFabButton:
             icon: "filter-outline"
             pos_hint: {"right": 0.95, "y": 0.03}
             on_release: root.manager.current = 'statistic-filter'
+            color_map: 'secondary'
+            theme_icon_color: 'Custom'
+            icon_color: app.theme_cls.onPrimaryColor

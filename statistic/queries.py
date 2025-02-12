@@ -49,7 +49,7 @@ def get_ascents_per_area(
                 Grade.correspondence <= max_grade_correpondence,
             )
         )
-        
+
         if area != "All":
             query = query.filter(Area.name == area)
 
@@ -78,7 +78,7 @@ def get_ascents_per_grade(
                 Grade.correspondence <= max_grade_correpondence,
             )
         )
-        
+
         if area != "All":
             query = query.filter(Area.name == area)
 
@@ -110,10 +110,37 @@ def get_ascents_per_year(
                 Grade.correspondence <= max_grade_correpondence,
             )
         )
-        
+
         if area != "All":
             query = query.filter(Area.name == area)
 
         result = query.group_by("year").order_by(desc("year")).all()
-        
+
     return result
+
+
+def get_average_grade(
+    min_grade_correspondence=1, max_grade_correpondence=19, area="All"
+):
+    with Session() as session:
+        query = (
+            session.query(func.avg(Grade.correspondence))
+            .join(Ascent, Grade.id == Ascent.grade_id)
+            .join(Area, Area.id == Ascent.area_id)
+            .filter(
+                Grade.correspondence >= min_grade_correspondence,
+                Grade.correspondence <= max_grade_correpondence,
+            )
+        )
+
+        if area != "All":
+            query = query.filter(Area.name == area)
+
+        average_grade_correspondence = round(query.first()[0])
+
+        average_grade = session.scalar(
+            select(Grade.grade_value).where(
+                Grade.correspondence == average_grade_correspondence
+            )
+        )
+    return average_grade

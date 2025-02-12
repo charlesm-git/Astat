@@ -15,8 +15,6 @@ from kivymd.uix.dialog import (
 )
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.divider import MDDivider
-from kivymd.uix.menu import MDDropdownMenu
-from kivy.metrics import dp
 from kivy.uix.behaviors import ButtonBehavior
 
 from kivymd.uix.segmentedbutton import MDSegmentedButton

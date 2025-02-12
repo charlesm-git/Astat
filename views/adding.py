@@ -254,7 +254,7 @@ class AddingAreaForm(MDBoxLayout):
         Area.create(name=area_name)
         self.show_snackbar(text="Area created successfully")
         self.clear_field()
-        
+
         if callable(self.on_area_adding):
             self.on_area_adding(area_name)
 
