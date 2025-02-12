@@ -5,12 +5,13 @@ from models.grade import Grade
 
 
 class StatisticFilterScreen(MDScreen):
-
+    """Definition of the statistic filtering screen"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         Clock.schedule_once(lambda x: self.binds())
 
     def binds(self, *args):
+        """Bind the grades sliders with their label display"""
         min_grade_selector = self.ids.min_grade_selector
         min_grade_selector.ids.slider.bind(
             value_pos=lambda *args: self.grade_label_update(min_grade_selector)
@@ -28,6 +29,9 @@ class StatisticFilterScreen(MDScreen):
         grade_selector.ids.grade_value.text = grade
 
     def validate_filter(self):
+        """Update the StatisticScreen attributes based on the user filtering
+        selection (both with grades and area)"""
+        
         statistic_screen = self.manager.get_screen("statistic")
         statistic_screen.min_grade_filter = (
             self.ids.min_grade_selector.ids.slider.value + 1
@@ -41,6 +45,7 @@ class StatisticFilterScreen(MDScreen):
         self.manager.current = "statistic"
 
     def clear_field(self):
+        """Reset all the filtering fields"""
         self.ids.min_grade_selector.ids.slider.value = 0
         self.ids.max_grade_selector.ids.slider.value = 18
         self.ids.area_selector.ids.selected_area.text = 'All'
