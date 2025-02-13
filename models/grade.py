@@ -1,9 +1,11 @@
 from typing import Optional, List
+
+from kivymd.app import MDApp
+
 from sqlalchemy import Integer, SmallInteger, String, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base import Base
-from database.database import Session
 import models.ascent
 
 
@@ -26,7 +28,7 @@ class Grade(Base):
 
     @classmethod
     def get_grade_value_from_correspondence(cls, grade_correspondence):
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             grade = session.scalar(
                 select(Grade.grade_value).where(
                     Grade.correspondence == grade_correspondence

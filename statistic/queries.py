@@ -1,6 +1,7 @@
 from sqlalchemy import func, extract, desc, select
 
-from database.database import Session
+from kivymd.app import MDApp
+
 from models.area import Area
 from models.ascent import Ascent
 from models.grade import Grade
@@ -13,7 +14,7 @@ def get_total_ascent(
     Get the total number of logged ascents
     :return: the total number as an int
     """
-    with Session() as session:
+    with MDApp.get_running_app().get_db_session() as session:
         query = (
             session.query(func.count(Ascent.id))
             .join(Grade, Grade.id == Ascent.grade_id)
@@ -39,7 +40,7 @@ def get_ascents_per_area(
     Get the number of ascent per area
     :return: a list of tuple with format : (number_of_ascent, area)
     """
-    with Session() as session:
+    with MDApp.get_running_app().get_db_session() as session:
         query = (
             session.query(Area.name, func.count(Ascent.id))
             .join(Ascent, Area.id == Ascent.area_id)
@@ -68,7 +69,7 @@ def get_ascents_per_grade(
     Get the number of ascent per grade
     :return: a list of tuple with format : (number_of_ascent, grade)
     """
-    with Session() as session:
+    with MDApp.get_running_app().get_db_session() as session:
         query = (
             session.query(Grade.grade_value, func.count(Ascent.id))
             .join(Ascent, Grade.id == Ascent.grade_id)
@@ -97,7 +98,7 @@ def get_ascents_per_year(
     Get the number of ascent per year
     :return: a list of tuple with format : (number_of_ascent, year)
     """
-    with Session() as session:
+    with MDApp.get_running_app().get_db_session() as session:
         query = (
             session.query(
                 extract("year", Ascent.ascent_date).label("year"),
@@ -122,7 +123,7 @@ def get_ascents_per_year(
 def get_average_grade(
     min_grade_correspondence=1, max_grade_correpondence=19, area="All"
 ):
-    with Session() as session:
+    with MDApp.get_running_app().get_db_session() as session:
         query = (
             session.query(func.avg(Grade.correspondence))
             .join(Ascent, Grade.id == Ascent.grade_id)

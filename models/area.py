@@ -2,7 +2,8 @@ from typing import Optional, List
 from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from database.database import Session
+from kivymd.app import MDApp
+
 from models.base import Base
 from models.ascent import Ascent
 import models.ascent
@@ -26,14 +27,14 @@ class Area(Base):
 
     @classmethod
     def create(cls, name):
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             session.add(Area(name=name))
             session.commit()
 
     @classmethod
     def delete(cls, area_name):
         """Delete an Area and all associated ascents"""
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             area_to_delete = session.scalar(
                 select(Area).where(Area.name == area_name)
             )

@@ -1,4 +1,4 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.slider import MDSlider
@@ -7,7 +7,6 @@ from kivy.metrics import dp
 from sqlalchemy import select
 
 from models.area import Area
-from database.database import Session
 
 
 class AreaSelector(MDBoxLayout):
@@ -16,7 +15,7 @@ class AreaSelector(MDBoxLayout):
 
     def area_selection(self, item):
         """Function for grade dropdown menu configuration and opening"""
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             areas = session.scalars(select(Area).order_by(Area.name)).all()
 
         menu_items = [
@@ -53,7 +52,7 @@ class AreaSelector(MDBoxLayout):
         Function called when an area is selected.
         Updated the area displayed on the label
         """
-        screen_manager = App.get_running_app().root
+        screen_manager = MDApp.get_running_app().root
         self.selected_area = area_name
         screen_manager.selected_area = self.selected_area
         self.area_selector.dismiss()

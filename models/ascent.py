@@ -1,9 +1,11 @@
+from datetime import datetime, date
+
+from kivymd.app import MDApp
+
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
-from datetime import datetime, date
 
-from database.database import Session
 from models.base import Base
 import models.area
 import models.grade
@@ -43,14 +45,14 @@ class Ascent(Base):
 
     @classmethod
     def delete(cls, id):
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             ascent_to_delete = session.get(cls, id)
             session.delete(ascent_to_delete)
             session.commit()
 
     @classmethod
     def create(cls, name, grade_id, area_id, ascent_date):
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             session.add(
                 Ascent(
                     name=name,

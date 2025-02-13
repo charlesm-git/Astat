@@ -10,7 +10,8 @@ class BaseMDNavigationItem(MDNavigationItem):
 
 
 class MainScreenManager(MDBoxLayout):
-    selected_area = StringProperty('All')
+    selected_area = StringProperty("All")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

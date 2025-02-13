@@ -1,3 +1,4 @@
+from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.widget import Widget
@@ -23,7 +24,6 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp
 from sqlalchemy import select
 
-from database.database import Session
 from models.area import Area
 from models.grade import Grade
 from models.ascent import Ascent
@@ -63,7 +63,7 @@ class AddingAscentForm(MDBoxLayout):
 
     def open_grade_menu(self, item):
         """Function for grade dropdown menu configuration and opening"""
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             grades = session.scalars(select(Grade)).all()
 
         menu_items = [
@@ -98,7 +98,7 @@ class AddingAscentForm(MDBoxLayout):
 
     def open_area_menu(self, item):
         """Function for grade dropdown menu configuration and opening"""
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             areas = session.scalars(select(Area).order_by(Area.name)).all()
 
         menu_items = [
@@ -168,7 +168,7 @@ class AddingAscentForm(MDBoxLayout):
             )
             return
 
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             ascent_existence_check = session.scalar(
                 select(Ascent).where(
                     Ascent.name == self.form["name"],
@@ -180,7 +180,10 @@ class AddingAscentForm(MDBoxLayout):
             # and return
             if ascent_existence_check:
                 self.show_snackbar(
-                    text=f"This climb was logged on {ascent_existence_check.ascent_date}"
+                    text=(
+                        f"This climb was logged on "
+                        f"{ascent_existence_check.ascent_date}"
+                    )
                 )
                 return
 
@@ -247,7 +250,7 @@ class AddingAreaForm(MDBoxLayout):
             self.show_snackbar(text="Form Incomplete")
             return
         # Check if an Area with this name already exist
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             if session.scalar(select(Area).where(Area.name == area_name)):
                 self.show_snackbar(text="Area already exists")
                 return
@@ -288,13 +291,15 @@ class DeleteAreaList(MDBoxLayout):
 
     def area_list_creation(self):
         """Creates the list of AreaItem with a callback function"""
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             areas = session.scalars(select(Area)).all()
             for area in areas:
                 self.add_widget(
                     AreaItem(
                         area_name=area.name,
-                        refresh_callback=self.refresh_area_list_after_delete_callback,
+                        refresh_callback=(
+                            self.refresh_area_list_after_delete_callback
+                        ),
                     )
                 )
 
@@ -333,7 +338,10 @@ class AreaItem(MDBoxLayout):
                 text=f"You are about to delete this area : {self.area_name}"
             ),
             MDDialogSupportingText(
-                text="This action is IRREVERSIBLE and will delete ALL associated ascent.",
+                text=(
+                    "This action is IRREVERSIBLE and will delete ALL "
+                    "associated ascents."
+                ),
                 bold=True,
                 font_style="Title",
                 role="medium",

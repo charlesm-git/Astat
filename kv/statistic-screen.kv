@@ -81,7 +81,7 @@
     FloatLayout:
         MDBoxLayout:
             orientation: 'vertical'
-            padding: dp(20)
+            padding: dp(30)
             CustomTitleLabel:
                 id: filter_display
                 bold: False
@@ -95,7 +95,8 @@
                 MDTabsCarousel:
                     id: carousel
                     size_hint_y: None
-                    height: dp(400)
+                    height: dp(450)
+                    lock_swiping: True
             Widget:
         MDFabButton:
             icon: "filter-outline"

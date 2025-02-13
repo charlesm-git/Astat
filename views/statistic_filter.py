@@ -1,4 +1,4 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
@@ -14,7 +14,7 @@ class StatisticFilterScreen(MDScreen):
 
     def on_pre_enter(self, *args):
         self.ids.area_selector.selected_area = (
-            App.get_running_app().root.selected_area
+            MDApp.get_running_app().root.selected_area
         )
 
     def binds(self, *args):

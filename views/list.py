@@ -1,6 +1,6 @@
 from sqlalchemy import select, desc
 
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 from kivymd.uix.screen import MDScreen
@@ -20,7 +20,6 @@ from kivy.uix.behaviors import ButtonBehavior
 
 from kivymd.uix.segmentedbutton import MDSegmentedButton
 
-from database.database import Session
 from models.area import Area
 from models.ascent import Ascent
 from models.grade import Grade
@@ -44,13 +43,13 @@ class ListScreen(MDScreen):
 
     def on_pre_enter(self):
         if self._initialized:
-            
+
             def get_selected_area():
                 self.ids.area_selector.selected_area = (
-                    App.get_running_app().root.selected_area
+                    MDApp.get_running_app().root.selected_area
                 )
+
             Clock.schedule_once(lambda dt: get_selected_area())
-            
             Clock.schedule_once(lambda dt: self.refresh_data())
 
     def load_ascents(self, ordered_query, group_label_getter):
@@ -62,7 +61,7 @@ class ListScreen(MDScreen):
         group_label_getter: Lambda function used to get the category label
         values
         """
-        with Session() as session:
+        with MDApp.get_running_app().get_db_session() as session:
             # Query the ascents with the right ordering requirement
             ascents = session.scalars(ordered_query).all()
 

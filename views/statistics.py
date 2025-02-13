@@ -8,7 +8,7 @@ from kivymd.uix.tab import (
     MDTabsItemIcon,
     MDTabsItemText,
 )
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.properties import (
     StringProperty,
     ListProperty,
@@ -30,14 +30,16 @@ from statistic.queries import (
 
 class CustomTitleLabel(MDLabel):
     """Custom title. Configured in .kv"""
+
     pass
 
 
 class TableRow(MDBoxLayout):
     """
-    Configure the display of one row of a table. 
+    Configure the display of one row of a table.
     Uses TableCell defined in .kv
     """
+
     value = StringProperty()
     nbre_of_ascents = StringProperty()
     pourcentage = StringProperty()
@@ -49,6 +51,7 @@ class TableRow(MDBoxLayout):
 
 class Table(MDBoxLayout):
     """3 columns Table to display data. Uses TableRow"""
+
     title = StringProperty("")
     content = ListProperty([["", "", ""]])
     header = ListProperty(["", "", ""])
@@ -73,10 +76,10 @@ class Table(MDBoxLayout):
             is_header=True,
         )
         self.add_widget(header_row)
-        
+
         # MDDivider used to draw a line between each row
         self.add_widget(MDDivider())
-        
+
         # Using the current attribute definitions, creates the TableRow and add
         # them to the table
         for value, nbre_of_ascents, pourcentage in self.content:
@@ -91,12 +94,14 @@ class Table(MDBoxLayout):
 
 class CustomTableTab(MDScrollView):
     """Tab used to display tables. Used by MDTabs"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
 class GeneralInfoTab(MDBoxLayout):
     """Table used to display general information. Used by MDTabs"""
+
     total_number_of_ascent = StringProperty()
     average_grade = StringProperty()
 
@@ -107,16 +112,17 @@ class GeneralInfoTab(MDBoxLayout):
 class StatisticScreen(MDScreen):
     """
     Screen displaying statistics.
-    
+
     Contains :
     - 4 tabs to display general informations and tables (statistics per area,
     grade and year)
     - A floating button to go to the filter screen
     """
+
     total_ascents = NumericProperty(0)
     min_grade_filter = NumericProperty(1)
     max_grade_filter = NumericProperty(19)
-    area_filter = StringProperty('All')
+    area_filter = StringProperty("All")
 
     tab_general = ObjectProperty()
     tab_grade = ObjectProperty()
@@ -139,7 +145,7 @@ class StatisticScreen(MDScreen):
         max_grade_value = Grade.get_grade_value_from_correspondence(
             self.max_grade_filter
         )
-        self.area_filter = App.get_running_app().root.selected_area
+        self.area_filter = MDApp.get_running_app().root.selected_area
         self.ids.filter_display.text = (
             f"Grades : ({min_grade_value} - {max_grade_value})"
             f"   /   Area : {self.area_filter}"
@@ -153,7 +159,7 @@ class StatisticScreen(MDScreen):
         The content of the carousel is initialised empty and updated when
         entering the screen (see on_pre_enter()).
         """
-        
+
         # Setup the tab bar
         tabs = {
             "General": "clipboard-text-outline",
@@ -201,7 +207,7 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        
+
         # Update the average grade
         average_grade = get_average_grade(
             min_grade_correspondence=self.min_grade_filter,
@@ -212,7 +218,7 @@ class StatisticScreen(MDScreen):
         self.ids.general_tab.average_grade = average_grade
 
         # Update the content of the tables
-        
+
         # Get the data from the database from the filters
         area_table_header, area_table_content, area_table_title = (
             self.area_table_instanciation()
@@ -256,7 +262,7 @@ class StatisticScreen(MDScreen):
             table.update_table()
 
     def grade_table_instanciation(self):
-        """Get from the database the informations related to the GRADE table 
+        """Get from the database the informations related to the GRADE table
         based on the current filters"""
         grade_query = get_ascents_per_grade(
             min_grade_correspondence=self.min_grade_filter,
@@ -270,7 +276,7 @@ class StatisticScreen(MDScreen):
         return header, ascents_per_grade, title
 
     def year_table_instanciation(self):
-        """Get from the database the informations related to the YEAR table 
+        """Get from the database the informations related to the YEAR table
         based on the current filters"""
         year_query = get_ascents_per_year(
             min_grade_correspondence=self.min_grade_filter,
@@ -283,7 +289,7 @@ class StatisticScreen(MDScreen):
         return header, ascents_per_year, title
 
     def area_table_instanciation(self):
-        """Get from the database the informations related to the AREA table 
+        """Get from the database the informations related to the AREA table
         based on the current filters"""
         area_query = get_ascents_per_area(
             min_grade_correspondence=self.min_grade_filter,
