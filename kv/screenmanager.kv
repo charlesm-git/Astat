@@ -16,28 +16,32 @@
     MDScreenManager:
         id: screen_manager
         ListScreen:
-            name: 'list'
-        AddingScreen:
+            name: 'ascents-list'
+        AddingAscentScreen:
             name: 'add-ascent'
+        AddingAreaScreen:
+            name: 'add-area'
         StatisticScreen:
             name: 'statistic'
         StatisticFilterScreen:
             name: 'statistic-filter'
+        SettingsScreen:
+            name: 'settings'
 
     MDNavigationBar:
         on_switch_tabs: root.on_switch_tabs(args[1])
         BaseMDNavigationItem:
-            name: 'list'
+            name: 'ascents-list'
             icon: "format-list-bulleted"
             text: "Ascents"
             active: True
 
         BaseMDNavigationItem:
-            name: 'add-ascent'
-            icon: "plus"
-            text: "Add"
-
-        BaseMDNavigationItem:
             name: 'statistic'
             icon: "chart-donut-variant"
             text: "Statistic"
+
+        BaseMDNavigationItem:
+            name: 'settings'
+            icon: "cog"
+            text: "Settings"

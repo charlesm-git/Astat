@@ -1,24 +1,26 @@
 #:kivy 2.3.1
 
-<AddingScreen>
+<AddingAscentScreen>
     md_bg_color: self.theme_cls.backgroundColor
-    MDScrollView:
-        do_scroll_x: False
-        MDBoxLayout:
-            orientation: 'vertical'
-            spacing: dp(30)
-            adaptive_height: True
-            AddingAscentForm:
-            MDDivider:
-                size_hint_x: 0.5
-                pos_hint: {"center_x": 0.5}
-            AddingAreaForm:
-                id: adding_area_form
-            MDDivider:
-                size_hint_x: 0.5
-                pos_hint: {"center_x": 0.5}
-            DeleteAreaList:
-                id: delete_area_list
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            type: "small"
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    on_release: root.manager.current = "ascents-list"
+            MDTopAppBarTitle:
+                text: 'Add Ascent'
+                text_color: app.theme_cls.primaryColor
+        MDScrollView:
+            do_scroll_x: False
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                spacing: dp(30)
+                adaptive_height: True
+                AddingAscentForm:
 
 <SectionTitle@MDLabel>
     # Section title for each Items of the AddingScreen
@@ -101,38 +103,7 @@
             MDButtonText:
                 text: "Add"
 
-<AddingAreaForm>
-    orientation: 'vertical'
-    adaptive_height: True
-    padding: dp(20)
 
-    SectionTitle:
-        text: "Add Area"
-    MDTextField:
-        id: area_form_name
-        mode: 'filled'
-        MDTextFieldLeadingIcon:
-            icon: "map"
-        MDTextFieldHintText:
-            id: text_field
-            text: "Area Name"
-        MDTextFieldMaxLengthText:
-            max_text_length: 64
-
-    MDBoxLayout:
-        orientation: "horizontal"
-        adaptive_height: True
-        padding: 0, dp(30), 0, dp(10)
-        spacing: dp(30)
-        Widget:
-        MDButton:
-            on_release: root.clear_field()
-            MDButtonText:
-                text: 'Clear'
-        MDButton:
-            on_release: root.submit()
-            MDButtonText:
-                text: "Add"
 
 <DropDownMenuHeader>
     orientation: "vertical"
@@ -171,34 +142,3 @@
             text_color:
                 app.theme_cls.onSurfaceVariantColor
 
-<DeleteAreaList>
-    orientation: 'vertical'
-    adaptive_height: True
-    padding: dp(20)
-    SectionTitle:
-        text: "Delete Area"
-    
-<AreaItem>
-    orientation: 'horizontal'
-    adaptive_height: True
-    spacing: dp(10)
-    canvas.after:
-        Color:
-            rgba: 0.5, 0.5, 0.5, 1  # Light gray color for the line
-        Line:
-            points: self.x, self.y, self.right, self.y  # Draws a line at the bottom
-            width: 1  # Thickness of the line
-
-    MDLabel:
-        text: root.area_name
-        bold: True
-        font_style: 'Body'
-        role: 'medium'
-    MDIconButton:
-        icon: 'delete-outline'
-        theme_font_size: "Custom"
-        font_size: "20sp"
-        radius: [self.height / 4, ]
-        size_hint: None, None
-        size: "30dp", "30dp"
-        on_release: root.show_delete_dialog()

@@ -3,6 +3,7 @@
 <ListScreen>
     md_bg_color: self.theme_cls.backgroundColor
 
+    # MDFloatLayout:
     MDBoxLayout:
         orientation: 'vertical'
         spacing: dp(10)
@@ -27,25 +28,39 @@
                 MDTextFieldLeadingIcon:
                     icon: "magnify"
                 MDTextFieldHintText:
-                    text: "Climb Name"
+                    text: "Search"
 
         MDDivider:
             size_hint_x: .9
             pos_hint: {'center_x': .5}
-        CustomMDSegmentedButton:
-            type: 'medium'
-            MDSegmentedButtonItem:
-                id: sort_by_date
-                on_release: root.load_by_date()
-                active: True
-                MDSegmentButtonLabel:
-                    text: 'by Date'
-            MDSegmentedButtonItem:
-                id: sort_by_grade
-                on_release: root.load_by_grade()
+        MDBoxLayout:
+            orientation: 'horizontal'
+            adaptive_height: True
+            spacing: dp(20)
+            CustomMDSegmentedButton:
+                type: 'medium'
+                pos_hint: {'center_y': .5}
+                MDSegmentedButtonItem:
+                    id: sort_by_date
+                    on_release: root.load_by_date()
+                    active: True
+                    MDSegmentButtonLabel:
+                        text: 'by Date'
+                MDSegmentedButtonItem:
+                    id: sort_by_grade
+                    on_release: root.load_by_grade()
 
-                MDSegmentButtonLabel:
-                    text: 'by Grade'
+                    MDSegmentButtonLabel:
+                        text: 'by Grade'
+            MDButton:
+                style: 'filled'
+                theme_bg_color: 'Custom'
+                md_bg_color: app.theme_cls.secondaryColor
+                on_release: root.manager.current = 'add-ascent'
+                MDButtonIcon:
+                    icon: 'plus'
+                MDButtonText:
+                    text: 'Add'
 
         MDRecycleView:
             viewclass: 'AscentItem'
@@ -60,7 +75,6 @@
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
-
 
 <AscentItem>
     orientation: 'horizontal'

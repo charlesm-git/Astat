@@ -1,0 +1,32 @@
+#:kivy 2.3.1
+<SettingsScreen>
+    md_bg_color: app.theme_cls.backgroundColor
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        MDList:
+            MDListItem:
+                on_release: root.manager.current = 'add-area'
+                MDListItemLeadingIcon:
+                    icon: "map"
+                MDListItemHeadlineText:
+                    text: "Manage Areas"
+                MDListItemSupportingText:
+                    text: "Add and delete areas"
+            MDListItem:
+                disabled: True
+                MDListItemLeadingIcon:
+                    icon: "database-import"
+                MDListItemHeadlineText:
+                    text: "Import database"
+                MDListItemSupportingText:
+                    text: "Import a CSV file to the database"
+            MDListItem:
+                disabled: True
+                MDListItemLeadingIcon:
+                    icon: "database-export"
+                MDListItemHeadlineText:
+                    text: "Export database"
+                MDListItemSupportingText:
+                    text: "export a CSV file from the database"
+        Widget:

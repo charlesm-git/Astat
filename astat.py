@@ -10,13 +10,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from views.list import ListScreen
-from views.adding import AddingScreen
+from views.adding_ascent import AddingAscentScreen
+from views.adding_area import AddingAreaScreen
 from views.statistics import StatisticScreen
-from views.statistic_filter import StatisticFilterScreen
+from views.settings import SettingsScreen
+from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.screenmanager import MainScreenManager
 
-# Window.size = (400, 720)
+Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
@@ -29,7 +31,9 @@ class AStatApp(MDApp):
 
         Builder.load_file("kv/selector.kv")
         Builder.load_file("kv/list-screen.kv")
-        Builder.load_file("kv/adding-screen.kv")
+        Builder.load_file("kv/adding-ascent-screen.kv")
+        Builder.load_file("kv/settings-screen.kv")
+        Builder.load_file("kv/adding-area-screen.kv")
         Builder.load_file("kv/statistic-screen.kv")
         Builder.load_file("kv/statistic-filter-screen.kv")
         Builder.load_file("kv/screenmanager.kv")

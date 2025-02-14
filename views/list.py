@@ -17,6 +17,7 @@ from kivymd.uix.dialog import (
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.divider import MDDivider
 from kivy.uix.behaviors import ButtonBehavior
+from kivy.metrics import dp
 
 from kivymd.uix.segmentedbutton import MDSegmentedButton
 
@@ -201,6 +202,7 @@ class AscentItem(MDBoxLayout):
                     on_release=lambda *args: dialog.dismiss(),
                 ),
             ),
+            size_hint_x=0.8,
         )
         dialog.open()
 
@@ -234,6 +236,7 @@ class AscentItem(MDBoxLayout):
                     ],
                 ),
             ),
+            size_hint_x=0.8,
         )
         dialog.open()
 
