@@ -11,98 +11,77 @@
                     icon: "arrow-left"
                     on_release: root.manager.current = "ascents-list"
             MDTopAppBarTitle:
-                text: 'Add Ascent'
+                text: 'Add Ascent' if not root.ascent_to_update_id else 'Update Ascent'
                 text_color: app.theme_cls.primaryColor
+
         MDScrollView:
             do_scroll_x: False
-
             MDBoxLayout:
+                id: ascent_form
                 orientation: 'vertical'
-                spacing: dp(30)
+                padding: dp(20)
                 adaptive_height: True
-                AddingAscentForm:
+                MDTextField:
+                    id: ascent_form_name
+                    mode: 'filled'
+                    MDTextFieldLeadingIcon:
+                        icon: "terrain"
+                    MDTextFieldHintText:
+                        id: text_field
+                        text: "Ascent Name"
+                    MDTextFieldMaxLengthText:
+                        max_text_length: 64
 
-<SectionTitle@MDLabel>
-    # Section title for each Items of the AddingScreen
-    adaptive_height: True
-    size_hint_x: 1
-    text_size: self.size
-    padding: 0, 0, 0, dp(30)
-    halign: 'center'
-    font_style: 'Title'
-    role: 'large'
-    text_color: app.theme_cls.primaryColor
-    bold: True
+                DropDownMenuHeader:
+                    id: ascent_form_grade
+                    on_release: root.open_grade_menu(self)
+                    text: "Grade"
+                    leading_icon: "chart-bar"
+                    adaptive_size: True
+                    padding: 0, dp(30), 0, dp(10)
 
-<AddingAscentForm>
-    orientation: 'vertical'
-    padding: dp(20)
-    adaptive_height: True
+                MDDivider:
+                    md_bg_color: app.theme_cls.outlineVariantColor
+                    divider_width: dp(1)
 
-    SectionTitle:
-        text: "Add Ascent"
-    MDTextField:
-        id: ascent_form_name
-        mode: 'filled'
-        MDTextFieldLeadingIcon:
-            icon: "terrain"
-        MDTextFieldHintText:
-            id: text_field
-            text: "Ascent Name"
-        MDTextFieldMaxLengthText:
-            max_text_length: 64
+                DropDownMenuHeader:
+                    id: ascent_form_area
+                    on_release: root.open_area_menu(self)
+                    text: "Area"
+                    leading_icon: "map-marker"
+                    adaptive_size: True
+                    padding: 0, dp(30), 0, dp(10)
 
-    DropDownMenuHeader:
-        id: ascent_form_grade
-        on_release: root.open_grade_menu(self)
-        text: "Grade"
-        leading_icon: "chart-bar"
-        adaptive_size: True
-        padding: 0, dp(30), 0, dp(10)
+                MDDivider:
+                    md_bg_color: app.theme_cls.outlineVariantColor
+                    divider_width: dp(1)
+                
+                DropDownMenuHeader:
+                    id: ascent_form_date_picker
+                    on_release: root.show_date_picker()
+                    text: "Date"
+                    leading_icon: "calendar"
+                    adaptive_size: True
+                    padding: 0, dp(30), 0, dp(10)
 
-    MDDivider:
-        md_bg_color: app.theme_cls.outlineVariantColor
-        divider_width: dp(1)
+                MDDivider:
+                    md_bg_color: app.theme_cls.outlineVariantColor
+                    divider_width: dp(1)
 
-    DropDownMenuHeader:
-        id: ascent_form_area
-        on_release: root.open_area_menu(self)
-        text: "Area"
-        leading_icon: "map-marker"
-        adaptive_size: True
-        padding: 0, dp(30), 0, dp(10)
-
-    MDDivider:
-        md_bg_color: app.theme_cls.outlineVariantColor
-        divider_width: dp(1)
-    
-    DropDownMenuHeader:
-        id: ascent_form_date_picker
-        on_release: root.show_date_picker()
-        text: "Date"
-        leading_icon: "calendar"
-        adaptive_size: True
-        padding: 0, dp(30), 0, dp(10)
-
-    MDDivider:
-        md_bg_color: app.theme_cls.outlineVariantColor
-        divider_width: dp(1)
-
-    MDBoxLayout:
-        orientation: "horizontal"
-        adaptive_height: True
-        padding: 0, dp(30), 0, dp(10)
-        spacing: dp(30)
-        Widget:
-        MDButton:
-            on_release: root.clear_all_fields()
-            MDButtonText:
-                text: 'Clear'
-        MDButton:
-            on_release: root.submit()
-            MDButtonText:
-                text: "Add"
-
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    padding: 0, dp(30), 0, dp(10)
+                    spacing: dp(30)
+                    Widget:
+                    MDButton:
+                        on_release: root.clear_all_fields()
+                        MDButtonText:
+                            text: 'Clear'
+                    MDButton:
+                        on_release: root.submit()
+                        MDButtonText:
+                            text: 'Add' if not root.ascent_to_update_id else 'Update'
 
 
 <DropDownMenuHeader>

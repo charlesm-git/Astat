@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from kivymd.app import MDApp
 
 from models.base import Base
-from models.ascent import Ascent
 import models.ascent
 
 
@@ -42,7 +41,9 @@ class Area(Base):
                 # Manual delete of all associated ascents because not handled
                 # by SQLite
                 ascents_to_delete = session.scalars(
-                    select(Ascent).where(Ascent.area_id == area_to_delete.id)
+                    select(models.ascent.Ascent).where(
+                        models.ascent.Ascent.area_id == area_to_delete.id
+                    )
                 ).all()
 
                 for ascent in ascents_to_delete:

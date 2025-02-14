@@ -2,7 +2,7 @@ from datetime import datetime, date
 
 from kivymd.app import MDApp
 
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Date
+from sqlalchemy import ForeignKey, Integer, String, DateTime, Date, select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -61,4 +61,13 @@ class Ascent(Base):
                     ascent_date=ascent_date,
                 )
             )
+            session.commit()
+
+    def update(self, name, grade_id, area_id, ascent_date):
+        with MDApp.get_running_app().get_db_session() as session:
+            updated_ascent = session.merge(self)
+            updated_ascent.name = name
+            updated_ascent.grade_id = grade_id
+            updated_ascent.area_id = area_id
+            updated_ascent.ascent_date = ascent_date
             session.commit()

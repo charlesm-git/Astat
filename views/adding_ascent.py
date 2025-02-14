@@ -3,7 +3,7 @@ from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.pickers import MDModalDatePicker, MDDockedDatePicker
+from kivymd.uix.pickers import MDModalDatePicker
 from kivymd.uix.snackbar import (
     MDSnackbar,
     MDSnackbarText,
@@ -12,7 +12,7 @@ from kivymd.uix.snackbar import (
 )
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.clock import Clock
-from kivy.properties import StringProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty, NumericProperty
 from kivy.metrics import dp
 from sqlalchemy import select
 
@@ -24,18 +24,8 @@ from models.ascent import Ascent
 class AddingAscentScreen(MDScreen):
     """Screen class for adding ascents"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
-class AddingAscentForm(MDBoxLayout):
-    """Form for adding ascents.
-    Contains :
-    - TextField for name input
-    - Dropdown menu for grade selection
-    - Dropdown menu for area selection
-    - Date picker for date selection
-    """
+    ascent_to_update_id = NumericProperty(None, allownone=True)
+    ascent_to_update = ObjectProperty(None, allownone=True)
 
     form = {
         "name": "",
@@ -45,9 +35,45 @@ class AddingAscentForm(MDBoxLayout):
     }
     date_picker = ObjectProperty(MDModalDatePicker)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         Clock.schedule_once(lambda *args: self.init_date_picker())
+
+    def on_pre_enter(self):
+        # Pre filling of the form in case of an update
+        if self.ascent_to_update_id:
+            self.ascent_to_update = Ascent.get_from_id(
+                self.ascent_to_update_id
+            )
+            area = Area.get_from_id(self.ascent_to_update.area_id)
+            grade = Grade.get_from_id(self.ascent_to_update.grade_id)
+
+            # Update UI
+            self.ids.ascent_form_name.text = self.ascent_to_update.name
+            self.ids.ascent_form_area.text = area.name
+            self.ids.ascent_form_grade.text = grade.grade_value
+            self.ids.ascent_form_date_picker.text = str(
+                self.ascent_to_update.ascent_date
+            )
+            # Update form's backend
+            self.form["grade_id"] = self.ascent_to_update.grade_id
+            self.form["area_id"] = self.ascent_to_update.area_id
+            self.form["date"] = self.ascent_to_update.ascent_date
+
+            # Update datepicker
+            self.date_picker.sel_day = self.ascent_to_update.ascent_date.day
+            self.date_picker.sel_month = (
+                self.ascent_to_update.ascent_date.month
+            )
+            self.date_picker.sel_year = self.ascent_to_update.ascent_date.year
+            self.date_picker.update_calendar(
+                self.date_picker.sel_year,
+                self.date_picker.sel_month,
+            )
+
+    def on_leave(self):
+        self.ascent_to_update_id = None
+        self.clear_all_fields()
 
     def init_date_picker(self):
         self.date_picker = MDModalDatePicker()
@@ -157,34 +183,53 @@ class AddingAscentForm(MDBoxLayout):
             )
             return
 
-        with MDApp.get_running_app().get_db_session() as session:
-            ascent_existence_check = session.scalar(
-                select(Ascent).where(
-                    Ascent.name == self.form["name"],
-                    Ascent.grade_id == self.form["grade_id"],
-                    Ascent.area_id == self.form["area_id"],
-                )
+        # # Get the parent screen to check if if is an update or a creation
+        # parent = self.parent
+        # while parent:
+        #     if isinstance(parent, MDScreen):
+        #         screen = parent
+        #         break
+        #     parent = parent.parent
+
+        if self.ascent_to_update:
+            self.ascent_to_update.update(
+                name=self.form["name"],
+                grade_id=self.form["grade_id"],
+                area_id=self.form["area_id"],
+                ascent_date=self.form["date"],
             )
-            # If the ascent is already logged in the database, notify the user
-            # and return
-            if ascent_existence_check:
-                self.show_snackbar(
-                    text=(
-                        f"This climb was logged on "
-                        f"{ascent_existence_check.ascent_date}"
+            self.show_snackbar(text="Ascent updated successfully")
+            self.parent.current = "ascents-list"
+
+        else:
+            with MDApp.get_running_app().get_db_session() as session:
+                ascent_existence_check = session.scalar(
+                    select(Ascent).where(
+                        Ascent.name == self.form["name"],
+                        Ascent.grade_id == self.form["grade_id"],
+                        Ascent.area_id == self.form["area_id"],
                     )
                 )
-                return
+                # If the ascent is already logged in the database, notify the user
+                # and return
+                if ascent_existence_check:
+                    self.show_snackbar(
+                        text=(
+                            f"This climb was logged on "
+                            f"{ascent_existence_check.ascent_date}"
+                        )
+                    )
+                    return
 
-        Ascent.create(
-            name=self.form["name"],
-            grade_id=self.form["grade_id"],
-            area_id=self.form["area_id"],
-            ascent_date=self.form["date"],
-        )
-        self.show_snackbar(text="Ascent added successfully")
-        # Reset all fields
-        self.submit_clear_fields()
+            Ascent.create(
+                name=self.form["name"],
+                grade_id=self.form["grade_id"],
+                area_id=self.form["area_id"],
+                ascent_date=self.form["date"],
+            )
+            self.show_snackbar(text="Ascent added successfully")
+            # Reset all fields
+            self.submit_clear_fields()
 
     def show_snackbar(self, text):
         """Function displaying a snackbar for user feedback"""

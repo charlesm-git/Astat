@@ -182,6 +182,8 @@ class AscentItem(MDBoxLayout):
         the ascent is clicked"""
         if self.is_group:
             return
+
+        app = MDApp.get_running_app()
         self.info_dialog = MDDialog(
             MDDialogHeadlineText(text="Ascent Details"),
             MDDialogContentContainer(
@@ -196,21 +198,36 @@ class AscentItem(MDBoxLayout):
             ),
             MDDialogButtonContainer(
                 MDButton(
-                    MDButtonText(text="Delete"),
+                    MDButtonText(
+                        text="Delete",
+                        theme_text_color="Custom",
+                        text_color=app.theme_cls.onErrorColor,
+                    ),
                     style="elevated",
+                    theme_bg_color="Custom",
+                    md_bg_color=app.theme_cls.errorColor,
                     on_release=lambda *args: self.show_delete_dialog(),
                 ),
                 MDButton(
-                    MDButtonText(text="Update"),
+                    MDButtonText(
+                        text="Update",
+                        theme_text_color="Custom",
+                        text_color=app.theme_cls.onTertiaryColor,
+                    ),
                     style="elevated",
-                    on_release=lambda *args: self.info_dialog.dismiss(),
+                    theme_bg_color="Custom",
+                    md_bg_color=app.theme_cls.tertiaryColor,
+                    on_release=lambda *args: [
+                        self.get_update_screen(self.id),
+                        self.info_dialog.dismiss(),
+                    ],
                 ),
                 MDButton(
                     MDButtonText(text="Close"),
                     style="elevated",
                     on_release=lambda *args: self.info_dialog.dismiss(),
                 ),
-                spacing=dp(10)
+                spacing=dp(10),
             ),
             size_hint_x=0.8,
         )
@@ -241,6 +258,14 @@ class AscentItem(MDBoxLayout):
             size_hint_x=0.7,
         )
         self.delete_dialog.open()
+
+    def get_update_screen(self, ascent_to_update_id):
+        screen_manager = MDApp.get_running_app().root.ids.screen_manager
+        add_ascent_screen = screen_manager.get_screen("add-ascent")
+        add_ascent_screen.ascent_to_update_id = (
+            ascent_to_update_id
+        )
+        screen_manager.current = "add-ascent"
 
 
 class CustomMDSegmentedButton(MDSegmentedButton):
