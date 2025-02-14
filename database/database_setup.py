@@ -119,3 +119,11 @@ def initialize_db():
         ascents = get_ascents_as_object(ascents, session)
         session.add_all(ascents)
         session.commit()
+
+def initialize_empty_db():
+    grades = get_grades_as_object()
+    with Session() as session:
+        Base.metadata.create_all(engine)
+        
+        session.add_all(grades)
+        session.commit()

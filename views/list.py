@@ -177,12 +177,12 @@ class AscentItem(MDBoxLayout):
         Ascent.delete(self.id)
         self.refresh_callback(self.id)
 
-    def show_info_bubble(self):
+    def show_info_dialog(self):
         """Show a dialog window with full details of an ascent when the name of
         the ascent is clicked"""
         if self.is_group:
             return
-        dialog = MDDialog(
+        self.info_dialog = MDDialog(
             MDDialogHeadlineText(text="Ascent Details"),
             MDDialogContentContainer(
                 MDDivider(),
@@ -195,50 +195,52 @@ class AscentItem(MDBoxLayout):
                 spacing="10dp",
             ),
             MDDialogButtonContainer(
-                Widget(),
+                MDButton(
+                    MDButtonText(text="Delete"),
+                    style="elevated",
+                    on_release=lambda *args: self.show_delete_dialog(),
+                ),
+                MDButton(
+                    MDButtonText(text="Update"),
+                    style="elevated",
+                    on_release=lambda *args: self.info_dialog.dismiss(),
+                ),
                 MDButton(
                     MDButtonText(text="Close"),
-                    style="text",
-                    on_release=lambda *args: dialog.dismiss(),
+                    style="elevated",
+                    on_release=lambda *args: self.info_dialog.dismiss(),
                 ),
+                spacing=dp(10)
             ),
             size_hint_x=0.8,
         )
-        dialog.open()
+        self.info_dialog.open()
 
     def show_delete_dialog(self):
-        dialog = MDDialog(
+        self.delete_dialog = MDDialog(
             MDDialogIcon(icon="delete"),
             MDDialogHeadlineText(text="Delete this ascent ?"),
-            MDDialogContentContainer(
-                MDDivider(),
-                DialogItem(icon="calendar", label=self.date),
-                DialogItem(icon="terrain", label=self.name),
-                DialogItem(icon="chart-bar", label=self.grade),
-                DialogItem(icon="map-marker", label=self.area),
-                MDDivider(),
-                orientation="vertical",
-                spacing="10dp",
-            ),
             MDDialogButtonContainer(
                 Widget(),
                 MDButton(
                     MDButtonText(text="No"),
                     style="text",
-                    on_release=lambda *args: dialog.dismiss(),
+                    on_release=lambda *args: self.delete_dialog.dismiss(),
                 ),
                 MDButton(
                     MDButtonText(text="Yes"),
                     style="text",
                     on_release=lambda x: [
                         self.delete_item(),
-                        dialog.dismiss(),
+                        self.delete_dialog.dismiss(),
+                        self.info_dialog.dismiss(),
                     ],
                 ),
+                Widget(),
             ),
-            size_hint_x=0.8,
+            size_hint_x=0.7,
         )
-        dialog.open()
+        self.delete_dialog.open()
 
 
 class CustomMDSegmentedButton(MDSegmentedButton):
