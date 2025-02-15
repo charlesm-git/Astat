@@ -1,12 +1,12 @@
 import csv
 from datetime import date
-from sqlalchemy import select
+from sqlalchemy import select, create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 from models.base import Base
 from models.area import Area
 from models.grade import Grade
 from models.ascent import Ascent
-from database.database import Session, engine
 
 GRADE_ASSOCIATION_DICT = {
     "6a": 1,
@@ -29,6 +29,35 @@ GRADE_ASSOCIATION_DICT = {
     "8c+": 18,
     "9a": 19,
 }
+
+db_path = "ascents.db"
+
+DATABASE_URL = f"sqlite:///{db_path}"
+engine = create_engine(DATABASE_URL, echo=False)
+
+session_factory = sessionmaker(bind=engine)
+
+Session = scoped_session(session_factory)
+
+def load_ascents_to_csv():
+    with Session() as session:
+        ascents = session.execute(
+            select(
+                Ascent.name,
+                Grade.grade_value,
+                Ascent.ascent_date,
+                Area.name,
+            )
+            .join(Area, Area.id == Ascent.area_id)
+            .join(Grade, Grade.id == Ascent.grade_id)
+        ).all()
+        print(ascents)
+
+    with open(
+        "./ascents_export.csv", "w", encoding="utf-8", newline=""
+    ) as export_file:
+        writer = csv.writer(export_file, delimiter=";", )
+        writer.writerows(ascents)
 
 
 def load_ascents_from_csv():
@@ -120,10 +149,14 @@ def initialize_db():
         session.add_all(ascents)
         session.commit()
 
+
 def initialize_empty_db():
     grades = get_grades_as_object()
     with Session() as session:
         Base.metadata.create_all(engine)
-        
+
         session.add_all(grades)
         session.commit()
+
+if __name__ == "__main__":
+    load_ascents_to_csv()
