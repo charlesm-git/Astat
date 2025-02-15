@@ -67,7 +67,7 @@
             id: ascent_list
             scroll_type: ['bars', 'content']
             scroll_wheel_distance: dp(60)
-            bar_width: dp(3)
+            bar_width: dp(10)
             
             RecycleBoxLayout:
                 orientation: 'vertical'
@@ -131,6 +131,7 @@
     MDIcon:
         icon: root.icon
         adaptive_width: True
+        pos_hint: {"center_y": 0.5}
 
     MDLabel:
         text: root.label

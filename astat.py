@@ -40,7 +40,7 @@ class AStatApp(MDApp):
         return MainScreenManager()
 
     def get_db_path(self):
-        db_filename = "ascents.db"
+        db_filename = "astat.db"
         if platform == "win":
             data_dir = os.path.join(os.environ["APPDATA"], self.name)
         elif platform == "android":
@@ -60,7 +60,6 @@ class AStatApp(MDApp):
             bundled_db_path = os.path.join(
                 os.path.dirname(__file__), db_filename
             )
-            print(bundled_db_path)
             if os.path.exists(bundled_db_path):
                 shutil.copyfile(bundled_db_path, writable_db_path)
 

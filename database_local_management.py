@@ -30,7 +30,7 @@ GRADE_ASSOCIATION_DICT = {
     "9a": 19,
 }
 
-db_path = "ascents.db"
+db_path = "astat.db"
 
 DATABASE_URL = f"sqlite:///{db_path}"
 engine = create_engine(DATABASE_URL, echo=False)
@@ -62,7 +62,7 @@ def load_ascents_to_csv():
 
 def load_ascents_from_csv():
     """Load ascents as a list of dictionaries"""
-    with open("./boulders_input.csv", "r", encoding="utf-8") as boulders_file:
+    with open("./ascents_import.csv", "r", encoding="utf-8") as boulders_file:
         ascents = csv.reader(boulders_file, delimiter=";")
         ascents_data = []
         for ascent in ascents:
@@ -159,4 +159,5 @@ def initialize_empty_db():
         session.commit()
 
 if __name__ == "__main__":
-    load_ascents_to_csv()
+    # load_ascents_to_csv()
+    initialize_db()

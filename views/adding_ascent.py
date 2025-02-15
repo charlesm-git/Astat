@@ -32,6 +32,7 @@ class AddingAscentScreen(MDScreen):
         "grade_id": "",
         "area_id": "",
         "date": "",
+        "note": "",
     }
     date_picker = ObjectProperty(MDModalDatePicker)
 
@@ -55,10 +56,13 @@ class AddingAscentScreen(MDScreen):
             self.ids.ascent_form_date_picker.text = str(
                 self.ascent_to_update.ascent_date
             )
+            self.ids.ascent_form_note.text = self.ascent_to_update.note
+            
             # Update form's backend
             self.form["grade_id"] = self.ascent_to_update.grade_id
             self.form["area_id"] = self.ascent_to_update.area_id
             self.form["date"] = self.ascent_to_update.ascent_date
+            self.form["note"] = self.ascent_to_update.note
 
             # Update datepicker
             self.date_picker.sel_day = self.ascent_to_update.ascent_date.day
@@ -169,10 +173,14 @@ class AddingAscentScreen(MDScreen):
         """Configure the actions performed when the form is submitted"""
         # Update the form with the name input
         typed_name = self.ids.ascent_form_name.text
+        typed_note = self.ids.ascent_form_note.text
         self.form["name"] = typed_name
+        self.form["note"] = typed_note
         incomplete = False
         # Check if the form is complete
-        for value in self.form.values():
+        for key, value in self.form.items():
+            if key == "note":
+                continue
             if value == "":
                 incomplete = True
                 break
@@ -197,6 +205,7 @@ class AddingAscentScreen(MDScreen):
                 grade_id=self.form["grade_id"],
                 area_id=self.form["area_id"],
                 ascent_date=self.form["date"],
+                note=self.form["note"],
             )
             self.show_snackbar(text="Ascent updated successfully")
             self.parent.current = "ascents-list"
@@ -226,6 +235,7 @@ class AddingAscentScreen(MDScreen):
                 grade_id=self.form["grade_id"],
                 area_id=self.form["area_id"],
                 ascent_date=self.form["date"],
+                note=self.form["note"],
             )
             self.show_snackbar(text="Ascent added successfully")
             # Reset all fields
@@ -255,6 +265,7 @@ class AddingAscentScreen(MDScreen):
     def submit_clear_fields(self):
         self.ids.ascent_form_name.text = ""
         self.ids.ascent_form_grade.text = "Grade"
+        self.ids.ascent_form_note.text = ""
 
     def clear_all_fields(self):
         # Empty the text fields
@@ -262,6 +273,7 @@ class AddingAscentScreen(MDScreen):
         self.ids.ascent_form_area.text = "Area"
         self.ids.ascent_form_grade.text = "Grade"
         self.ids.ascent_form_date_picker.text = "Date"
+        self.ids.ascent_form_note.text = ""
         # Reset the date_picker on today
         today = datetime.today()
         self.date_picker.sel_day = today.day

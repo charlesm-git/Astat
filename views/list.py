@@ -82,6 +82,7 @@ class ListScreen(MDScreen):
                             "grade": "",
                             "area": "",
                             "date": "",
+                            "note": "",
                             "is_group": True,
                         }
                     )
@@ -94,6 +95,7 @@ class ListScreen(MDScreen):
                         "grade": ascent.grade.grade_value,
                         "area": ascent.area.name,
                         "date": str(ascent.ascent_date),
+                        "note": ascent.note,
                         "is_group": False,
                         "refresh_callback": self.refresh_recycleview,
                     }
@@ -166,6 +168,7 @@ class AscentItem(MDBoxLayout):
     grade = StringProperty()
     area = StringProperty()
     date = StringProperty()
+    note = StringProperty()
     is_group = BooleanProperty()
 
     def __init__(self, refresh_callback=None, **kwargs):
@@ -184,6 +187,9 @@ class AscentItem(MDBoxLayout):
             return
 
         app = MDApp.get_running_app()
+
+        self.note = self.note if self.note else " "
+            
         self.info_dialog = MDDialog(
             MDDialogHeadlineText(text="Ascent Details"),
             MDDialogContentContainer(
@@ -192,6 +198,7 @@ class AscentItem(MDBoxLayout):
                 DialogItem(icon="terrain", label=self.name),
                 DialogItem(icon="chart-bar", label=self.grade),
                 DialogItem(icon="map-marker", label=self.area),
+                DialogItem(icon="note", label=self.note),
                 MDDivider(),
                 orientation="vertical",
                 spacing="10dp",

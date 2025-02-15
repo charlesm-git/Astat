@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from typing import Optional
 
 from kivymd.app import MDApp
 
@@ -25,6 +26,7 @@ class Ascent(Base):
         ForeignKey("area.id", ondelete="CASCADE", onupdate="CASCADE")
     )
     ascent_date: Mapped[date] = mapped_column(Date)
+    note: Mapped[str] = mapped_column(String(255), default="")
     date_created: Mapped[datetime] = mapped_column(
         DateTime, default=func.now()
     )
@@ -51,7 +53,7 @@ class Ascent(Base):
             session.commit()
 
     @classmethod
-    def create(cls, name, grade_id, area_id, ascent_date):
+    def create(cls, name, grade_id, area_id, ascent_date, note):
         with MDApp.get_running_app().get_db_session() as session:
             session.add(
                 Ascent(
@@ -59,15 +61,17 @@ class Ascent(Base):
                     grade_id=grade_id,
                     area_id=area_id,
                     ascent_date=ascent_date,
+                    note=note
                 )
             )
             session.commit()
 
-    def update(self, name, grade_id, area_id, ascent_date):
+    def update(self, name, grade_id, area_id, ascent_date, note):
         with MDApp.get_running_app().get_db_session() as session:
             updated_ascent = session.merge(self)
             updated_ascent.name = name
             updated_ascent.grade_id = grade_id
             updated_ascent.area_id = area_id
             updated_ascent.ascent_date = ascent_date
+            updated_ascent.note = note
             session.commit()
