@@ -165,4 +165,4 @@ def initialize_empty_db():
 
 if __name__ == "__main__":
     # load_ascents_to_csv()
-    initialize_db()
+    initialize_empty_db()

@@ -204,6 +204,7 @@ class AscentItem(MDBoxLayout):
                 spacing="10dp",
             ),
             MDDialogButtonContainer(
+                Widget(),
                 MDButton(
                     MDButtonText(
                         text="Delete",
@@ -228,11 +229,6 @@ class AscentItem(MDBoxLayout):
                         self.get_update_screen(self.id),
                         self.info_dialog.dismiss(),
                     ],
-                ),
-                MDButton(
-                    MDButtonText(text="Close"),
-                    style="elevated",
-                    on_release=lambda *args: self.info_dialog.dismiss(),
                 ),
                 spacing=dp(10),
             ),
