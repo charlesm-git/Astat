@@ -25,7 +25,7 @@ from sqlalchemy import select
 from models.area import Area
 
 
-class AddingAreaScreen(MDScreen):
+class AreaScreen(MDScreen):
     """Screen class for adding ascents"""
 
     def __init__(self, *args, **kwargs):
@@ -38,7 +38,7 @@ class AddingAreaScreen(MDScreen):
         )
 
 
-class AddingAreaForm(MDBoxLayout):
+class AreaForm(MDBoxLayout):
     """Form to add an Area to the database"""
 
     # Defines the function called when an Area is added to the database
@@ -91,7 +91,7 @@ class AddingAreaForm(MDBoxLayout):
         snackbar.open()
 
 
-class DeleteAreaList(MDBoxLayout):
+class AreaList(MDBoxLayout):
     """List of areas in order to be able to delete areas"""
 
     def __init__(self, *args, **kwargs):

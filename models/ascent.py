@@ -1,9 +1,8 @@
 from datetime import datetime, date
-from typing import Optional
 
 from kivymd.app import MDApp
 
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Date, select
+from sqlalchemy import ForeignKey, Integer, String, DateTime, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 

@@ -189,7 +189,7 @@ class AscentItem(MDBoxLayout):
         app = MDApp.get_running_app()
 
         self.note = self.note if self.note else " "
-            
+
         self.info_dialog = MDDialog(
             MDDialogHeadlineText(text="Ascent Details"),
             MDDialogContentContainer(
@@ -268,11 +268,9 @@ class AscentItem(MDBoxLayout):
 
     def get_update_screen(self, ascent_to_update_id):
         screen_manager = MDApp.get_running_app().root.ids.screen_manager
-        add_ascent_screen = screen_manager.get_screen("add-ascent")
-        add_ascent_screen.ascent_to_update_id = (
-            ascent_to_update_id
-        )
-        screen_manager.current = "add-ascent"
+        add_ascent_screen = screen_manager.get_screen("ascent")
+        add_ascent_screen.ascent_to_update_id = ascent_to_update_id
+        screen_manager.current = "ascent"
 
 
 class CustomMDSegmentedButton(MDSegmentedButton):

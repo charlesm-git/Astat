@@ -39,6 +39,7 @@ session_factory = sessionmaker(bind=engine)
 
 Session = scoped_session(session_factory)
 
+
 def load_ascents_to_csv():
     with Session() as session:
         ascents = session.execute(
@@ -56,7 +57,10 @@ def load_ascents_to_csv():
     with open(
         "./ascents_export.csv", "w", encoding="utf-8", newline=""
     ) as export_file:
-        writer = csv.writer(export_file, delimiter=";", )
+        writer = csv.writer(
+            export_file,
+            delimiter=";",
+        )
         writer.writerows(ascents)
 
 
@@ -157,6 +161,7 @@ def initialize_empty_db():
 
         session.add_all(grades)
         session.commit()
+
 
 if __name__ == "__main__":
     # load_ascents_to_csv()

@@ -1,6 +1,6 @@
 #:kivy 2.3.1
 
-<AddingAreaScreen>
+<AreaScreen>
     md_bg_color: app.theme_cls.backgroundColor
     MDBoxLayout:
         orientation: 'vertical'
@@ -19,15 +19,15 @@
                 orientation: 'vertical'
                 spacing: dp(30)
                 adaptive_height: True
-                AddingAreaForm:
+                AreaForm:
                     id: adding_area_form
                 MDDivider:
                     size_hint_x: 0.5
                     pos_hint: {"center_x": 0.5}
-                DeleteAreaList:
+                AreaList:
                     id: delete_area_list
 
-<AddingAreaForm>
+<AreaForm>
     orientation: 'vertical'
     adaptive_height: True
     padding: dp(20)
@@ -60,7 +60,7 @@
             MDButtonText:
                 text: "Add"
 
-<DeleteAreaList>
+<AreaList>
     orientation: 'vertical'
     adaptive_height: True
     padding: dp(20)

@@ -1,5 +1,6 @@
 from kivymd.uix.screen import MDScreen
 
+
 class SettingsScreen(MDScreen):
     """Screen class for adding ascents"""
 

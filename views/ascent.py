@@ -21,7 +21,7 @@ from models.grade import Grade
 from models.ascent import Ascent
 
 
-class AddingAscentScreen(MDScreen):
+class AscentScreen(MDScreen):
     """Screen class for adding ascents"""
 
     ascent_to_update_id = NumericProperty(None, allownone=True)
@@ -57,7 +57,7 @@ class AddingAscentScreen(MDScreen):
                 self.ascent_to_update.ascent_date
             )
             self.ids.ascent_form_note.text = self.ascent_to_update.note
-            
+
             # Update form's backend
             self.form["grade_id"] = self.ascent_to_update.grade_id
             self.form["area_id"] = self.ascent_to_update.area_id
@@ -219,8 +219,8 @@ class AddingAscentScreen(MDScreen):
                         Ascent.area_id == self.form["area_id"],
                     )
                 )
-                # If the ascent is already logged in the database, notify the user
-                # and return
+                # If the ascent is already logged in the database, notify the
+                # user and return
                 if ascent_existence_check:
                     self.show_snackbar(
                         text=(
