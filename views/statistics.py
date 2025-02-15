@@ -214,8 +214,13 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
+        
         self.ids.general_tab.total_number_of_ascent = str(self.total_ascents)
-        self.ids.general_tab.average_grade = average_grade
+        
+        if average_grade:
+            self.ids.general_tab.average_grade = average_grade
+        else:
+            self.ids.general_tab.average_grade = "Not defined"
 
         # Update the content of the tables
 

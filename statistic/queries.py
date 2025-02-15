@@ -137,7 +137,14 @@ def get_average_grade(
         if area != "All":
             query = query.filter(Area.name == area)
 
-        average_grade_correspondence = round(query.first()[0])
+        result = query.first()[0]
+
+        # If the average grade returned by the query is not (No ascent with
+        # those filters), return None
+        if not result:
+            return None
+
+        average_grade_correspondence = round(result)
 
         average_grade = session.scalar(
             select(Grade.grade_value).where(

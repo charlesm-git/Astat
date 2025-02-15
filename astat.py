@@ -18,7 +18,7 @@ from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.screenmanager import MainScreenManager
 
-# Window.size = (400, 720)
+Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
