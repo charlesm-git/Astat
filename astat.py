@@ -10,14 +10,14 @@ from views.ascent import AscentScreen
 from views.area import AreaScreen
 from views.statistics import StatisticScreen
 from views.settings import SettingsScreen
-# from views.to_do_list import ToDoListScreen
+from views.to_do_list import ToDoListScreen
 from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.screenmanager import MainScreenManager
 
 from database import get_db_path, run_migrations
 
-# Window.size = (400, 720)
+Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
@@ -36,7 +36,7 @@ class AStatApp(MDApp):
         Builder.load_file("kv/area-screen.kv")
         Builder.load_file("kv/statistic-screen.kv")
         Builder.load_file("kv/statistic-filter-screen.kv")
-        # Builder.load_file("kv/to-do-list-screen.kv")
+        Builder.load_file("kv/to-do-list-screen.kv")
         Builder.load_file("kv/screenmanager.kv")
         return MainScreenManager()
 

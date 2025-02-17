@@ -13,6 +13,9 @@ from models.base import Base
 import models.area
 import models.ascent
 import models.grade
+import models.to_do_list
+import models.sector
+import models.climb_to_do
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

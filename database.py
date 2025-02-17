@@ -39,3 +39,14 @@ def run_migrations():
         print("Database migrations applied successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error running migrations: {e}")
+
+
+def get_android_documents_path():
+    """Returns the absolute path to the user's Documents directory on Android."""
+    # Get Android context
+    from jnius import autoclass, cast
+    Environment = autoclass("android.os.Environment")
+    documents_dir = Environment.getExternalStoragePublicDirectory(
+        Environment.DIRECTORY_DOCUMENTS
+    )
+    return documents_dir.getAbsolutePath()
