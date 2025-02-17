@@ -5,3 +5,4 @@ kivy-master/
 color_chart_with_preview.png
 test.py
 buildozer*
+*.db

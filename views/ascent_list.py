@@ -26,7 +26,7 @@ from models.ascent import Ascent
 from models.grade import Grade
 
 
-class ListScreen(MDScreen):
+class AscentListScreen(MDScreen):
     """Screen for the list of ascents"""
 
     ascents_data = []
