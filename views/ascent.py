@@ -19,6 +19,7 @@ from sqlalchemy import select
 from models.area import Area
 from models.grade import Grade
 from models.ascent import Ascent
+from views.snackbar import CustomSnackbar
 
 
 class AscentScreen(MDScreen):
@@ -171,19 +172,22 @@ class AscentScreen(MDScreen):
 
     def submit(self):
         """Configure the actions performed when the form is submitted"""
+
         # Update the form with the name input
         typed_name = self.ids.ascent_form_name.text
         typed_note = self.ids.ascent_form_note.text
         self.form["name"] = typed_name
         self.form["note"] = typed_note
-        incomplete = False
+
         # Check if the form is complete
+        incomplete = False
         for key, value in self.form.items():
             if key == "note":
                 continue
             if value == "":
                 incomplete = True
                 break
+
         # If incomplete, notify the user
         if incomplete:
             self.show_snackbar(
@@ -191,14 +195,7 @@ class AscentScreen(MDScreen):
             )
             return
 
-        # # Get the parent screen to check if if is an update or a creation
-        # parent = self.parent
-        # while parent:
-        #     if isinstance(parent, MDScreen):
-        #         screen = parent
-        #         break
-        #     parent = parent.parent
-
+        # Run if an ascent is currently being updated, call update function
         if self.ascent_to_update:
             self.ascent_to_update.update(
                 name=self.form["name"],
@@ -208,8 +205,9 @@ class AscentScreen(MDScreen):
                 note=self.form["note"],
             )
             self.show_snackbar(text="Ascent updated successfully")
-            self.parent.current = "ascents-list"
+            self.parent.current = "ascent-list"
 
+        # Run if an ascent is currently being created
         else:
             with MDApp.get_running_app().get_db_session() as session:
                 ascent_existence_check = session.scalar(
@@ -237,37 +235,25 @@ class AscentScreen(MDScreen):
                 ascent_date=self.form["date"],
                 note=self.form["note"],
             )
+            # Show snackbar for user feedback
             self.show_snackbar(text="Ascent added successfully")
             # Reset all fields
             self.submit_clear_fields()
 
     def show_snackbar(self, text):
         """Function displaying a snackbar for user feedback"""
-        snackbar = MDSnackbar(
-            MDSnackbarText(
-                text=text,
-                adaptive_size=True,
-            ),
-            MDSnackbarButtonContainer(
-                MDSnackbarCloseButton(
-                    icon="close", on_release=lambda x: snackbar.dismiss()
-                ),
-                pos_hint={"center_y": 0.5},
-            ),
-            y=dp(100),
-            orientation="horizontal",
-            pos_hint={"center_x": 0.5},
-            size_hint_x=0.9,
-            duration=5,
-        )
+        snackbar = CustomSnackbar(text=text)
         snackbar.open()
 
     def submit_clear_fields(self):
+        """Reset only some of the fields after a submit (date and area are
+        kept)"""
         self.ids.ascent_form_name.text = ""
         self.ids.ascent_form_grade.text = "Grade"
         self.ids.ascent_form_note.text = ""
 
     def clear_all_fields(self):
+        """Reset all the fields"""
         # Empty the text fields
         self.ids.ascent_form_name.text = ""
         self.ids.ascent_form_area.text = "Area"

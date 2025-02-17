@@ -23,6 +23,7 @@ from kivy.metrics import dp
 from sqlalchemy import select
 
 from models.area import Area
+from views.snackbar import CustomSnackbar
 
 
 class AreaScreen(MDScreen):
@@ -71,23 +72,7 @@ class AreaForm(MDBoxLayout):
             self.on_area_adding(area_name)
 
     def show_snackbar(self, text):
-        snackbar = MDSnackbar(
-            MDSnackbarText(
-                text=text,
-                adaptive_size=True,
-            ),
-            MDSnackbarButtonContainer(
-                MDSnackbarCloseButton(
-                    icon="close", on_release=lambda x: snackbar.dismiss()
-                ),
-                pos_hint={"center_y": 0.5},
-            ),
-            y=dp(100),
-            orientation="horizontal",
-            pos_hint={"center_x": 0.5},
-            size_hint_x=0.9,
-            duration=5,
-        )
+        snackbar = CustomSnackbar(text=text)
         snackbar.open()
 
 
