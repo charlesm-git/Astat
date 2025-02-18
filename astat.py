@@ -1,3 +1,5 @@
+import os
+
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.core.window import Window
@@ -15,7 +17,9 @@ from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.screenmanager import MainScreenManager
 
-from database import get_db_path, run_migrations
+from models.base import Base
+
+from database import get_db_path, run_migrations, get_grades_as_object
 
 Window.size = (400, 720)
 
@@ -26,7 +30,12 @@ class AStatApp(MDApp):
         self.theme_cls.primary_palette = "Darkred"
 
         db_path = get_db_path()
-        run_migrations()
+                
+        # try:
+        #     run_migrations()
+        # except Exception as e:
+        #     print(f"Migration failed: {e}")
+
         self.Session = self.init_db(db_path)
 
         Builder.load_file("kv/selector.kv")
@@ -48,4 +57,13 @@ class AStatApp(MDApp):
         engine = create_engine(DATABASE_URL, echo=False)
         session_factory = sessionmaker(bind=engine)
         Session = scoped_session(session_factory)
+        
+        if not os.path.exists(db_path):
+            grades = get_grades_as_object()
+            print(grades)
+            with Session() as session:
+                Base.metadata.create_all(engine)
+                session.add_all(grades)
+                session.commit()
+                
         return Session

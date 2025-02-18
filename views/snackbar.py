@@ -5,7 +5,6 @@ from kivymd.uix.snackbar import (
     MDSnackbarCloseButton,
 )
 
-from kivy.properties import StringProperty
 from kivy.metrics import dp
 
 

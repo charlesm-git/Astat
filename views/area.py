@@ -10,15 +10,8 @@ from kivymd.uix.dialog import (
     MDDialogButtonContainer,
     MDDialogSupportingText,
 )
-from kivymd.uix.snackbar import (
-    MDSnackbar,
-    MDSnackbarText,
-    MDSnackbarButtonContainer,
-    MDSnackbarCloseButton,
-)
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
-from kivy.metrics import dp
 
 from sqlalchemy import select
 

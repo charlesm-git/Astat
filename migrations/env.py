@@ -1,3 +1,4 @@
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -6,7 +7,6 @@ from sqlalchemy import create_engine
 
 from alembic import context
 
-from kivymd.app import MDApp
 
 from database import get_db_path
 from models.base import Base
@@ -50,7 +50,13 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+
+    db_path = get_db_path()
+    url = f"sqlite:///{db_path}"
+    config.set_main_option("sqlalchemy.url", url)
+
+    print("url: ", url)
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -69,13 +75,19 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # connectable = engine_from_config(
-    #     config.get_section(config.config_ini_section, {}),
-    #     prefix="sqlalchemy.",
-    #     poolclass=pool.NullPool,
-    # )
+    from alembic.script import ScriptDirectory
+
+    script = ScriptDirectory.from_config(config)
     
+    print("Discovered migrations:")
+    for rev in script.walk_revisions():
+        print(f"- {rev.revision} ({rev.doc})")
+        
     db_path = get_db_path()
+    print(f"Android DB Path: {db_path}")
+    print(f"File exists: {os.path.exists(db_path)}")
+    print(f"Migration files: {os.listdir(os.path.dirname(__file__))}")
+
     connectable = create_engine(f"sqlite:///{db_path}")
 
     with connectable.connect() as connection:
@@ -85,7 +97,6 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()

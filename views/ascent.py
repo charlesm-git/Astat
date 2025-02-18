@@ -1,19 +1,16 @@
 from datetime import datetime
+
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDModalDatePicker
-from kivymd.uix.snackbar import (
-    MDSnackbar,
-    MDSnackbarText,
-    MDSnackbarCloseButton,
-    MDSnackbarButtonContainer,
-)
+
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.clock import Clock
 from kivy.properties import StringProperty, ObjectProperty, NumericProperty
 from kivy.metrics import dp
+
 from sqlalchemy import select
 
 from models.area import Area

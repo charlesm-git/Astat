@@ -1,5 +1,5 @@
 from typing import Optional, List
-from sqlalchemy import Integer, String, ForeignKey, select
+from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from kivymd.app import MDApp

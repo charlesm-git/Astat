@@ -1,11 +1,8 @@
-from datetime import datetime, date
-
 from kivymd.app import MDApp
 
-from typing import Optional, List
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Date
+from typing import List
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
 
 from models.base import Base
 import models.grade
@@ -22,8 +19,8 @@ class ToDoList(Base):
     name: Mapped[str] = mapped_column(String(32))
 
     # Relationship
-    climbs_to_do: Mapped[List["models.climb_to_do.ClimbToDo"]] = (
-        relationship(back_populates="todolist")
+    climbs_to_do: Mapped[List["models.climb_to_do.ClimbToDo"]] = relationship(
+        back_populates="todolist"
     )
     sectors: Mapped[List["models.sector.Sector"]] = relationship(
         back_populates="todolist"
@@ -49,7 +46,7 @@ class ToDoList(Base):
             )
             session.commit()
 
-    def update(self, name):
-        with MDApp.get_running_app().get_db_session() as session:
-            updated_ascent = session.merge(self)
-            session.commit()
+    # def update(self, name):
+    #     with MDApp.get_running_app().get_db_session() as session:
+    #         updated_ascent = session.merge(self)
+    #         session.commit()

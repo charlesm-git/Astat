@@ -1,6 +1,5 @@
-from datetime import datetime, date
+from datetime import datetime
 import enum
-from tkinter import CASCADE
 
 from kivymd.app import MDApp
 
@@ -28,7 +27,9 @@ class ClimbToDo(Base):
         Integer, primary_key=True, autoincrement=True
     )
     name: Mapped[str] = mapped_column(String(64))
-    status: Mapped[Optional[str]] = mapped_column(Enum(ClimbStatusEnum), nullable=True)
+    status: Mapped[Optional[str]] = mapped_column(
+        Enum(ClimbStatusEnum), nullable=True
+    )
     grade_id: Mapped[int] = mapped_column(
         ForeignKey("grade.id", ondelete="RESTRICT", onupdate="CASCADE")
     )
