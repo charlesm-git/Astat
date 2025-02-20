@@ -1,9 +1,7 @@
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.card import MDCard
-from kivymd.uix.menu import MDDropdownMenu
 from kivy.clock import Clock
-from kivy.metrics import dp
 
 from kivy.properties import StringProperty, NumericProperty
 from sqlalchemy import select
@@ -47,8 +45,7 @@ class ToDoListItem(MDCard):
         todolist_detail_screen = self.screen_manager.get_screen(
             "todolist-detail"
         )
-        with MDApp.get_running_app().get_db_session() as session:
-            todolist = ToDoList.get_from_id(self.todolist_id)
+        todolist = ToDoList.get_from_id(self.todolist_id)
 
         todolist_detail_screen.todolist = todolist
         todolist_detail_screen.todolist_name = todolist.name

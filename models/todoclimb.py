@@ -1,10 +1,9 @@
 from datetime import datetime
-import enum
 
 from kivymd.app import MDApp
 
 from typing import Optional
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Enum
+from sqlalchemy import ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 

@@ -3,8 +3,6 @@ import os
 from alembic.config import Config
 from alembic import command
 
-from sqlalchemy import create_engine, text
-
 from kivy.utils import platform
 
 from models.grade import Grade
@@ -80,7 +78,8 @@ def run_migrations():
 
 
 def get_android_documents_path():
-    """Returns the absolute path to the user's Documents directory on Android."""
+    """Returns the absolute path to the user's Documents directory on Android.
+    """
     # Get Android context
     from jnius import autoclass, cast
 

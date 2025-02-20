@@ -3,7 +3,6 @@ from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 from models.grade import Grade
-from views import screenmanager
 
 
 class StatisticFilterScreen(MDScreen):
@@ -57,6 +56,6 @@ class StatisticFilterScreen(MDScreen):
         self.ids.min_grade_selector.ids.slider.value = 0
         self.ids.max_grade_selector.ids.slider.value = 18
         self.ids.area_selector.ids.selected_area.text = "All"
-        
+
         screen_manager = MDApp.get_running_app().root
         screen_manager.selected_area = "All"

@@ -11,7 +11,6 @@ from kivy.properties import (
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.widget import Widget
-from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import (
     MDDialog,
     MDDialogIcon,
@@ -22,7 +21,6 @@ from kivymd.uix.dialog import (
 )
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.divider import MDDivider
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.metrics import dp
 
 from models.sector import Sector
@@ -156,9 +154,9 @@ class ToDoListDetailScreen(MDScreen):
         query = self.get_filtered_query()
         # Adding of the ordering to the query
         tag_order = case(
-                (ToDoClimb.tag == "Project", 1),
-                (ToDoClimb.tag == "To Try", 2),
-                (ToDoClimb.tag == "To Check", 3),
+            (ToDoClimb.tag == "Project", 1),
+            (ToDoClimb.tag == "To Try", 2),
+            (ToDoClimb.tag == "To Check", 3),
             else_=4,
         )
         query = query.order_by(

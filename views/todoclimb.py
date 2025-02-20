@@ -1,16 +1,10 @@
-from datetime import datetime
-
-import asynckivy
-
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.chip import MDChip, MDChipText
 
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.clock import Clock
-from kivy.properties import StringProperty, ObjectProperty, NumericProperty
+from kivy.properties import ObjectProperty, NumericProperty
 from kivy.metrics import dp
 
 from sqlalchemy import select
@@ -185,7 +179,8 @@ class ToDoClimbScreen(MDScreen):
                 # Manually accessing MDChipText content from MDChip
                 self.form["tag"] = child.children[1].children[0].text
 
-        # Update the form with None values for tag and sector_id for database entry
+        # Update the form with None values for tag and sector_id for database
+        # entry
         if not self.form["tag"]:
             self.form["tag"] = None
         if not self.form["sector_id"]:

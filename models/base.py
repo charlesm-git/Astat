@@ -1,6 +1,5 @@
 from kivymd.app import MDApp
 
-from sqlalchemy import select
 from sqlalchemy.orm import DeclarativeBase
 
 

@@ -176,7 +176,8 @@ class LocationItem(MDBoxLayout):
         dialog = MDDialog(
             MDDialogIcon(icon="delete"),
             MDDialogHeadlineText(
-                text=f"You are about to delete this location : {self.location.name}"
+                text=f"You are about to delete this location: "
+                f"{self.location.name}"
             ),
             MDDialogSupportingText(
                 text=(

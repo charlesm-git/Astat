@@ -6,3 +6,4 @@ exclude =
     .venv/,
     kivy-master/,
     example/,
+    migrations/,

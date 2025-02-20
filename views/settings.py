@@ -10,6 +10,6 @@ class SettingsScreen(MDScreen):
         super().__init__(*args, **kwargs)
 
     def get_area_screen(self):
-        location_screen = self.manager.get_screen('area')
+        location_screen = self.manager.get_screen("area")
         location_screen.model_class = Area
-        self.manager.current = 'area'
+        self.manager.current = "area"

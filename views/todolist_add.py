@@ -1,8 +1,5 @@
-from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivy.properties import ObjectProperty, StringProperty, NumericProperty
-from kivy.clock import Clock
+from kivy.properties import ObjectProperty, NumericProperty
 
 from models.todolist import ToDoList
 from views.snackbar import CustomSnackbar
