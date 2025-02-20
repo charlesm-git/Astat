@@ -1,0 +1,47 @@
+#:kivy 2.3.1
+
+<ToDoListAddScreen>
+    md_bg_color: app.theme_cls.backgroundColor
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            type: "small"
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    on_release: root.manager.current = "todolist" if not root.todolist_to_update else "todolist-detail"
+            MDTopAppBarTitle:
+                text: 'New List' if not root.todolist_to_update else 'Update list name'
+                text_color: app.theme_cls.primaryColor
+        MDScrollView:
+            do_scroll_x: False
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(20)
+                spacing: dp(30)
+                adaptive_height: True
+                MDTextField:
+                    id: todolist_form_name
+                    mode: 'filled'
+                    MDTextFieldLeadingIcon:
+                        icon: "map"
+                    MDTextFieldHintText:
+                        id: text_field
+                        text: "List Name"
+                    MDTextFieldMaxLengthText:
+                        max_text_length: 32
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    adaptive_height: True
+                    padding: 0, dp(30), 0, dp(10)
+                    spacing: dp(30)
+                    Widget:
+                    MDButton:
+                        on_release: root.clear_field()
+                        MDButtonText:
+                            text: 'Clear'
+                    MDButton:
+                        on_release: root.submit()
+                        MDButtonText:
+                            text: "Add" if not root.todolist_to_update else "Update"

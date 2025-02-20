@@ -37,7 +37,7 @@ class Ascent(Base):
     grade: Mapped["models.grade.Grade"] = relationship(
         "Grade", back_populates="ascents"
     )
-    area: Mapped["models.area.Area"] = relationship(
+    area: Mapped["models.area.Sector"] = relationship(
         "Area", back_populates="ascents"
     )
 
@@ -60,7 +60,7 @@ class Ascent(Base):
                     grade_id=grade_id,
                     area_id=area_id,
                     ascent_date=ascent_date,
-                    note=note
+                    note=note,
                 )
             )
             session.commit()

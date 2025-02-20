@@ -101,7 +101,7 @@ class AscentScreen(MDScreen):
         self.grade_menu = MDDropdownMenu(
             caller=item,
             items=menu_items,
-            max_height=dp(200),
+            max_height=dp(350),
             width=dp(100),
             position="bottom",
             hor_growth="right",
@@ -136,8 +136,8 @@ class AscentScreen(MDScreen):
         self.area_menu = MDDropdownMenu(
             caller=item,
             items=menu_items,
-            max_height=dp(200),
-            width=dp(180),
+            max_height=dp(300),
+            width=dp(275),
             position="bottom",
             hor_growth="right",
         )
@@ -169,10 +169,17 @@ class AscentScreen(MDScreen):
 
     def submit(self):
         """Configure the actions performed when the form is submitted"""
-
         # Update the form with the name input
         typed_name = self.ids.ascent_form_name.text
         typed_note = self.ids.ascent_form_note.text
+
+        if len(typed_name) > 64:
+            self.show_snackbar(text="Name too long")
+            return
+        if len(typed_note) > 255:
+            self.show_snackbar(text="Note too long")
+            return
+
         self.form["name"] = typed_name
         self.form["note"] = typed_note
 
@@ -249,6 +256,10 @@ class AscentScreen(MDScreen):
         self.ids.ascent_form_grade.text = "Grade"
         self.ids.ascent_form_note.text = ""
 
+        self.form["name"] = ""
+        self.form["grade_id"] = ""
+        self.form["note"] = ""
+
     def clear_all_fields(self):
         """Reset all the fields"""
         # Empty the text fields
@@ -265,6 +276,9 @@ class AscentScreen(MDScreen):
         self.date_picker.update_calendar(
             self.date_picker.sel_year, self.date_picker.sel_month
         )
+        # Reset form
+        for key in self.form:
+            self.form[key] = ""
 
 
 class DropDownMenuHeader(ButtonBehavior, MDBoxLayout):

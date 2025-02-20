@@ -1,7 +1,7 @@
 #:kivy 2.3.1
 
-<AscentScreen>
-    md_bg_color: self.theme_cls.backgroundColor
+<ToDoClimbScreen>
+    md_bg_color: app.theme_cls.backgroundColor
     MDBoxLayout:
         orientation: 'vertical'
         MDTopAppBar:
@@ -9,20 +9,20 @@
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
-                    on_release: root.manager.current = "ascent-list"
+                    on_release: root.manager.current = "todolist-detail"
             MDTopAppBarTitle:
-                text: 'Add Ascent' if not root.ascent_to_update_id else 'Update Ascent'
+                text: 'Add Climb' if not root.climb_to_update_id else 'Update Climb'
                 text_color: app.theme_cls.primaryColor
 
         MDScrollView:
             do_scroll_x: False
             MDBoxLayout:
-                id: ascent_form
+                id: climb_form
                 orientation: 'vertical'
                 padding: dp(20)
                 adaptive_height: True
                 MDTextField:
-                    id: ascent_form_name
+                    id: climb_form_name
                     mode: 'filled'
                     MDTextFieldLeadingIcon:
                         icon: "terrain"
@@ -33,7 +33,7 @@
                         max_text_length: 64
 
                 DropDownMenuHeader:
-                    id: ascent_form_grade
+                    id: climb_form_grade
                     on_release: root.open_grade_menu(self)
                     text: "Grade"
                     leading_icon: "chart-bar"
@@ -43,23 +43,39 @@
                     md_bg_color: app.theme_cls.outlineVariantColor
                     divider_width: dp(1)
 
-                DropDownMenuHeader:
-                    id: ascent_form_area
-                    on_release: root.open_area_menu(self)
-                    text: "Area"
-                    leading_icon: "map-marker"
-                    adaptive_size: True
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    adaptive_height: True
+                    spacing: dp(20)
+                    DropDownMenuHeader:
+                        id: climb_form_sector
+                        on_release: root.open_sector_menu(self)
+                        text: "Sector"
+                        leading_icon: "map-marker"
+                        adaptive_size: True
+                    MDIconButton:
+                        icon: 'close-circle-outline'
+                        on_release: root.clear_sector_field()
+                        icon_color_theme: 'Custom'
+                        icon_color: app.theme_cls.secondaryColor
 
                 MDDivider:
                     md_bg_color: app.theme_cls.outlineVariantColor
                     divider_width: dp(1)
-                
-                DropDownMenuHeader:
-                    id: ascent_form_date_picker
-                    on_release: root.show_date_picker()
-                    text: "Date"
-                    leading_icon: "calendar"
-                    adaptive_size: True
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    padding: 0, dp(30), 0, dp(10)
+                    adaptive_height: True
+                    spacing: dp(10)
+                    MDLabel:
+                        text: 'Tag:'
+                        adaptive_width: True
+                    MDBoxLayout:
+                        id: climb_form_tag
+                        orientation: 'horizontal'
+                        spacing: dp(10)
+                        adaptive_height: True
 
                 MDDivider:
                     md_bg_color: app.theme_cls.outlineVariantColor
@@ -70,7 +86,7 @@
                     padding: 0, dp(30)
 
                     MDTextField:
-                        id: ascent_form_note
+                        id: climb_form_note
                         multiline: True
                         mode: 'filled'
 
@@ -91,49 +107,8 @@
                     MDButton:
                         on_release: root.clear_all_fields()
                         MDButtonText:
-                            text: 'Clear'
+                            text: 'Clear All'
                     MDButton:
                         on_release: root.submit()
                         MDButtonText:
-                            text: 'Add' if not root.ascent_to_update_id else 'Update'
-
-
-<DropDownMenuHeader>
-    orientation: "vertical"
-    id: container
-
-    MDBoxLayout:
-        spacing: dp(15)
-        adaptive_height: True
-        adaptive_width: True
-        padding: 0, dp(30), 0, dp(10)
-
-
-        MDIcon:
-            id: leading_icon
-            icon: root.leading_icon
-            size_hint: None, None
-            size: "48dp", "48dp"
-            theme_text_color: "Custom"
-            adaptive_width: True
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-
-        MDLabel:
-            id: label
-            text: root.text
-            adaptive_size: True
-            theme_text_color: "Custom"
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-        
-        MDIcon:
-            id: leading_icon
-            icon: "arrow-down-drop-circle"
-            size_hint: None, None
-            size: "48dp", "48dp"
-            theme_text_color: "Custom"
-            adaptive_width: True
-            text_color:
-                app.theme_cls.onSurfaceVariantColor
-
+                            text: 'Add' if not root.climb_to_update_id else 'Update'

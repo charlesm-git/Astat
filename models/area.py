@@ -27,16 +27,17 @@ class Area(Base):
     @classmethod
     def create(cls, name):
         with MDApp.get_running_app().get_db_session() as session:
-            session.add(Area(name=name))
+            area_created = Area(name=name)
+            session.add(area_created)
             session.commit()
+            session.refresh(area_created)
+        return area_created
 
     @classmethod
-    def delete(cls, area_name):
+    def delete(cls, id):
         """Delete an Area and all associated ascents"""
         with MDApp.get_running_app().get_db_session() as session:
-            area_to_delete = session.scalar(
-                select(Area).where(Area.name == area_name)
-            )
+            area_to_delete = session.get(Area, id)
             if area_to_delete:
                 # Manual delete of all associated ascents because not handled
                 # by SQLite

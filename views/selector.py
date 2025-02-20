@@ -11,7 +11,7 @@ from models.area import Area
 
 class AreaSelector(MDBoxLayout):
     on_area_selected = ObjectProperty(None, allownone=True)
-    selected_area = StringProperty('All')
+    selected_area = StringProperty("All")
 
     def area_selection(self, item):
         """Function for grade dropdown menu configuration and opening"""

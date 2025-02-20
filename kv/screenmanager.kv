@@ -19,7 +19,7 @@
             name: 'ascent-list'
         AscentScreen:
             name: 'ascent'
-        AreaScreen:
+        LocationScreen:
             name: 'area'
         StatisticScreen:
             name: 'statistic'
@@ -28,7 +28,13 @@
         SettingsScreen:
             name: 'settings'
         ToDoListScreen:
-            name: 'to-do-list'
+            name: 'todolist'
+        ToDoListDetailScreen:
+            name: 'todolist-detail'
+        ToDoListAddScreen:
+            name: 'todolist-add'
+        ToDoClimbScreen:
+            name: 'todoclimb'
 
     MDNavigationBar:
         on_switch_tabs: root.on_switch_tabs(args[1])
@@ -43,10 +49,10 @@
             icon: "chart-donut-variant"
             text: "Statistic"
         
-        # BaseMDNavigationItem:
-        #     name: 'to-do-list'
-        #     icon: "format-list-bulleted"
-        #     text: "To-Do List"
+        BaseMDNavigationItem:
+            name: 'todolist'
+            icon: "format-list-bulleted"
+            text: "To-Do List"
 
         BaseMDNavigationItem:
             name: 'settings'

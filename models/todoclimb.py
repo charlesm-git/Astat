@@ -11,25 +11,17 @@ from sqlalchemy.sql import func
 from models.base import Base
 import models.grade
 import models.sector
-import models.to_do_list
+import models.todolist
 
 
-class ClimbStatusEnum(enum.Enum):
-    TO_CHECK = "To Check"
-    TO_TRY = "To Try"
-    PROJECT = "Project"
-
-
-class ClimbToDo(Base):
-    __tablename__ = "climbs_to_do"
+class ToDoClimb(Base):
+    __tablename__ = "todoclimb"
 
     id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True
     )
     name: Mapped[str] = mapped_column(String(64))
-    status: Mapped[Optional[str]] = mapped_column(
-        Enum(ClimbStatusEnum), nullable=True
-    )
+    tag: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     grade_id: Mapped[int] = mapped_column(
         ForeignKey("grade.id", ondelete="RESTRICT", onupdate="CASCADE")
     )
@@ -52,13 +44,13 @@ class ClimbToDo(Base):
 
     # Relationship
     grade: Mapped["models.grade.Grade"] = relationship(
-        "Grade", back_populates="climbs_to_do"
+        "Grade", back_populates="todoclimbs"
     )
     sector: Mapped[Optional["models.sector.Sector"]] = relationship(
-        "Sector", back_populates="climbs_to_do"
+        "Sector", back_populates="todoclimbs"
     )
     todolist: Mapped["models.to_do_list.ToDoList"] = relationship(
-        "ToDoList", back_populates="climbs_to_do"
+        "ToDoList", back_populates="todoclimbs"
     )
 
     def __repr__(self):
@@ -67,32 +59,25 @@ class ClimbToDo(Base):
     @classmethod
     def delete(cls, id):
         with MDApp.get_running_app().get_db_session() as session:
-            ascent_to_delete = session.get(cls, id)
-            session.delete(ascent_to_delete)
+            climb_to_delete = session.get(cls, id)
+            session.delete(climb_to_delete)
             session.commit()
 
     @classmethod
-    def create(cls, name, grade_id, todolist_id, note, sector_id=None):
+    def create(
+        cls, name, grade_id, todolist_id, note, sector_id=None, tag=None
+    ):
         with MDApp.get_running_app().get_db_session() as session:
-            if sector_id:
-                session.add(
-                    ClimbToDo(
-                        name=name,
-                        grade_id=grade_id,
-                        todolist_id=todolist_id,
-                        note=note,
-                        sector_id=sector_id,
-                    )
+            session.add(
+                ToDoClimb(
+                    name=name,
+                    grade_id=grade_id,
+                    todolist_id=todolist_id,
+                    note=note,
+                    sector_id=sector_id,
+                    tag=tag,
                 )
-            else:
-                session.add(
-                    ClimbToDo(
-                        name=name,
-                        grade_id=grade_id,
-                        todolist_id=todolist_id,
-                        note=note,
-                    )
-                )
+            )
             session.commit()
 
     def update(self, name, grade_id, sector_id, note):

@@ -13,9 +13,9 @@ from models.base import Base
 import models.area
 import models.ascent
 import models.grade
-import models.to_do_list
+import models.todolist
 import models.sector
-import models.climb_to_do
+import models.todoclimb
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -78,11 +78,11 @@ def run_migrations_online() -> None:
     from alembic.script import ScriptDirectory
 
     script = ScriptDirectory.from_config(config)
-    
+
     print("Discovered migrations:")
     for rev in script.walk_revisions():
         print(f"- {rev.revision} ({rev.doc})")
-        
+
     db_path = get_db_path()
     print(f"Android DB Path: {db_path}")
     print(f"File exists: {os.path.exists(db_path)}")
@@ -97,6 +97,7 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

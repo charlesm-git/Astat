@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base import Base
 import models.grade
-import models.climb_to_do
+import models.todoclimb
 import models.sector
 
 
@@ -19,7 +19,7 @@ class ToDoList(Base):
     name: Mapped[str] = mapped_column(String(32))
 
     # Relationship
-    climbs_to_do: Mapped[List["models.climb_to_do.ClimbToDo"]] = relationship(
+    todoclimbs: Mapped[List["models.todoclimb.ToDoClimb"]] = relationship(
         back_populates="todolist"
     )
     sectors: Mapped[List["models.sector.Sector"]] = relationship(
@@ -39,14 +39,16 @@ class ToDoList(Base):
     @classmethod
     def create(cls, name):
         with MDApp.get_running_app().get_db_session() as session:
-            session.add(
-                ToDoList(
-                    name=name,
-                )
-            )
+            todolist = ToDoList(name=name)
+            session.add(todolist)
             session.commit()
+            session.refresh(todolist)
+        return todolist
 
-    # def update(self, name):
-    #     with MDApp.get_running_app().get_db_session() as session:
-    #         updated_ascent = session.merge(self)
-    #         session.commit()
+    def update(self, name):
+        with MDApp.get_running_app().get_db_session() as session:
+            updated_todolist = session.merge(self)
+            updated_todolist.name = name
+            session.commit()
+            session.refresh(updated_todolist)
+            self.name = updated_todolist.name

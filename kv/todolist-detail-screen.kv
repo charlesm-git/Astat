@@ -1,0 +1,127 @@
+#:kivy 2.3.1
+
+<ToDoListDetailScreen>
+    md_bg_color: self.theme_cls.backgroundColor
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            type: "medium"
+            MDTopAppBarLeadingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "arrow-left"
+                    on_release: root.manager.current = "todolist"
+            MDTopAppBarTitle:
+                text: root.todolist_name
+                text_color: app.theme_cls.primaryColor
+            MDTopAppBarTrailingButtonContainer:
+                MDActionTopAppBarButton:
+                    icon: "pencil-outline"
+                    on_release: root.update_todolist_name()
+                MDActionTopAppBarButton:
+                    icon: "delete-outline"
+                    on_release: root.show_delete_dialog()
+                MDActionTopAppBarButton:
+                    icon: "map"
+                    on_release: root.get_sector_screen()
+                MDActionTopAppBarButton:
+                    icon: "plus"
+                    on_release: root.get_todoclimb_screen()
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(10)
+            padding: dp(20), 0
+
+            # MDTextField:
+            #     id: search_field
+            #     mode: 'filled'
+            #     on_text: root.refresh_data()
+            #     MDTextFieldLeadingIcon:
+            #         icon: "magnify"
+            #     MDTextFieldHintText:
+            #         text: "Search"
+
+            MDDivider:
+                size_hint_x: .5
+                pos_hint: {'center_x': .5}
+            MDBoxLayout:
+                orientation: 'horizontal'
+                adaptive_height: True
+                spacing: dp(20)
+                CustomMDSegmentedButton:
+                    type: 'small'
+                    pos_hint: {'center_y': .5}
+                    MDSegmentedButtonItem:
+                        id: sort_by_sector
+                        on_release: root.load_by_sector()
+                        MDSegmentButtonLabel:
+                            text: 'by Sector'
+
+                    MDSegmentedButtonItem:
+                        id: sort_by_grade
+                        on_release: root.load_by_grade()
+                        active: True
+                        MDSegmentButtonLabel:
+                            text: 'by Grade'
+
+                    MDSegmentedButtonItem:
+                        id: sort_by_tag
+                        on_release: root.load_by_tag()
+                        MDSegmentButtonLabel:
+                            text: 'by Tag'
+
+            MDRecycleView:
+                viewclass: 'ClimbItem'
+                id: climb_list
+                scroll_type: ['bars', 'content']
+                scroll_wheel_distance: dp(60)
+                bar_width: dp(10)
+                
+                RecycleBoxLayout:
+                    orientation: 'vertical'
+                    default_size: None, dp(30)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+
+<ClimbItem>
+    orientation: 'horizontal'
+    adaptive_height: True
+    spacing: dp(30)
+
+    canvas.after:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1  # Light gray color for the line
+        Line:
+            points: self.x, self.y, self.right, self.y  # Draws a line at the bottom
+            width: 1  # Thickness of the line
+    
+    ClickableMDLabel:
+        text: root.name
+        bold: True if root.is_group else False
+        font_style: 'Title' if root.is_group else 'Body'
+        role: 'medium' if root.is_group else 'medium'
+        shorten: True
+        shorten_from: 'right'
+        on_release: root.show_info_dialog()
+        padding: (dp(30), 0) if root.is_group else 0
+
+    MDLabel:
+        text: root.tag
+        adaptive_width: True
+        text_color: app.theme_cls.secondaryColor
+        italic: True
+        font_style: 'Body'
+        role: 'small'
+    
+    MDLabel:
+        text: root.grade
+        size_hint_x: None
+        width: dp(30)
+        halign: 'right'
+        text_color: self.theme_cls.primaryColor
+        font_style: 'Body'
+        role: 'medium'
+    
+

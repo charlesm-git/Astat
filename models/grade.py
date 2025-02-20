@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base import Base
 import models.ascent
-import models.climb_to_do
+import models.todoclimb
 
 
 class Grade(Base):
@@ -24,8 +24,8 @@ class Grade(Base):
         back_populates="grade"
     )
 
-    climbs_to_do: Mapped[List["models.climb_to_do.ClimbToDo"]] = relationship(
-        "ClimbToDo", back_populates="grade"
+    todoclimbs: Mapped[List["models.todoclimb.ToDoClimb"]] = relationship(
+        back_populates="grade"
     )
 
     def __repr__(self):

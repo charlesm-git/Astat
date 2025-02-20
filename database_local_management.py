@@ -4,9 +4,9 @@ from sqlalchemy import select, create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from models.base import Base
-from models.area import Area
+from models.area import Sector
 from models.grade import Grade
-from models.ascent import Ascent
+from models.ascent import ClimbToDo
 
 GRADE_ASSOCIATION_DICT = {
     "6a": 1,
@@ -44,13 +44,13 @@ def load_ascents_to_csv():
     with Session() as session:
         ascents = session.execute(
             select(
-                Ascent.name,
+                ClimbToDo.name,
                 Grade.grade_value,
-                Ascent.ascent_date,
-                Area.name,
+                ClimbToDo.ascent_date,
+                Sector.name,
             )
-            .join(Area, Area.id == Ascent.area_id)
-            .join(Grade, Grade.id == Ascent.grade_id)
+            .join(Sector, Sector.id == ClimbToDo.area_id)
+            .join(Grade, Grade.id == ClimbToDo.grade_id)
         ).all()
         print(ascents)
 
@@ -105,7 +105,7 @@ def get_areas_as_objects(ascents):
             areas.append(ascent["area"])
     areas_objects = []
     for area in areas:
-        areas_objects.append(Area(name=area))
+        areas_objects.append(Sector(name=area))
     return areas_objects
 
 
@@ -120,11 +120,11 @@ def get_ascents_as_object(ascents, session):
             select(Grade.id).where(Grade.grade_value == ascent["grade"])
         )
         area = ascent["area"]
-        area_id = session.scalar(select(Area.id).where(Area.name == area))
+        area_id = session.scalar(select(Sector.id).where(Sector.name == area))
         full_date = ascent["date"]
         day, month, year = full_date.split("/")
         ascents_object_list.append(
-            Ascent(
+            ClimbToDo(
                 name=ascent["name"],
                 grade_id=grade_id,
                 area_id=area_id,

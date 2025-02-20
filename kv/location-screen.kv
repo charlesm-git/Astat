@@ -1,6 +1,20 @@
 #:kivy 2.3.1
+#:import Area models.area.Area
 
-<AreaScreen>
+
+<SectionTitle@MDLabel>
+    # Section title for each Items of the AddingScreen
+    adaptive_height: True
+    size_hint_x: 1
+    text_size: self.size
+    padding: 0, 0, 0, dp(30)
+    halign: 'center'
+    font_style: 'Title'
+    role: 'large'
+    text_color: app.theme_cls.primaryColor
+    bold: True
+
+<LocationScreen>
     md_bg_color: app.theme_cls.backgroundColor
     MDBoxLayout:
         orientation: 'vertical'
@@ -9,41 +23,52 @@
             MDTopAppBarLeadingButtonContainer:
                 MDActionTopAppBarButton:
                     icon: "arrow-left"
-                    on_release: root.manager.current = "settings"
+                    on_release: root.manager.current = "settings" if root.model_class == Area else 'todolist-detail'
             MDTopAppBarTitle:
-                text: 'Manage Areas'
+                text: 'Manage Areas' if root.model_class == Area else 'Manage Sectors'
                 text_color: app.theme_cls.primaryColor
         MDScrollView:
             do_scroll_x: False
             MDBoxLayout:
                 orientation: 'vertical'
+                padding: dp(20)
                 spacing: dp(30)
                 adaptive_height: True
-                AreaForm:
-                    id: adding_area_form
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    SectionTitle:
+                        text: "Add Area" if root.model_class == Area else "Add Sector"
+                    LocationForm:
+                        id: location_form
+                        model_class: root.model_class
+                        todolist_id: root.todolist_id
                 MDDivider:
                     size_hint_x: 0.5
                     pos_hint: {"center_x": 0.5}
-                AreaList:
-                    id: delete_area_list
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    SectionTitle:
+                        text: "Areas" if root.model_class == Area else "Sectors"
+                    LocationList:
+                        id: location_list
+                        model_class: root.model_class
+                        todolist_id: root.todolist_id
 
-<AreaForm>
+<LocationForm>
     orientation: 'vertical'
     adaptive_height: True
-    padding: dp(20)
-
-    SectionTitle:
-        text: "Add Area"
     MDTextField:
-        id: area_form_name
+        id: location_form_name
         mode: 'filled'
         MDTextFieldLeadingIcon:
             icon: "map"
         MDTextFieldHintText:
             id: text_field
-            text: "Area Name"
+            text: "Name"
         MDTextFieldMaxLengthText:
-            max_text_length: 64
+            max_text_length: 32
 
     MDBoxLayout:
         orientation: "horizontal"
@@ -60,14 +85,12 @@
             MDButtonText:
                 text: "Add"
 
-<AreaList>
+<LocationList>
     orientation: 'vertical'
     adaptive_height: True
-    padding: dp(20)
-    SectionTitle:
-        text: "Delete Area"
+
     
-<AreaItem>
+<LocationItem>
     orientation: 'horizontal'
     adaptive_height: True
     spacing: dp(10)
@@ -79,7 +102,7 @@
             width: 1  # Thickness of the line
 
     MDLabel:
-        text: root.area_name
+        text: root.location_name
         bold: True
         font_style: 'Body'
         role: 'medium'
@@ -91,15 +114,3 @@
         size_hint: None, None
         size: "30dp", "30dp"
         on_release: root.show_delete_dialog()
-
-<SectionTitle@MDLabel>
-    # Section title for each Items of the AddingScreen
-    adaptive_height: True
-    size_hint_x: 1
-    text_size: self.size
-    padding: 0, 0, 0, dp(30)
-    halign: 'center'
-    font_style: 'Title'
-    role: 'large'
-    text_color: app.theme_cls.primaryColor
-    bold: True

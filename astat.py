@@ -9,12 +9,15 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 from views.ascent_list import AscentListScreen
 from views.ascent import AscentScreen
-from views.area import AreaScreen
+from views.location import LocationScreen
 from views.statistics import StatisticScreen
 from views.settings import SettingsScreen
-from views.to_do_list import ToDoListScreen
+from views.todolist import ToDoListScreen
+from views.todolist_detail import ToDoListDetailScreen
+from views.todolist_add import ToDoListAddScreen
 from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
+from views.todoclimb import ToDoClimbScreen
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
@@ -30,7 +33,7 @@ class AStatApp(MDApp):
         self.theme_cls.primary_palette = "Darkred"
 
         db_path = get_db_path()
-                
+
         # try:
         #     run_migrations()
         # except Exception as e:
@@ -42,10 +45,13 @@ class AStatApp(MDApp):
         Builder.load_file("kv/ascent-list-screen.kv")
         Builder.load_file("kv/ascent-screen.kv")
         Builder.load_file("kv/settings-screen.kv")
-        Builder.load_file("kv/area-screen.kv")
+        Builder.load_file("kv/location-screen.kv")
         Builder.load_file("kv/statistic-screen.kv")
         Builder.load_file("kv/statistic-filter-screen.kv")
-        Builder.load_file("kv/to-do-list-screen.kv")
+        Builder.load_file("kv/todoclimb-screen.kv")
+        Builder.load_file("kv/todolist-screen.kv")
+        Builder.load_file("kv/todolist-detail-screen.kv")
+        Builder.load_file("kv/todolist-add-screen.kv")
         Builder.load_file("kv/screenmanager.kv")
         return MainScreenManager()
 
@@ -57,13 +63,12 @@ class AStatApp(MDApp):
         engine = create_engine(DATABASE_URL, echo=False)
         session_factory = sessionmaker(bind=engine)
         Session = scoped_session(session_factory)
-        
+
         if not os.path.exists(db_path):
             grades = get_grades_as_object()
-            print(grades)
             with Session() as session:
                 Base.metadata.create_all(engine)
                 session.add_all(grades)
                 session.commit()
-                
+
         return Session
