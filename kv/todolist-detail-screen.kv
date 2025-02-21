@@ -88,8 +88,8 @@
 <ClimbItem>
     orientation: 'horizontal'
     adaptive_height: True
-    spacing: dp(30)
-
+    padding: 0, dp(5)
+    
     canvas.after:
         Color:
             rgba: 0.5, 0.5, 0.5, 1  # Light gray color for the line
@@ -97,15 +97,24 @@
             points: self.x, self.y, self.right, self.y  # Draws a line at the bottom
             width: 1  # Thickness of the line
     
+    MDIcon:
+        icon: "star" if root.star else "blank"
+        pos_hint: {"center_y": .5}
+        theme_font_size: "Custom"
+        font_size: sp(20)
+        icon_color_theme: 'Custom'
+        icon_color: app.theme_cls.secondaryColor
+        padding: (0, dp(3), dp(10), dp(3)) if root.star else 0
+
     ClickableMDLabel:
         text: root.name
         bold: True if root.is_group else False
         font_style: 'Title' if root.is_group else 'Body'
-        role: 'medium' if root.is_group else 'medium'
+        role: 'medium' if root.is_group else 'large'
         shorten: True
         shorten_from: 'right'
         on_release: root.show_info_dialog()
-        padding: (dp(30), 0) if root.is_group else 0
+        padding: (dp(50), 0) if root.is_group else 0
 
     MDLabel:
         text: root.tag
@@ -113,15 +122,13 @@
         text_color: app.theme_cls.secondaryColor
         italic: True
         font_style: 'Body'
-        role: 'small'
+        role: 'medium'
     
     MDLabel:
         text: root.grade
         size_hint_x: None
-        width: dp(30)
+        width: dp(35)
         halign: 'right'
         text_color: self.theme_cls.primaryColor
         font_style: 'Body'
-        role: 'medium'
-    
-
+        role: 'large'

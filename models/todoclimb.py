@@ -3,7 +3,7 @@ from datetime import datetime
 from kivymd.app import MDApp
 
 from typing import Optional
-from sqlalchemy import ForeignKey, Integer, String, DateTime
+from sqlalchemy import Boolean, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -31,7 +31,7 @@ class ToDoClimb(Base):
     todolist_id: Mapped[int] = mapped_column(
         ForeignKey("todolist.id", ondelete="CASCADE", onupdate="CASCADE")
     )
-
+    star: Mapped[bool] = mapped_column(Boolean, default=False)
     note: Mapped[str] = mapped_column(String(3000), default="")
 
     date_created: Mapped[datetime] = mapped_column(
@@ -64,7 +64,7 @@ class ToDoClimb(Base):
 
     @classmethod
     def create(
-        cls, name, grade_id, todolist_id, note, sector_id=None, tag=None
+        cls, name, grade_id, todolist_id, note, star, sector_id=None, tag=None
     ):
         with MDApp.get_running_app().get_db_session() as session:
             session.add(
@@ -75,11 +75,12 @@ class ToDoClimb(Base):
                     note=note,
                     sector_id=sector_id,
                     tag=tag,
+                    star=star
                 )
             )
             session.commit()
 
-    def update(self, name, grade_id, sector_id, note, tag):
+    def update(self, name, grade_id, sector_id, note, tag, star):
         with MDApp.get_running_app().get_db_session() as session:
             updated_ascent = session.merge(self)
             updated_ascent.name = name
@@ -87,4 +88,5 @@ class ToDoClimb(Base):
             updated_ascent.sector_id = sector_id
             updated_ascent.note = note
             updated_ascent.tag = tag
+            updated_ascent.star = star
             session.commit()

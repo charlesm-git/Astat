@@ -26,6 +26,7 @@ class ToDoClimbScreen(MDScreen):
         "sector_id": "",
         "todolist_id": "",
         "tag": "",
+        "star": False,
         "note": "",
     }
 
@@ -42,7 +43,7 @@ class ToDoClimbScreen(MDScreen):
 
             # Update name
             self.ids.climb_form_name.text = self.climb_to_update.name
-            
+
             # Update grade
             grade = Grade.get_from_id(self.climb_to_update.grade_id)
             self.ids.climb_form_grade.text = grade.grade_value
@@ -60,10 +61,15 @@ class ToDoClimbScreen(MDScreen):
                     if self.climb_to_update.tag == child.children[1].children[0].text:
                         child.active = True
                 self.form["tag"] = self.climb_to_update.tag
-            
+
             # Update note
             self.ids.climb_form_note.text = self.climb_to_update.note
             self.form["note"] = self.climb_to_update.note
+
+            # Update star
+            if self.climb_to_update.star:
+                self.ids.climb_form_star.icon = "star"
+                self.form["star"] = True
 
     def on_enter(self):
         self.form["todolist_id"] = self.todolist_id
@@ -153,7 +159,7 @@ class ToDoClimbScreen(MDScreen):
             caller=item,
             items=menu_items,
             max_height=dp(300),
-            width=dp(275),
+            width=dp(200),
             position="bottom",
             hor_growth="right",
         )
@@ -167,6 +173,16 @@ class ToDoClimbScreen(MDScreen):
         self.ids.climb_form_sector.text = sector_name
         self.form["sector_id"] = int(sector_id)
         self.sector_menu.dismiss()
+
+    def update_star(self):
+        star = self.ids.climb_form_star
+        if star.icon == "star-outline":
+            star.icon = "star"
+            self.form["star"] = True
+        else:
+            star.icon = "star-outline"
+            self.form["star"] = False
+        print(self.form)
 
     def submit(self):
         """Configure the actions performed when the form is submitted"""
@@ -198,10 +214,7 @@ class ToDoClimbScreen(MDScreen):
         # Check if the form is complete
         incomplete = False
         for key, value in self.form.items():
-            # None required fields
-            if key in ["sector_id", "tag", "note"]:
-                continue
-            if value == "":
+            if key in ["name", "grade"] and value == "":
                 incomplete = True
                 break
 
@@ -222,6 +235,7 @@ class ToDoClimbScreen(MDScreen):
                 sector_id=self.form["sector_id"],
                 tag=self.form["tag"],
                 note=self.form["note"],
+                star=self.form["star"],
             )
             self.show_snackbar(text="Ascent updated successfully")
             self.manager.current = "todolist-detail"
@@ -234,6 +248,7 @@ class ToDoClimbScreen(MDScreen):
                 tag=self.form["tag"],
                 note=self.form["note"],
                 todolist_id=self.form["todolist_id"],
+                star=self.form["star"],
             )
             # Show snackbar for user feedback
             self.show_snackbar(text="Climb added successfully")
@@ -251,11 +266,13 @@ class ToDoClimbScreen(MDScreen):
         self.ids.climb_form_name.text = ""
         self.ids.climb_form_grade.text = "Grade"
         self.ids.climb_form_note.text = ""
+        self.ids.climb_form_star.icon = "star-outline"
 
         # Reset form
         self.form["name"] = ""
         self.form["grade_id"] = ""
         self.form["note"] = ""
+        self.form["star"] = False
 
     def clear_all_fields(self):
         """Reset all the fields"""
@@ -264,14 +281,17 @@ class ToDoClimbScreen(MDScreen):
         self.ids.climb_form_sector.text = "Sector"
         self.ids.climb_form_grade.text = "Grade"
         self.ids.climb_form_note.text = ""
+        self.ids.climb_form_star.icon = "star-outline"
 
         for child in self.ids.climb_form_tag.children:
             child.active = False
 
         # Reset form
         for key in self.form:
-            if key != "todolist_id":
+            if key not in ["todolist_id", "star"]:
                 self.form[key] = ""
+            if key == "star":
+                self.form[key] = False
 
     def clear_sector_field(self):
         self.ids.climb_form_sector.text = "Sector"

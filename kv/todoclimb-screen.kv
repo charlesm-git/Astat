@@ -21,16 +21,29 @@
                 orientation: 'vertical'
                 padding: dp(20)
                 adaptive_height: True
-                MDTextField:
-                    id: climb_form_name
-                    mode: 'filled'
-                    MDTextFieldLeadingIcon:
-                        icon: "terrain"
-                    MDTextFieldHintText:
-                        id: text_field
-                        text: "Name"
-                    MDTextFieldMaxLengthText:
-                        max_text_length: 64
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    adaptive_height: True
+                    spacing: dp(20)
+                    MDTextField:
+                        id: climb_form_name
+                        mode: 'filled'
+                        MDTextFieldLeadingIcon:
+                            icon: "terrain"
+                        MDTextFieldHintText:
+                            id: text_field
+                            text: "Name"
+                        MDTextFieldMaxLengthText:
+                            max_text_length: 64
+                    MDIconButton:
+                        id: climb_form_star
+                        icon: "star-outline"
+                        theme_font_size: "Custom"
+                        font_size: sp(35)
+                        size_hint: None, None
+                        size: dp(50), dp(50)
+                        pos_hint: {"center_y": .5}
+                        on_release: root.update_star()
 
                 DropDownMenuHeader:
                     id: climb_form_grade
@@ -38,6 +51,7 @@
                     text: "Grade"
                     leading_icon: "chart-bar"
                     adaptive_size: True
+
 
                 MDDivider:
                     md_bg_color: app.theme_cls.outlineVariantColor

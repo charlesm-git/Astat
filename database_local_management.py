@@ -166,3 +166,4 @@ def initialize_empty_db():
 
 if __name__ == "__main__":
     initialize_empty_db()
+    load_ascents_to_db()

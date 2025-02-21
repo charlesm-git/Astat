@@ -141,7 +141,7 @@ class AscentScreen(MDScreen):
             caller=item,
             items=menu_items,
             max_height=dp(300),
-            width=dp(275),
+            width=dp(200),
             position="bottom",
             hor_growth="right",
         )

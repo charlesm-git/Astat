@@ -79,6 +79,7 @@ class ToDoListDetailScreen(MDScreen):
                             "sector": "",
                             "note": "",
                             "tag": "",
+                            "star": False,
                             "todolist_id": 0,
                             "is_group": True,
                         }
@@ -95,6 +96,7 @@ class ToDoListDetailScreen(MDScreen):
                         "sector": sector,
                         "tag": tag,
                         "note": climb.note,
+                        "star": climb.star,
                         "todolist_id": self.todolist_id,
                         "is_group": False,
                         "refresh_callback": self.refresh_recycleview,
@@ -244,6 +246,7 @@ class ClimbItem(MDBoxLayout):
     sector = StringProperty()
     note = StringProperty()
     tag = StringProperty()
+    star = BooleanProperty()
     todolist_id = NumericProperty()
     is_group = BooleanProperty()
 

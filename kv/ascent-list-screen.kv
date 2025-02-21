@@ -79,6 +79,7 @@
     orientation: 'horizontal'
     adaptive_height: True
     spacing: dp(10)
+    padding: 0, dp(5)
 
     canvas.after:
         Color:
@@ -92,32 +93,33 @@
         adaptive_width: True
         text_color: app.theme_cls.secondaryColor
         italic: True
+        pos_hint: {"center_y": .5}
         font_style: 'Body'
-        role: 'small'
+        role: 'medium'
     
     ClickableMDLabel:
         text: root.name
         bold: True
         font_style: 'Title' if root.is_group else 'Body'
-        role: 'medium' if root.is_group else 'medium'
+        role: 'medium' if root.is_group else 'large'
         shorten: True
         shorten_from: 'right'
         on_release: root.show_info_dialog()
     
     MDIcon:
-        icon: "lightning-bolt" if root.flash else ""
-        padding: dp(3)
+        icon: "lightning-bolt" if root.flash else "blank"
+        # padding: dp(3)
         icon_color_theme: 'Custom'
         icon_color: "#dbbf02"
     
     MDLabel:
         text: root.grade
         size_hint_x: None
-        width: dp(25)
+        width: dp(35)
         halign: 'right'
         text_color: self.theme_cls.primaryColor
         font_style: 'Body'
-        role: 'medium'
+        role: 'large'
 
 <DialogItem>
     orientation: 'horizontal'

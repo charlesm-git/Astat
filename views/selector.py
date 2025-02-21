@@ -41,7 +41,7 @@ class AreaSelector(MDBoxLayout):
             caller=item,
             items=menu_items,
             max_height=dp(200),
-            width=dp(180),
+            width=dp(200),
             position="bottom",
             hor_growth="right",
         )
