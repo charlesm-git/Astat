@@ -79,6 +79,7 @@ class AscentScreen(MDScreen):
 
     def on_leave(self):
         self.ascent_to_update_id = None
+        self.ascent_to_update = None
         self.clear_all_fields()
 
     def init_date_picker(self):

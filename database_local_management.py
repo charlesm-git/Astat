@@ -52,7 +52,6 @@ def load_ascents_to_csv():
             .join(Ascent.area)
             .join(Ascent.grade)
         ).all()
-        print(ascents)
 
     with open(
         "./ascents_export.csv", "w", encoding="utf-8", newline=""

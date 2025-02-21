@@ -76,6 +76,7 @@ class ToDoClimbScreen(MDScreen):
 
     def on_leave(self):
         self.climb_to_update_id = None
+        self.climb_to_update = None
         self.clear_all_fields()
 
     def create_chips(self):
@@ -182,7 +183,6 @@ class ToDoClimbScreen(MDScreen):
         else:
             star.icon = "star-outline"
             self.form["star"] = False
-        print(self.form)
 
     def submit(self):
         """Configure the actions performed when the form is submitted"""
