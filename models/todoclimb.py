@@ -32,7 +32,7 @@ class ToDoClimb(Base):
         ForeignKey("todolist.id", ondelete="CASCADE", onupdate="CASCADE")
     )
 
-    note: Mapped[str] = mapped_column(String(255), default="")
+    note: Mapped[str] = mapped_column(String(3000), default="")
 
     date_created: Mapped[datetime] = mapped_column(
         DateTime, default=func.now()

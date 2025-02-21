@@ -198,7 +198,7 @@ class AscentItem(MDBoxLayout):
                 DialogItem(icon="terrain", label=self.name),
                 DialogItem(icon="chart-bar", label=self.grade),
                 DialogItem(icon="map-marker", label=self.area),
-                DialogItem(icon="note", label=self.note),
+                DialogScrollableItem(icon="note", label=self.note),
                 MDDivider(),
                 orientation="vertical",
                 spacing="10dp",
@@ -286,6 +286,14 @@ class ClickableMDLabel(ButtonBehavior, MDLabel):
 
 
 class DialogItem(MDBoxLayout):
+    icon = StringProperty()
+    label = StringProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class DialogScrollableItem(MDBoxLayout):
     icon = StringProperty()
     label = StringProperty()
 

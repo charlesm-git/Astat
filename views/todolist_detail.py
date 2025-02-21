@@ -25,7 +25,7 @@ from kivy.metrics import dp
 
 from models.sector import Sector
 from models.todolist import ToDoList
-from views.ascent_list import DialogItem
+from views.ascent_list import DialogItem, DialogScrollableItem
 from models.todoclimb import ToDoClimb
 from models.grade import Grade
 
@@ -274,7 +274,7 @@ class ClimbItem(MDBoxLayout):
                 DialogItem(icon="chart-bar", label=self.grade),
                 DialogItem(icon="map-marker", label=self.sector),
                 DialogItem(icon="tag", label=self.tag),
-                DialogItem(icon="note", label=self.note),
+                DialogScrollableItem(icon="note", label=self.note),
                 MDDivider(),
                 orientation="vertical",
                 spacing="10dp",

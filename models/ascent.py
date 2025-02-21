@@ -25,7 +25,7 @@ class Ascent(Base):
         ForeignKey("area.id", ondelete="CASCADE", onupdate="CASCADE")
     )
     ascent_date: Mapped[date] = mapped_column(Date)
-    note: Mapped[str] = mapped_column(String(255), default="")
+    note: Mapped[str] = mapped_column(String(3000), default="")
     date_created: Mapped[datetime] = mapped_column(
         DateTime, default=func.now()
     )

@@ -78,8 +78,7 @@ def run_migrations():
 
 
 def get_android_documents_path():
-    """Returns the absolute path to the user's Documents directory on Android.
-    """
+    """Returns the absolute path to the user's Documents directory on Android."""
     # Get Android context
     from jnius import autoclass, cast
 

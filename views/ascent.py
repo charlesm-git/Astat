@@ -176,9 +176,6 @@ class AscentScreen(MDScreen):
         if len(typed_name) > 64:
             self.show_snackbar(text="Name too long")
             return
-        if len(typed_note) > 255:
-            self.show_snackbar(text="Note too long")
-            return
 
         self.form["name"] = typed_name
         self.form["note"] = typed_note
