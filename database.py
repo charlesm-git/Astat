@@ -1,7 +1,7 @@
 import os
 
-from alembic.config import Config
-from alembic import command
+# from alembic.config import Config
+# from alembic import command
 
 from kivy.utils import platform
 
@@ -50,31 +50,31 @@ def get_db_path():
     return writable_db_path
 
 
-def run_migrations():
-    """Run migrations using Alembic's command API with proper configuration."""
-    db_path = get_db_path()
+# def run_migrations():
+#     """Run migrations using Alembic's command API with proper configuration."""
+#     db_path = get_db_path()
 
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    script_location = os.path.join(base_dir, "migrations")
+#     base_dir = os.path.abspath(os.path.dirname(__file__))
+#     script_location = os.path.join(base_dir, "migrations")
 
-    # Configure Alembic programmatically
-    alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("script_location", script_location)
-    alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+#     # Configure Alembic programmatically
+#     alembic_cfg = Config("alembic.ini")
+#     alembic_cfg.set_main_option("script_location", script_location)
+#     alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
 
-    # Debug prints
-    db_url = alembic_cfg.get_main_option("sqlalchemy.url")
-    migrations = os.listdir(os.path.join(script_location, "versions"))
-    print(f"database url : {db_url}")
-    print(f"migration path: {script_location}")
-    print(f"Migration versions: {migrations}")
+#     # Debug prints
+#     db_url = alembic_cfg.get_main_option("sqlalchemy.url")
+#     migrations = os.listdir(os.path.join(script_location, "versions"))
+#     print(f"database url : {db_url}")
+#     print(f"migration path: {script_location}")
+#     print(f"Migration versions: {migrations}")
 
-    try:
-        command.upgrade(alembic_cfg, "head")
-    except SystemExit as e:
-        if e.code != 0:
-            print(f"Migration failed with code {e.code}")
-            raise
+#     try:
+#         command.upgrade(alembic_cfg, "head")
+#     except SystemExit as e:
+#         if e.code != 0:
+#             print(f"Migration failed with code {e.code}")
+#             raise
 
 
 def get_android_documents_path():
