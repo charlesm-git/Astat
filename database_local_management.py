@@ -4,9 +4,9 @@ from sqlalchemy import select, create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from models.base import Base
-from models.area import Sector
+from models.area import Area
 from models.grade import Grade
-from models.ascent import ClimbToDo
+from models.ascent import Ascent
 
 GRADE_ASSOCIATION_DICT = {
     "6a": 1,
@@ -44,13 +44,13 @@ def load_ascents_to_csv():
     with Session() as session:
         ascents = session.execute(
             select(
-                ClimbToDo.name,
+                Ascent.name,
                 Grade.grade_value,
-                ClimbToDo.ascent_date,
-                Sector.name,
+                Ascent.ascent_date,
+                Area.name,
             )
-            .join(Sector, Sector.id == ClimbToDo.area_id)
-            .join(Grade, Grade.id == ClimbToDo.grade_id)
+            .join(Ascent.area)
+            .join(Ascent.grade)
         ).all()
         print(ascents)
 
@@ -105,7 +105,7 @@ def get_areas_as_objects(ascents):
             areas.append(ascent["area"])
     areas_objects = []
     for area in areas:
-        areas_objects.append(Sector(name=area))
+        areas_objects.append(Area(name=area))
     return areas_objects
 
 
@@ -119,12 +119,15 @@ def get_ascents_as_object(ascents, session):
         grade_id = session.scalar(
             select(Grade.id).where(Grade.grade_value == ascent["grade"])
         )
-        area = ascent["area"]
-        area_id = session.scalar(select(Sector.id).where(Sector.name == area))
+        area_id = session.scalar(
+            select(Area.id).where(Area.name == ascent["area"])
+        )
+
         full_date = ascent["date"]
         day, month, year = full_date.split("/")
+
         ascents_object_list.append(
-            ClimbToDo(
+            Ascent(
                 name=ascent["name"],
                 grade_id=grade_id,
                 area_id=area_id,
@@ -134,18 +137,16 @@ def get_ascents_as_object(ascents, session):
     return ascents_object_list
 
 
-def initialize_db():
+def load_ascents_to_db():
     """Initialize the database from a .csv given as input"""
     ascents = load_ascents_from_csv()
     areas = get_areas_as_objects(ascents)
-    grades = get_grades_as_object()
 
     with Session() as session:
         # Create all the tables
         Base.metadata.create_all(engine)
         # Initialize the 'area' and 'grade' tables
         session.add_all(areas)
-        session.add_all(grades)
         session.commit()
         # Initialize the 'ascent' table based. Has to be done after the
         # initialisation of 'area' and 'grade' for foreign key references
@@ -164,5 +165,4 @@ def initialize_empty_db():
 
 
 if __name__ == "__main__":
-    # load_ascents_to_csv()
     initialize_empty_db()

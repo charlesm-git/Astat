@@ -82,6 +82,7 @@ class AscentListScreen(MDScreen):
                             "grade": "",
                             "area": "",
                             "date": "",
+                            "flash": False,
                             "note": "",
                             "is_group": True,
                         }
@@ -95,6 +96,7 @@ class AscentListScreen(MDScreen):
                         "grade": ascent.grade.grade_value,
                         "area": ascent.area.name,
                         "date": str(ascent.ascent_date),
+                        "flash": ascent.flash,
                         "note": ascent.note,
                         "is_group": False,
                         "refresh_callback": self.refresh_recycleview,
@@ -168,6 +170,7 @@ class AscentItem(MDBoxLayout):
     grade = StringProperty()
     area = StringProperty()
     date = StringProperty()
+    flash = BooleanProperty()
     note = StringProperty()
     is_group = BooleanProperty()
 

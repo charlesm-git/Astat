@@ -104,9 +104,17 @@
         shorten_from: 'right'
         on_release: root.show_info_dialog()
     
+    MDIcon:
+        icon: "lightning-bolt" if root.flash else ""
+        padding: dp(3)
+        icon_color_theme: 'Custom'
+        icon_color: "#dbbf02"
+    
     MDLabel:
         text: root.grade
-        adaptive_width: True
+        size_hint_x: None
+        width: dp(25)
+        halign: 'right'
         text_color: self.theme_cls.primaryColor
         font_style: 'Body'
         role: 'medium'

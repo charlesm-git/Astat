@@ -66,6 +66,22 @@
                     divider_width: dp(1)
 
                 MDBoxLayout:
+                    orientation: 'horizontal'
+                    adaptive_height: True
+                    padding: 0, dp(30), 0, dp(10)
+
+                    MDLabel:
+                        text: "Flash"
+                        adaptive_size: True
+                        padding: dp(20), 0
+                    MDCheckbox:
+                        id: ascent_form_flash_checkbox
+
+                MDDivider:
+                    md_bg_color: app.theme_cls.outlineVariantColor
+                    divider_width: dp(1)
+
+                MDBoxLayout:
                     adaptive_height: True
                     padding: 0, dp(30)
 

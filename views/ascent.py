@@ -30,6 +30,7 @@ class AscentScreen(MDScreen):
         "grade_id": "",
         "area_id": "",
         "date": "",
+        "flash": "",
         "note": "",
     }
     date_picker = ObjectProperty(MDModalDatePicker)
@@ -53,6 +54,9 @@ class AscentScreen(MDScreen):
             self.ids.ascent_form_grade.text = grade.grade_value
             self.ids.ascent_form_date_picker.text = str(
                 self.ascent_to_update.ascent_date
+            )
+            self.ids.ascent_form_flash_checkbox.active = (
+                self.ascent_to_update.flash
             )
             self.ids.ascent_form_note.text = self.ascent_to_update.note
 
@@ -180,6 +184,12 @@ class AscentScreen(MDScreen):
         self.form["name"] = typed_name
         self.form["note"] = typed_note
 
+        if self.ids.ascent_form_flash_checkbox.active:
+            flash_checkbox_status = True
+        else:
+            flash_checkbox_status = False
+        self.form["flash"] = flash_checkbox_status
+
         # Check if the form is complete
         incomplete = False
         for key, value in self.form.items():
@@ -203,6 +213,7 @@ class AscentScreen(MDScreen):
                 grade_id=self.form["grade_id"],
                 area_id=self.form["area_id"],
                 ascent_date=self.form["date"],
+                flash=self.form["flash"],
                 note=self.form["note"],
             )
             self.show_snackbar(text="Ascent updated successfully")
@@ -234,6 +245,7 @@ class AscentScreen(MDScreen):
                 grade_id=self.form["grade_id"],
                 area_id=self.form["area_id"],
                 ascent_date=self.form["date"],
+                flash=self.form["flash"],
                 note=self.form["note"],
             )
             # Show snackbar for user feedback
@@ -252,9 +264,11 @@ class AscentScreen(MDScreen):
         self.ids.ascent_form_name.text = ""
         self.ids.ascent_form_grade.text = "Grade"
         self.ids.ascent_form_note.text = ""
+        self.ids.ascent_form_flash_checkbox.active = False
 
         self.form["name"] = ""
         self.form["grade_id"] = ""
+        self.form["flash"] = ""
         self.form["note"] = ""
 
     def clear_all_fields(self):
@@ -265,6 +279,7 @@ class AscentScreen(MDScreen):
         self.ids.ascent_form_grade.text = "Grade"
         self.ids.ascent_form_date_picker.text = "Date"
         self.ids.ascent_form_note.text = ""
+        self.ids.ascent_form_flash_checkbox.active = False
         # Reset the date_picker on today
         today = datetime.today()
         self.date_picker.sel_day = today.day

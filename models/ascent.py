@@ -2,7 +2,7 @@ from datetime import datetime, date
 
 from kivymd.app import MDApp
 
-from sqlalchemy import ForeignKey, Integer, String, DateTime, Date
+from sqlalchemy import Boolean, ForeignKey, Integer, String, DateTime, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -25,6 +25,7 @@ class Ascent(Base):
         ForeignKey("area.id", ondelete="CASCADE", onupdate="CASCADE")
     )
     ascent_date: Mapped[date] = mapped_column(Date)
+    flash: Mapped[bool] = mapped_column(Boolean, default=False)
     note: Mapped[str] = mapped_column(String(3000), default="")
     date_created: Mapped[datetime] = mapped_column(
         DateTime, default=func.now()
@@ -52,7 +53,7 @@ class Ascent(Base):
             session.commit()
 
     @classmethod
-    def create(cls, name, grade_id, area_id, ascent_date, note):
+    def create(cls, name, grade_id, area_id, ascent_date, flash, note):
         with MDApp.get_running_app().get_db_session() as session:
             session.add(
                 Ascent(
@@ -61,16 +62,18 @@ class Ascent(Base):
                     area_id=area_id,
                     ascent_date=ascent_date,
                     note=note,
+                    flash=flash,
                 )
             )
             session.commit()
 
-    def update(self, name, grade_id, area_id, ascent_date, note):
+    def update(self, name, grade_id, area_id, ascent_date, flash, note):
         with MDApp.get_running_app().get_db_session() as session:
             updated_ascent = session.merge(self)
             updated_ascent.name = name
             updated_ascent.grade_id = grade_id
             updated_ascent.area_id = area_id
             updated_ascent.ascent_date = ascent_date
+            updated_ascent.flash = flash
             updated_ascent.note = note
             session.commit()
