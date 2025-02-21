@@ -79,6 +79,7 @@ class ToDoListDetailScreen(MDScreen):
                             "sector": "",
                             "note": "",
                             "tag": "",
+                            "todolist_id": 0,
                             "is_group": True,
                         }
                     )
@@ -94,6 +95,7 @@ class ToDoListDetailScreen(MDScreen):
                         "sector": sector,
                         "tag": tag,
                         "note": climb.note,
+                        "todolist_id": self.todolist_id,
                         "is_group": False,
                         "refresh_callback": self.refresh_recycleview,
                     }
@@ -242,6 +244,7 @@ class ClimbItem(MDBoxLayout):
     sector = StringProperty()
     note = StringProperty()
     tag = StringProperty()
+    todolist_id = NumericProperty()
     is_group = BooleanProperty()
 
     def __init__(self, refresh_callback=None, **kwargs):
@@ -340,6 +343,7 @@ class ClimbItem(MDBoxLayout):
 
     def get_update_screen(self, climb_to_update_id):
         screen_manager = MDApp.get_running_app().root.ids.screen_manager
-        add_ascent_screen = screen_manager.get_screen("todoclimb")
-        add_ascent_screen.climb_to_update_id = climb_to_update_id
+        todoclimb_screen = screen_manager.get_screen("todoclimb")
+        todoclimb_screen.climb_to_update_id = climb_to_update_id
+        todoclimb_screen.todolist_id = self.todolist_id
         screen_manager.current = "todoclimb"

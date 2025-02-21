@@ -206,7 +206,7 @@ class AscentScreen(MDScreen):
                 note=self.form["note"],
             )
             self.show_snackbar(text="Ascent updated successfully")
-            self.parent.current = "ascent-list"
+            self.manager.current = "ascent-list"
 
         # Run if an ascent is currently being created
         else:

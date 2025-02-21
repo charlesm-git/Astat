@@ -79,11 +79,12 @@ class ToDoClimb(Base):
             )
             session.commit()
 
-    def update(self, name, grade_id, sector_id, note):
+    def update(self, name, grade_id, sector_id, note, tag):
         with MDApp.get_running_app().get_db_session() as session:
             updated_ascent = session.merge(self)
             updated_ascent.name = name
             updated_ascent.grade_id = grade_id
             updated_ascent.sector_id = sector_id
             updated_ascent.note = note
+            updated_ascent.tag = tag
             session.commit()

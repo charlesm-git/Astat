@@ -39,18 +39,30 @@ class ToDoClimbScreen(MDScreen):
             self.climb_to_update = ToDoClimb.get_from_id(
                 self.climb_to_update_id
             )
-            sector = Sector.get_from_id(self.climb_to_update.sector_id)
-            grade = Grade.get_from_id(self.climb_to_update.grade_id)
 
-            # Update UI
+            # Update name
             self.ids.climb_form_name.text = self.climb_to_update.name
-            self.ids.climb_form_sector.text = sector.name
+            
+            # Update grade
+            grade = Grade.get_from_id(self.climb_to_update.grade_id)
             self.ids.climb_form_grade.text = grade.grade_value
-            self.ids.climb_form_note.text = self.climb_to_update.note
-
-            # Update form's backend
             self.form["grade_id"] = self.climb_to_update.grade_id
-            self.form["sector_id"] = self.climb_to_update.sector_id
+
+            # Update sector
+            if self.climb_to_update.sector_id:
+                sector = Sector.get_from_id(self.climb_to_update.sector_id)
+                self.ids.climb_form_sector.text = sector.name
+                self.form["sector_id"] = self.climb_to_update.sector_id
+
+            # Update tag
+            if self.climb_to_update.tag:
+                for child in self.ids.climb_form_tag.children:
+                    if self.climb_to_update.tag == child.children[1].children[0].text:
+                        child.active = True
+                self.form["tag"] = self.climb_to_update.tag
+            
+            # Update note
+            self.ids.climb_form_note.text = self.climb_to_update.note
             self.form["note"] = self.climb_to_update.note
 
     def on_enter(self):
@@ -171,15 +183,15 @@ class ToDoClimbScreen(MDScreen):
         self.form["note"] = typed_note
 
         # Update the form with the right tag
+        active_tag = None
         for child in self.ids.climb_form_tag.children:
             if child.active:
                 # Manually accessing MDChipText content from MDChip
-                self.form["tag"] = child.children[1].children[0].text
+                active_tag = child.children[1].children[0].text
+        self.form["tag"] = active_tag
 
-        # Update the form with None values for tag and sector_id for database
+        # Update the form with None values for sector_id for database
         # entry
-        if not self.form["tag"]:
-            self.form["tag"] = None
         if not self.form["sector_id"]:
             self.form["sector_id"] = None
 
@@ -212,7 +224,7 @@ class ToDoClimbScreen(MDScreen):
                 note=self.form["note"],
             )
             self.show_snackbar(text="Ascent updated successfully")
-            self.parent.current = "ascent-list"
+            self.manager.current = "todolist-detail"
         # Run if an ascent is currently being created
         else:
             ToDoClimb.create(
