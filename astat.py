@@ -24,7 +24,7 @@ from models.base import Base
 
 from database import get_db_path, get_grades_as_object
 
-# Window.size = (400, 720)
+Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
