@@ -28,5 +28,21 @@
                 MDListItemHeadlineText:
                     text: "Export database"
                 MDListItemSupportingText:
-                    text: "export a CSV file from the database"
+                    text: "Export a CSV file from the database"
+            MDListItem:
+                on_release: root.import_db_as_db_file()
+                MDListItemLeadingIcon:
+                    icon: "database-import-outline"
+                MDListItemHeadlineText:
+                    text: "Import database"
+                MDListItemSupportingText:
+                    text: "Import a astat.db file"
+            MDListItem:
+                on_release: root.export_db_as_db_file()
+                MDListItemLeadingIcon:
+                    icon: "database-export-outline"
+                MDListItemHeadlineText:
+                    text: "Export database"
+                MDListItemSupportingText:
+                    text: "Export a astat.db file"
         Widget:

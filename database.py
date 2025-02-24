@@ -81,12 +81,12 @@ def get_android_documents_path():
     """Returns the absolute path to the user's Documents directory on Android."""
     # Get Android context
     from jnius import autoclass, cast
-
+    
     Environment = autoclass("android.os.Environment")
     documents_dir = Environment.getExternalStoragePublicDirectory(
-        Environment.DIRECTORY_DOCUMENTS
-    )
-    return documents_dir.getAbsolutePath()
+        Environment.DIRECTORY_DOWNLOADS
+    ).getAbsolutePath()
+    return documents_dir
 
 
 def get_grades_as_object():
