@@ -21,10 +21,10 @@ from views.todoclimb import ToDoClimbScreen
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
-
+from statistic.queries import get_ascents_per_grade
 from database import get_db_path, get_grades_as_object
 
-# Window.size = (400, 720)
+Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
@@ -53,6 +53,8 @@ class AStatApp(MDApp):
         Builder.load_file("kv/todolist-detail-screen.kv")
         Builder.load_file("kv/todolist-add-screen.kv")
         Builder.load_file("kv/screenmanager.kv")
+        print(get_ascents_per_grade())
+
         return MainScreenManager()
 
     def get_db_session(self):

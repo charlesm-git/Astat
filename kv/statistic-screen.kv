@@ -30,12 +30,12 @@
     MDDivider:
         orientation: 'vertical'
     TableCell:
-        text: root.nbre_of_ascents
+        text: root.ascents
         bold: True if root.is_header else False
     MDDivider:
         orientation: 'vertical'
     TableCell:
-        text: root.pourcentage
+        text: root.flash
         bold: True if root.is_header else False
 
 <Table>
@@ -61,7 +61,7 @@
     orientation: 'vertical'
     padding: 0, dp(40)
     CustomTitleLabel:
-        text: 'Total number of ascents'
+        text: 'Number of ascents'
     CustomTitleLabel:
         id: total_ascents
         text: root.total_number_of_ascent
@@ -74,6 +74,22 @@
         text: root.average_grade
         font_style: 'Display'
         role: 'small'
+    MDDivider:
+    CustomTitleLabel:
+        text: 'Number of flash'
+        padding: 0, dp(20), 0, 0
+    CustomTitleLabel:
+        id: total_ascents
+        text: root.total_number_of_flash
+        font_style: 'Display'
+        role: 'small'
+    CustomTitleLabel:
+        text: 'Average flash grade'
+    CustomTitleLabel:
+        id: total_flash
+        text: root.average_flash_grade
+        font_style: 'Display'
+        role: 'small'
     Widget:
 
 <StatisticScreen>
@@ -81,13 +97,14 @@
     FloatLayout:
         MDBoxLayout:
             orientation: 'vertical'
-            padding: dp(30)
-            spacing: dp(20)
+            padding: dp(15), dp(20)
+            spacing: dp(15)
             CustomTitleLabel:
                 id: filter_display
                 halign: 'left'
                 font_style: 'Title'
                 role: 'medium'
+                padding: dp(15), 0
             MDTabsPrimary:
                 id: tabs
                 size_hint_y: None

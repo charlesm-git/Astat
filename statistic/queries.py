@@ -1,4 +1,4 @@
-from sqlalchemy import func, extract, desc, select
+from sqlalchemy import func, extract, desc, select, case
 
 from kivymd.app import MDApp
 
@@ -16,7 +16,10 @@ def get_total_ascent(
     """
     with MDApp.get_running_app().get_db_session() as session:
         query = (
-            session.query(func.count(Ascent.id))
+            session.query(
+                func.count(Ascent.id),
+                func.sum(case((Ascent.flash == True, 1), else_=0)),
+            )
             .join(Grade, Grade.id == Ascent.grade_id)
             .join(Area, Area.id == Ascent.area_id)
             .filter(
@@ -30,7 +33,7 @@ def get_total_ascent(
 
         result = query.first()
 
-    return result[0]
+    return result
 
 
 def get_ascents_per_area(
@@ -42,7 +45,11 @@ def get_ascents_per_area(
     """
     with MDApp.get_running_app().get_db_session() as session:
         query = (
-            session.query(Area.name, func.count(Ascent.id))
+            session.query(
+                Area.name,
+                func.count(Ascent.id),
+                func.sum(case((Ascent.flash == True, 1), else_=0)),
+            )
             .join(Ascent, Area.id == Ascent.area_id)
             .join(Grade, Grade.id == Ascent.grade_id)
             .filter(
@@ -71,7 +78,11 @@ def get_ascents_per_grade(
     """
     with MDApp.get_running_app().get_db_session() as session:
         query = (
-            session.query(Grade.grade_value, func.count(Ascent.id))
+            session.query(
+                Grade.grade_value,
+                func.count(Ascent.id),
+                func.sum(case((Ascent.flash == True, 1), else_=0)),
+            )
             .join(Ascent, Grade.id == Ascent.grade_id)
             .join(Area, Area.id == Ascent.area_id)
             .filter(
@@ -103,6 +114,7 @@ def get_ascents_per_year(
             session.query(
                 extract("year", Ascent.ascent_date).label("year"),
                 func.count(Ascent.id),
+                func.sum(case((Ascent.flash == True, 1), else_=0)),
             )
             .join(Grade, Grade.id == Ascent.grade_id)
             .join(Area, Area.id == Ascent.area_id)
@@ -116,7 +128,6 @@ def get_ascents_per_year(
             query = query.filter(Area.name == area)
 
         result = query.group_by("year").order_by(desc("year")).all()
-
     return result
 
 
@@ -125,7 +136,15 @@ def get_average_grade(
 ):
     with MDApp.get_running_app().get_db_session() as session:
         query = (
-            session.query(func.avg(Grade.correspondence))
+            session.query(
+                func.avg(Grade.correspondence),
+                func.avg(
+                    case(
+                        (Ascent.flash == True, Grade.correspondence),
+                        else_=None,
+                    )
+                ),
+            )
             .join(Ascent, Grade.id == Ascent.grade_id)
             .join(Area, Area.id == Ascent.area_id)
             .filter(
@@ -137,18 +156,23 @@ def get_average_grade(
         if area != "All":
             query = query.filter(Area.name == area)
 
-        result = query.first()[0]
+        average_grade, average_flash_grade = query.first()
 
         # If the average grade returned by the query is not (No ascent with
         # those filters), return None
-        if not result:
-            return None
-
-        average_grade_correspondence = round(result)
-
-        average_grade = session.scalar(
-            select(Grade.grade_value).where(
-                Grade.correspondence == average_grade_correspondence
-            )
+        average_grade = get_avg_grade_from_corresp(average_grade, session)
+        average_flash_grade = get_avg_grade_from_corresp(
+            average_flash_grade, session
         )
+
+    return average_grade, average_flash_grade
+
+
+def get_avg_grade_from_corresp(average_correspondence, session):
+    if not average_correspondence:
+        return None
+    average_grade = round(average_correspondence)
+    average_grade = session.scalar(
+        select(Grade.grade_value).where(Grade.correspondence == average_grade)
+    )
     return average_grade

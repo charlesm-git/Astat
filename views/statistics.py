@@ -41,8 +41,8 @@ class TableRow(MDBoxLayout):
     """
 
     value = StringProperty()
-    nbre_of_ascents = StringProperty()
-    pourcentage = StringProperty()
+    ascents = StringProperty()
+    flash = StringProperty()
     is_header = BooleanProperty(False)
 
     def __init__(self, *args, **kwargs):
@@ -71,8 +71,8 @@ class Table(MDBoxLayout):
         # Define the header
         header_row = TableRow(
             value=self.header[0],
-            nbre_of_ascents=self.header[1],
-            pourcentage=self.header[2],
+            ascents=self.header[1],
+            flash=self.header[2],
             is_header=True,
         )
         self.add_widget(header_row)
@@ -82,11 +82,15 @@ class Table(MDBoxLayout):
 
         # Using the current attribute definitions, creates the TableRow and add
         # them to the table
-        for value, nbre_of_ascents, pourcentage in self.content:
+        for (
+            value,
+            ascents,
+            flash,
+        ) in self.content:
             table_row = TableRow(
                 value=value,
-                nbre_of_ascents=nbre_of_ascents,
-                pourcentage=f"{pourcentage} %",
+                ascents=ascents,
+                flash=flash,
             )
             self.add_widget(table_row)
             self.add_widget(MDDivider())
@@ -104,6 +108,8 @@ class GeneralInfoTab(MDBoxLayout):
 
     total_number_of_ascent = StringProperty()
     average_grade = StringProperty()
+    total_number_of_flash = StringProperty()
+    average_flash_grade = StringProperty()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -120,6 +126,7 @@ class StatisticScreen(MDScreen):
     """
 
     total_ascents = NumericProperty(0)
+    total_flash = NumericProperty(0)
     min_grade_filter = NumericProperty(1)
     max_grade_filter = NumericProperty(19)
     area_filter = StringProperty("All")
@@ -202,25 +209,30 @@ class StatisticScreen(MDScreen):
         Update the content of the carousel with the current filters
         """
         # Update the total number of ascents
-        self.total_ascents = get_total_ascent(
+        self.total_ascents, self.total_flash = get_total_ascent(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-
         # Update the average grade
-        average_grade = get_average_grade(
+        average_grade, average_flash_grade = get_average_grade(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
 
         self.ids.general_tab.total_number_of_ascent = str(self.total_ascents)
+        self.ids.general_tab.total_number_of_flash = str(self.total_flash)
 
         if average_grade:
             self.ids.general_tab.average_grade = average_grade
         else:
             self.ids.general_tab.average_grade = "Not defined"
+
+        if average_flash_grade:
+            self.ids.general_tab.average_flash_grade = average_flash_grade
+        else:
+            self.ids.general_tab.average_flash_grade = "Not defined"
 
         # Update the content of the tables
 
@@ -274,7 +286,7 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        header = ["Grade", "Ascents", "Percentage"]
+        header = ["Grade", "Ascents", "Flash"]
         ascents_per_grade = self.add_pourcentage(grade_query)
         title = "Ascent per grade"
 
@@ -288,7 +300,7 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        header = ["Year", "Ascents", "Percentage"]
+        header = ["Year", "Ascents", "Flash"]
         ascents_per_year = self.add_pourcentage(year_query)
         title = "Ascent per year"
         return header, ascents_per_year, title
@@ -301,7 +313,7 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        header = ["Area", "Ascents", "Percentage"]
+        header = ["Area", "Ascents", "Flash"]
         ascents_per_area = self.add_pourcentage(area_query)
         title = "Ascent per area"
 
@@ -310,9 +322,14 @@ class StatisticScreen(MDScreen):
     def add_pourcentage(self, query_result):
         """Add a pourcentage column to the database query result"""
         updated_filtered_list = []
-        for filter_value, ascents in query_result:
-            pourcentage = round(ascents / self.total_ascents * 100, 1)
+        for filter_value, ascents, flashes in query_result:
+            ascent_pourcentage = round(ascents / self.total_ascents * 100, 1)
+            flash_pourcentage = round(flashes / ascents * 100, 1)
             updated_filtered_list.append(
-                [str(filter_value), str(ascents), str(pourcentage)]
+                [
+                    str(filter_value),
+                    str(ascents),
+                    str(flashes),
+                ]
             )
         return updated_filtered_list

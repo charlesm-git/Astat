@@ -31,16 +31,7 @@
         MDBoxLayout:
             orientation: 'vertical'
             spacing: dp(10)
-            padding: dp(20), 0
-
-            # MDTextField:
-            #     id: search_field
-            #     mode: 'filled'
-            #     on_text: root.refresh_data()
-            #     MDTextFieldLeadingIcon:
-            #         icon: "magnify"
-            #     MDTextFieldHintText:
-            #         text: "Search"
+            padding: dp(20), 0, dp(20), dp(20)
 
             MDDivider:
                 size_hint_x: .5
@@ -48,7 +39,6 @@
             MDBoxLayout:
                 orientation: 'horizontal'
                 adaptive_height: True
-                spacing: dp(20)
                 CustomMDSegmentedButton:
                     type: 'small'
                     pos_hint: {'center_y': .5}
@@ -77,6 +67,7 @@
                 scroll_type: ['bars', 'content']
                 scroll_wheel_distance: dp(60)
                 bar_width: dp(10)
+                padding: 0, 0, 0, dp(20)
                 
                 RecycleBoxLayout:
                     orientation: 'vertical'
