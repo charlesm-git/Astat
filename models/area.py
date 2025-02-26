@@ -30,8 +30,6 @@ class Area(Base):
             area_created = Area(name=name)
             session.add(area_created)
             session.commit()
-            session.refresh(area_created)
-        return area_created
 
     @classmethod
     def delete(cls, id):
@@ -52,3 +50,9 @@ class Area(Base):
 
                 session.delete(area_to_delete)
                 session.commit()
+
+    def update(self, name):
+        with MDApp.get_running_app().get_db_session() as session:
+            updated_area = session.merge(self)
+            updated_area.name = name
+            session.commit()

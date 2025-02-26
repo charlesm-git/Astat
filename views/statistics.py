@@ -287,7 +287,7 @@ class StatisticScreen(MDScreen):
             area=self.area_filter,
         )
         header = ["Grade", "Ascents", "Flash"]
-        ascents_per_grade = self.add_pourcentage(grade_query)
+        ascents_per_grade = self.reformat_query(grade_query)
         title = "Ascent per grade"
 
         return header, ascents_per_grade, title
@@ -301,7 +301,7 @@ class StatisticScreen(MDScreen):
             area=self.area_filter,
         )
         header = ["Year", "Ascents", "Flash"]
-        ascents_per_year = self.add_pourcentage(year_query)
+        ascents_per_year = self.reformat_query(year_query)
         title = "Ascent per year"
         return header, ascents_per_year, title
 
@@ -314,17 +314,17 @@ class StatisticScreen(MDScreen):
             area=self.area_filter,
         )
         header = ["Area", "Ascents", "Flash"]
-        ascents_per_area = self.add_pourcentage(area_query)
+        ascents_per_area = self.reformat_query(area_query)
         title = "Ascent per area"
 
         return header, ascents_per_area, title
 
-    def add_pourcentage(self, query_result):
+    def reformat_query(self, query_result):
         """Add a pourcentage column to the database query result"""
         updated_filtered_list = []
         for filter_value, ascents, flashes in query_result:
-            ascent_pourcentage = round(ascents / self.total_ascents * 100, 1)
-            flash_pourcentage = round(flashes / ascents * 100, 1)
+            # ascent_pourcentage = round(ascents / self.total_ascents * 100, 1)
+            # flash_pourcentage = round(flashes / ascents * 100, 1)
             updated_filtered_list.append(
                 [
                     str(filter_value),

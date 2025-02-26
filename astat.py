@@ -34,11 +34,6 @@ class AStatApp(MDApp):
 
         db_path = get_db_path()
 
-        # try:
-        #     run_migrations()
-        # except Exception as e:
-        #     print(f"Migration failed: {e}")
-
         self.Session = self.init_db(db_path)
 
         Builder.load_file("kv/selector.kv")

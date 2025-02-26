@@ -15,9 +15,9 @@ class SettingsScreen(MDScreen):
         super().__init__(*args, **kwargs)
 
     def get_area_screen(self):
-        location_screen = self.manager.get_screen("area")
+        location_screen = self.manager.get_screen("location")
         location_screen.model_class = Area
-        self.manager.current = "area"
+        self.manager.current = "location"
 
     def import_db_as_db_file(self):
         document_path = get_android_documents_path()
@@ -41,9 +41,7 @@ class SettingsScreen(MDScreen):
 
         shutil.copy(database, db_copy_url)
 
-        self.show_snackbar(
-            text="Database copied to the download folder"
-        )
+        self.show_snackbar(text="Database copied to the download folder")
 
     def show_snackbar(self, text):
         """Function displaying a snackbar for user feedback"""

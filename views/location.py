@@ -38,10 +38,8 @@ class LocationScreen(MDScreen):
         self.todolist_id = None
 
     def binds(self):
-        self.ids.location_form.on_area_adding = (
-            self.ids.location_list.refresh_area_list_after_adding_callback
-        )
         self.list_refresh = self.ids.location_list.location_list_creation
+        self.ids.location_form.list_refresh = self.list_refresh
 
 
 class LocationForm(MDBoxLayout):
@@ -49,15 +47,17 @@ class LocationForm(MDBoxLayout):
 
     # Defines the function called when an Area is added to the database
     # Initialized in the Adding Screen
-    on_area_adding = ObjectProperty(None, allownone=True)
+    list_refresh = ObjectProperty(None, allownone=True)
     model_class = ObjectProperty()
     todolist_id = NumericProperty(None, allownone=True)
+    location_to_update = ObjectProperty(None, allownone=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def clear_field(self):
         self.ids.location_form_name.text = ""
+        self.location_to_update = None
 
     def submit(self):
         """Configure the actions performed when the form is submitted"""
@@ -84,21 +84,34 @@ class LocationForm(MDBoxLayout):
                     self.show_snackbar(text="Sector already exists")
                     return
 
-        if self.model_class == Area:
-            location_created = Area.create(name=location_name)
-            self.show_snackbar(text="Area created successfully")
+        if not self.location_to_update:
+            # Create Area
+            if self.model_class == Area:
+                Area.create(name=location_name)
+                self.show_snackbar(text="Area created successfully")
+            # Create Sector
+            else:
+                Sector.create(
+                    name=location_name,
+                    todolist_id=self.todolist_id,
+                )
+                self.show_snackbar(text="Sector created successfully")
+            self.list_refresh()
 
         else:
-            location_created = Sector.create(
-                name=location_name,
-                todolist_id=self.todolist_id,
-            )
-            self.show_snackbar(text="Sector created successfully")
+            # Update Area
+            if self.model_class == Area:
+                self.location_to_update.update(name=location_name)
+                self.show_snackbar(text="Area renamed successfully")
+            # Update Sector
+            else:
+                self.location_to_update.update(
+                    name=location_name,
+                )
+                self.show_snackbar(text="Sector renamed successfully")
+            self.list_refresh()
 
         self.clear_field()
-
-        if callable(self.on_area_adding):
-            self.on_area_adding(location_created)
 
     def show_snackbar(self, text):
         snackbar = CustomSnackbar(text=text)
@@ -166,11 +179,22 @@ class LocationItem(MDBoxLayout):
     location = ObjectProperty()
     location_name = StringProperty()
     model_class = ObjectProperty()
+    form = ObjectProperty()
 
     def __init__(self, refresh_callback, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.refresh_callback = refresh_callback
         self.location_name = self.location.name
+        Clock.schedule_once(lambda *args: self.form_init())
+
+    def form_init(self):
+        screen_manager = MDApp.get_running_app().root.ids.screen_manager
+        location_screen = screen_manager.get_screen("location")
+        self.form = location_screen.ids.location_form
+
+    def update_location(self):
+        self.form.ids.location_form_name.text = self.location.name
+        self.form.location_to_update = self.location
 
     def show_delete_dialog(self):
         dialog = MDDialog(

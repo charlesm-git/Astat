@@ -11,7 +11,7 @@
                     icon: "arrow-left"
                     on_release: root.manager.current = "todolist" if not root.todolist_to_update else "todolist-detail"
             MDTopAppBarTitle:
-                text: 'New List' if not root.todolist_to_update else 'Update list name'
+                text: 'New list' if not root.todolist_to_update else 'Rename list'
                 text_color: app.theme_cls.primaryColor
         MDScrollView:
             do_scroll_x: False
@@ -44,4 +44,4 @@
                     MDButton:
                         on_release: root.submit()
                         MDButtonText:
-                            text: "Add" if not root.todolist_to_update else "Update"
+                            text: "Ok"

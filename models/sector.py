@@ -39,7 +39,6 @@ class Sector(Base):
             session.add(sector_created)
             session.commit()
             session.refresh(sector_created)
-        return sector_created
 
     @classmethod
     def delete(cls, id):
@@ -61,3 +60,9 @@ class Sector(Base):
 
                 session.delete(sector_to_delete)
                 session.commit()
+
+    def update(self, name):
+        with MDApp.get_running_app().get_db_session() as session:
+            updated_sector = session.merge(self)
+            updated_sector.name = name
+            session.commit()

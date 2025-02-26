@@ -58,7 +58,10 @@ class ToDoClimbScreen(MDScreen):
             # Update tag
             if self.climb_to_update.tag:
                 for child in self.ids.climb_form_tag.children:
-                    if self.climb_to_update.tag == child.children[1].children[0].text:
+                    if (
+                        self.climb_to_update.tag
+                        == child.children[1].children[0].text
+                    ):
                         child.active = True
                 self.form["tag"] = self.climb_to_update.tag
 

@@ -226,10 +226,10 @@ class ToDoListDetailScreen(MDScreen):
         self.delete_dialog.open()
 
     def get_sector_screen(self):
-        location_screen = self.manager.get_screen("area")
+        location_screen = self.manager.get_screen("location")
         location_screen.model_class = Sector
         location_screen.todolist_id = self.todolist_id
-        self.manager.current = "area"
+        self.manager.current = "location"
 
     def get_todoclimb_screen(self):
         todoclimb_screen = self.manager.get_screen("todoclimb")
