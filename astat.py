@@ -18,6 +18,7 @@ from views.todolist_add import ToDoListAddScreen
 from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.todoclimb import ToDoClimbScreen
+from views.pyramidgraph import PopulationPyramid
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
