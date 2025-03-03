@@ -194,14 +194,17 @@ class StatisticScreen(MDScreen):
         self.ids["general_tab"] = general_tab
 
         grade_tab = CustomTableTab()
+        grade_tab.ids.graph.ids.barchart.data_type = "grade"
         carousel.add_widget(grade_tab)
         self.ids["grade_tab"] = grade_tab
 
         year_tab = CustomTableTab()
+        year_tab.ids.graph.ids.barchart.data_type = "year"
         carousel.add_widget(year_tab)
         self.ids["year_tab"] = year_tab
 
         area_tab = CustomTableTab()
+        area_tab.ids.graph.ids.barchart.data_type = "area"
         carousel.add_widget(area_tab)
         self.ids["area_tab"] = area_tab
 
@@ -280,8 +283,7 @@ class StatisticScreen(MDScreen):
             table.update_table()
 
     def get_grade_table_content(self):
-        """Get the content of the GRADE table based on the current grade_data
-        """
+        """Get the content of the GRADE table based on the current grade_data"""
         header = ["Grade", "Ascents", "Flash"]
         ascents_per_grade = self.add_pourcentage(self.grade_data)
         title = "Ascent per grade"
@@ -303,10 +305,29 @@ class StatisticScreen(MDScreen):
 
         return header, ascents_per_area, title
 
+    def get_graph_data(self, data):
+        graph_data = [
+            {
+                "label": line[0],
+                "redpoint": line[1] - line[2],
+                "flash": line[2],
+            }
+            for line in data
+        ]
+        return graph_data
+
     def graph_update(self):
         grade_graph = self.ids.grade_tab.ids.graph.ids.barchart
         year_graph = self.ids.year_tab.ids.graph.ids.barchart
         area_graph = self.ids.area_tab.ids.graph.ids.barchart
+
+        grade_graph_data = self.get_graph_data(self.grade_data)
+        year_graph_data = self.get_graph_data(self.year_data)
+        area_graph_data = self.get_graph_data(self.area_data)
+        
+        grade_graph.data = grade_graph_data
+        year_graph.data = year_graph_data
+        area_graph.data = area_graph_data
 
         grade_graph.redraw()
         year_graph.redraw()
@@ -324,7 +345,7 @@ class StatisticScreen(MDScreen):
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        
+
         self.area_data = get_area_data(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,

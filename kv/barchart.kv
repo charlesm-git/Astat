@@ -5,10 +5,13 @@
     pos_hint: {"center_x": .5}
 
 <BarChartLabel>
-    adaptive_size: True
+    text_size: self.size
+    adaptive_height: True
     shorten: True
     shorten_from: 'right'
-    width: dp(40)
+    font_style: 'Body'
+    role: 'large'
+    width: dp(40) if self.data_type == "grade" else dp(60) if self.data_type == "year" else dp(80)
 
 <BarChartTick>
     text_size: self.size
