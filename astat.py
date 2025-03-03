@@ -22,7 +22,6 @@ from views.barchart import BarChart
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
-from statistic.queries import get_grade_data
 from database import get_db_path, get_grades_as_object
 
 # Window.size = (400, 720)

@@ -1,9 +1,6 @@
-from kivymd.app import MDApp
-from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle, Line
 from kivy.properties import ListProperty, NumericProperty, StringProperty
 from kivy.metrics import dp
-from kivy.clock import Clock
 
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -11,11 +8,10 @@ from kivymd.uix.widget import MDWidget
 
 
 class BarChart(MDWidget):
-    # Example data: each dict represents an group with redpoint and flash values.
     data = ListProperty()
     data_type = StringProperty()
-    bar_height = NumericProperty(30)
-    gap = NumericProperty(7)
+    bar_height = NumericProperty(80)
+    gap = NumericProperty(20)
 
     def __init__(self, **kwargs):
         super(BarChart, self).__init__(**kwargs)
@@ -41,7 +37,9 @@ class BarChart(MDWidget):
             redpoint_val = group["redpoint"]
             flash_val = group["flash"]
 
-            label = BarChartLabel(text=str(group["label"]), data_type = self.data_type)
+            label = BarChartLabel(
+                text=str(group["label"]), data_type=self.data_type
+            )
             label.pos = (left_side, current_y)
             self.add_widget(label)
 
@@ -57,28 +55,45 @@ class BarChart(MDWidget):
                     pos=(bar_start, current_y),
                     size=(redpoint_width, self.bar_height),
                 )
-
-                # Draw flash bar (right side) in red
                 flash_width = flash_val * scale
                 Color(0.961, 0.922, 0.365)
                 Rectangle(
                     pos=(bar_start + redpoint_width, current_y),
                     size=(flash_width, self.bar_height),
                 )
-
-            # Optionally, you could add labels here (requires extra widget or canvas instructions)
             current_y -= self.bar_height + self.gap
 
-        division = max_value // 4
-        x_tick = [
-            {
-                "pos": bar_start + (index * division) * scale,
-                "value": index * division,
-            }
-            for index in range(1, 4)
-        ]
+        x_tick = []
         x_tick.append({"pos": bar_end, "value": max_value})
         x_tick.append({"pos": bar_start, "value": 0})
+
+        if max_value <= 5:
+            pass
+        elif 5 < max_value < 10:
+            number_of_division = 2
+            division = max_value // number_of_division
+            x_tick.append(
+                {
+                    "pos": bar_start + division * scale,
+                    "value": division,
+                }
+            )
+        else:
+            number_of_division = 3
+            division = max_value // number_of_division
+            x_tick.append(
+                {
+                    "pos": bar_start + division * scale,
+                    "value": division,
+                }
+            )
+            x_tick.append(
+                {
+                    "pos": bar_start + (max_value - division) * scale,
+                    "value": max_value - division,
+                }
+            )
+
         with self.canvas:
             Color(0, 0, 0)
             for x in x_tick:
@@ -100,7 +115,7 @@ class BarChart(MDWidget):
 
 class BarChartLabel(MDLabel):
     data_type = StringProperty()
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

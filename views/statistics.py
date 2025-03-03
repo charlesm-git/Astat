@@ -14,7 +14,6 @@ from kivy.properties import (
     ListProperty,
     BooleanProperty,
     NumericProperty,
-    ObjectProperty,
 )
 from kivy.clock import Clock
 
@@ -283,7 +282,9 @@ class StatisticScreen(MDScreen):
             table.update_table()
 
     def get_grade_table_content(self):
-        """Get the content of the GRADE table based on the current grade_data"""
+        """
+        Get the content of the GRADE table based on the current grade_data
+        """
         header = ["Grade", "Ascents", "Flash"]
         ascents_per_grade = self.reformat_query(self.grade_data)
         title = "Ascent per grade"
@@ -324,7 +325,7 @@ class StatisticScreen(MDScreen):
         grade_graph_data = self.get_graph_data(self.grade_data)
         year_graph_data = self.get_graph_data(self.year_data)
         area_graph_data = self.get_graph_data(self.area_data)
-        
+
         grade_graph.data = grade_graph_data
         year_graph.data = year_graph_data
         area_graph.data = area_graph_data
