@@ -36,7 +36,7 @@ def get_total_ascent(
     return result
 
 
-def get_ascents_per_area(
+def get_area_data(
     min_grade_correspondence=1, max_grade_correpondence=19, area="All"
 ):
     """
@@ -69,7 +69,7 @@ def get_ascents_per_area(
     return result
 
 
-def get_ascents_per_grade(
+def get_grade_data(
     min_grade_correspondence=1, max_grade_correpondence=19, area="All"
 ):
     """
@@ -102,7 +102,7 @@ def get_ascents_per_grade(
     return result
 
 
-def get_ascents_per_year(
+def get_year_data(
     min_grade_correspondence=1, max_grade_correpondence=19, area="All"
 ):
     """

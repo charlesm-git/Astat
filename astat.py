@@ -18,13 +18,14 @@ from views.todolist_add import ToDoListAddScreen
 from views.statistics_filter import StatisticFilterScreen
 from views.selector import AreaSelector
 from views.todoclimb import ToDoClimbScreen
+from views.barchart import BarChart
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
-from statistic.queries import get_ascents_per_grade
+from statistic.queries import get_grade_data
 from database import get_db_path, get_grades_as_object
 
-Window.size = (400, 720)
+# Window.size = (400, 720)
 
 
 class AStatApp(MDApp):
@@ -37,6 +38,7 @@ class AStatApp(MDApp):
         self.Session = self.init_db(db_path)
 
         Builder.load_file("kv/selector.kv")
+        Builder.load_file("kv/barchart.kv")
         Builder.load_file("kv/ascent-list-screen.kv")
         Builder.load_file("kv/ascent-screen.kv")
         Builder.load_file("kv/settings-screen.kv")
@@ -48,8 +50,6 @@ class AStatApp(MDApp):
         Builder.load_file("kv/todolist-detail-screen.kv")
         Builder.load_file("kv/todolist-add-screen.kv")
         Builder.load_file("kv/screenmanager.kv")
-        print(get_ascents_per_grade())
-
         return MainScreenManager()
 
     def get_db_session(self):

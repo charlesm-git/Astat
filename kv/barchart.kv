@@ -1,0 +1,51 @@
+#:kivy 2.3.1
+
+<BarChart>
+    size_hint: 1, None
+    pos_hint: {"center_x": .5}
+
+<BarChartLabel>
+    text_size: self.size
+    adaptive_height: True
+    shorten: True
+    shorten_from: 'right'
+    font_style: 'Body'
+    role: 'large'
+    width: dp(40) if self.data_type == "grade" else dp(60) if self.data_type == "year" else dp(80)
+
+<BarChartTick>
+    text_size: self.size
+    adaptive_height: True
+    width: dp(70)
+    halign: 'center'
+
+<Graph>
+    orientation: 'vertical'
+    adaptive_height: True
+    spacing: dp(20)
+    MDBoxLayout:
+        orientation: 'horizontal'
+        adaptive_height: True
+        spacing: dp(10)
+        MDIcon:
+            icon: 'square'
+            md_icon_color: 'Custom'
+            icon_color: (0.969, 0.306, 0.306)
+        MDLabel:
+            text: 'Redpoint'
+            adaptive_height: True
+        MDIcon:
+            icon: 'square'
+            md_icon_color: 'Custom'
+            icon_color: (0.961, 0.922, 0.365)
+        MDLabel:
+            text: 'Flash'
+            adaptive_height: True
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, None
+        adaptive_height: True
+        pos_hint: {"center_x": .5}
+        BarChart:
+            id: barchart
+            size_hint: 1, None
