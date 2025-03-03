@@ -46,22 +46,21 @@
         text: root.title
         padding: 0, 0, 0, dp(15)
 
+
 <CustomTableTab>
     MDScrollView:
         MDBoxLayout:
             id: tab_scroll_view
             orientation: 'vertical'
-            padding: 0, dp(10), 0, dp(100)
+            padding: 0, dp(20), 0, 0
+            spacing: dp(20)
             adaptive_height: True
             Table:
                 id: table
                 adaptive_height: True
-            MDBoxLayout:
-                size_hint: 1, None
-                height: dp(200)
-                pos_hint: {"center_x": .5}
-                PopulationPyramid:
-                    size_hint: 1, 1
+            Graph:
+                id: graph
+
 
 <GeneralInfoTab>
     orientation: 'vertical'

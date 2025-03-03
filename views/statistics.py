@@ -20,9 +20,9 @@ from kivy.clock import Clock
 
 from models.grade import Grade
 from statistic.queries import (
-    get_ascents_per_area,
-    get_ascents_per_grade,
-    get_ascents_per_year,
+    get_grade_data,
+    get_area_data,
+    get_year_data,
     get_total_ascent,
     get_average_grade,
 )
@@ -125,16 +125,15 @@ class StatisticScreen(MDScreen):
     - A floating button to go to the filter screen
     """
 
-    total_ascents = NumericProperty(0)
-    total_flash = NumericProperty(0)
     min_grade_filter = NumericProperty(1)
     max_grade_filter = NumericProperty(19)
     area_filter = StringProperty("All")
 
-    tab_general = ObjectProperty()
-    tab_grade = ObjectProperty()
-    tab_year = ObjectProperty()
-    tab_area = ObjectProperty()
+    total_ascents = NumericProperty(0)
+    total_flash = NumericProperty(0)
+    grade_data = ListProperty()
+    year_data = ListProperty()
+    area_data = ListProperty()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -158,7 +157,9 @@ class StatisticScreen(MDScreen):
             f"   /   Area : {self.area_filter}"
         )
 
-        Clock.schedule_once(lambda dt: self.carousel_update())
+        Clock.schedule_once(lambda x: self.update_data())
+        Clock.schedule_once(lambda x: self.carousel_update())
+        Clock.schedule_once(lambda x: self.graph_update())
 
     def tab_init(self, *args):
         """
@@ -238,13 +239,13 @@ class StatisticScreen(MDScreen):
 
         # Get the data from the database from the filters
         area_table_header, area_table_content, area_table_title = (
-            self.area_table_instanciation()
+            self.get_area_table_content()
         )
         grade_table_header, grade_table_content, grade_table_title = (
-            self.grade_table_instanciation()
+            self.get_grade_table_content()
         )
         year_table_header, year_table_content, year_table_title = (
-            self.year_table_instanciation()
+            self.get_year_table_content()
         )
 
         # Build the lists for tables update
@@ -278,46 +279,57 @@ class StatisticScreen(MDScreen):
             table.title = title
             table.update_table()
 
-    def grade_table_instanciation(self):
-        """Get from the database the informations related to the GRADE table
-        based on the current filters"""
-        grade_query = get_ascents_per_grade(
-            min_grade_correspondence=self.min_grade_filter,
-            max_grade_correpondence=self.max_grade_filter,
-            area=self.area_filter,
-        )
+    def get_grade_table_content(self):
+        """Get the content of the GRADE table based on the current grade_data
+        """
         header = ["Grade", "Ascents", "Flash"]
-        ascents_per_grade = self.add_pourcentage(grade_query)
+        ascents_per_grade = self.add_pourcentage(self.grade_data)
         title = "Ascent per grade"
 
         return header, ascents_per_grade, title
 
-    def year_table_instanciation(self):
-        """Get from the database the informations related to the YEAR table
-        based on the current filters"""
-        year_query = get_ascents_per_year(
-            min_grade_correspondence=self.min_grade_filter,
-            max_grade_correpondence=self.max_grade_filter,
-            area=self.area_filter,
-        )
+    def get_year_table_content(self):
+        """Get the content of the YEAR table based on the current grade_data"""
         header = ["Year", "Ascents", "Flash"]
-        ascents_per_year = self.add_pourcentage(year_query)
+        ascents_per_year = self.add_pourcentage(self.year_data)
         title = "Ascent per year"
         return header, ascents_per_year, title
 
-    def area_table_instanciation(self):
-        """Get from the database the informations related to the AREA table
-        based on the current filters"""
-        area_query = get_ascents_per_area(
+    def get_area_table_content(self):
+        """Get the content of the AREA table based on the current grade_data"""
+        header = ["Area", "Ascents", "Flash"]
+        ascents_per_area = self.add_pourcentage(self.area_data)
+        title = "Ascent per area"
+
+        return header, ascents_per_area, title
+
+    def graph_update(self):
+        grade_graph = self.ids.grade_tab.ids.graph.ids.barchart
+        year_graph = self.ids.year_tab.ids.graph.ids.barchart
+        area_graph = self.ids.area_tab.ids.graph.ids.barchart
+
+        grade_graph.redraw()
+        year_graph.redraw()
+        area_graph.redraw()
+
+    def update_data(self):
+        self.grade_data = get_grade_data(
             min_grade_correspondence=self.min_grade_filter,
             max_grade_correpondence=self.max_grade_filter,
             area=self.area_filter,
         )
-        header = ["Area", "Ascents", "Flash"]
-        ascents_per_area = self.add_pourcentage(area_query)
-        title = "Ascent per area"
 
-        return header, ascents_per_area, title
+        self.year_data = get_year_data(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
+        
+        self.area_data = get_area_data(
+            min_grade_correspondence=self.min_grade_filter,
+            max_grade_correpondence=self.max_grade_filter,
+            area=self.area_filter,
+        )
 
     def add_pourcentage(self, query_result):
         """Add a pourcentage column to the database query result"""
