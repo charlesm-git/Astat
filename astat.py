@@ -2,23 +2,10 @@ import os
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivy.core.window import Window
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from views.ascent_list import AscentListScreen
-from views.ascent import AscentScreen
-from views.location import LocationScreen
-from views.statistics import StatisticScreen
-from views.settings import SettingsScreen
-from views.todolist import ToDoListScreen
-from views.todolist_detail import ToDoListDetailScreen
-from views.todolist_add import ToDoListAddScreen
-from views.statistics_filter import StatisticFilterScreen
-from views.selector import AreaSelector
-from views.todoclimb import ToDoClimbScreen
-from views.barchart import BarChart
 from views.screenmanager import MainScreenManager
 
 from models.base import Base
